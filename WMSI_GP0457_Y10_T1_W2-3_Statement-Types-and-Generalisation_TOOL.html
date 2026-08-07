@@ -551,21 +551,43 @@ main { max-width: 1100px; margin: 0 auto; padding: 32px 24px 80px; }
       <span class="video-badge">▶ Explainer · 1(b)</span>
     </div>
     <p class="video-sub">Start here if you're new to this topic <span class="zh-annotation">先看视频</span> — the video walks through all eight terms, spends the longest on <strong>generalisation</strong>, and uses the same social-media examples you'll meet in Tab 2.</p>
-    <div class="video-frame">
-      <video controls preload="metadata" playsinline poster="" width="100%">
+    <div class="video-frame" id="videoFrame">
+      <video id="explainerVideo" controls preload="metadata" playsinline width="100%">
         <source src="assets/statement-types-overview.mp4" type="video/mp4">
         Your browser doesn't support embedded video.
       </video>
     </div>
-    <div class="video-tips">
+    <div class="video-tips" id="videoTips">
       <span class="video-tip">Use CC / subtitles if the audio is unclear</span>
       <span class="video-tip">Pause and re-read each example</span>
       <span class="video-tip">Then work through Tab 2</span>
     </div>
-    <div class="video-fallback">
+    <div class="video-fallback" id="videoFallback">
       <strong>Video not loading?</strong> It needs an internet connection the first time. You can also <a href="assets/statement-types-overview.mp4" download>download the video</a> to watch offline. Everything in the video is also written out in Tab&nbsp;2 — the video is a shortcut, not a replacement.
     </div>
   </div>
+
+  <script>
+  /* If the video file is missing or unreachable, hide the player rather than
+     showing students an empty black box, and explain what to do instead. */
+  (function () {
+    var src = document.querySelector('#explainerVideo source');
+    if (!src) return;
+    src.addEventListener('error', function () {
+      var frame = document.getElementById('videoFrame');
+      var tips  = document.getElementById('videoTips');
+      var fb    = document.getElementById('videoFallback');
+      if (frame) frame.style.display = 'none';
+      if (tips)  tips.style.display  = 'none';
+      if (fb) {
+        fb.innerHTML = '<strong>The video isn\'t available right now.</strong> ' +
+          'It may still be uploading, or you may be offline. ' +
+          'Nothing is lost — every point the video makes is written out in full in ' +
+          '<strong>Tab 2: The Eight Terms</strong>. Carry on there and try the video again later.';
+      }
+    });
+  })();
+  </script>
 
   <div class="section-lead" style="font-size:18px;">The eight terms at a glance</div>
   <p class="section-desc">Tap through Tab 2 for full definitions and examples. This map shows where each term resurfaces across the paper.</p>
