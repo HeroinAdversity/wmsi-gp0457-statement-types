@@ -193,6 +193,10 @@ a { color: var(--teal-deep); }
 .leaf:hover { background: var(--teal-pale); border-left-color: var(--teal); }
 .leaf:focus-visible { outline: 3px solid var(--teal-light); outline-offset: 2px; }
 .leaf strong { color: var(--text); }
+/* example leaves carry an actual exam-style statement, so mark them out */
+.leaf-ex { border-left-color: var(--gold); background: var(--gold-pale); }
+.leaf-ex:hover { background: #fbedd2; border-left-color: var(--gold-deep); }
+.leaf-quote { font-style: italic; color: var(--text-mid); }
 
 /* ─────────── DETAIL PANEL ─────────── */
 .detail {
@@ -232,6 +236,27 @@ a { color: var(--teal-deep); }
   background: var(--gold-pale); color: var(--gold-deep);
   border: 1.5px solid var(--gold); padding: 5px 11px; border-radius: 6px;
 }
+/* extra exam-style statements of the same type */
+.more-block {
+  margin-top: 18px; background: var(--gold-pale);
+  border: 1.5px solid var(--gold); border-radius: 10px; padding: 15px 18px;
+}
+.more-head {
+  font-family: var(--font-mono); font-size: 11.5px; font-weight: 700;
+  letter-spacing: 0.07em; text-transform: uppercase; color: var(--gold-deep);
+  margin-bottom: 10px; display: flex; align-items: center; gap: 9px;
+}
+.more-count {
+  background: var(--gold-deep); color: #fff; border-radius: 20px;
+  padding: 1px 8px; font-size: 11px; letter-spacing: 0;
+}
+.more-list { list-style: none; display: grid; gap: 9px; }
+.more-list li {
+  font-size: 15px; line-height: 1.55; color: var(--text); font-style: italic;
+  background: var(--white); border-left: 3px solid var(--gold);
+  padding: 10px 14px; border-radius: 0 8px 8px 0;
+}
+
 .detail-actions { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 10px; }
 .detail-actions a {
   font-family: var(--font-mono); font-size: 12.5px; font-weight: 700;
@@ -264,8 +289,37 @@ a { color: var(--teal-deep); }
   .detail-head h2 { font-size: 23px; }
 }
 </style>
+
+<style>
+/* ══════════ PACKAGE NAV (shared across all pages in this pack) ══════════
+   Self-contained: hardcoded palette so it renders identically regardless of
+   which page's token set it lands in. */
+.pkg-nav{background:#16233d;border-bottom:1px solid rgba(240,200,106,.28);
+  font-family:'DM Sans',system-ui,sans-serif;position:relative;z-index:120}
+.pkg-nav-inner{max-width:1240px;margin:0 auto;display:flex;align-items:center;
+  gap:4px;padding:0 14px;overflow-x:auto;scrollbar-width:none}
+.pkg-nav-inner::-webkit-scrollbar{display:none}
+.pkg-nav-label{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;color:#8b98b5;white-space:nowrap;
+  padding-right:14px;margin-right:6px;border-right:1px solid rgba(255,255,255,.14);flex-shrink:0}
+.pkg-nav a{display:inline-flex;align-items:center;gap:7px;white-space:nowrap;
+  font-size:14px;font-weight:600;color:#c9d3e6;text-decoration:none;
+  padding:13px 14px;min-height:48px;border-bottom:3px solid transparent;transition:color .18s,border-color .18s,background .18s}
+.pkg-nav a:hover{color:#fff;background:rgba(255,255,255,.06)}
+.pkg-nav a:focus-visible{outline:3px solid #f0c86a;outline-offset:-3px}
+.pkg-nav a[aria-current="page"]{color:#f0c86a;border-bottom-color:#C8922A}
+.pkg-nav a svg{flex-shrink:0}
+.pkg-nav .is-staff{color:#9fb0cc;margin-left:auto;border-left:1px solid rgba(255,255,255,.14)}
+@media (max-width:640px){
+  .pkg-nav-label{display:none}
+  .pkg-nav a{font-size:13.5px;padding:12px 11px}
+  .pkg-nav .is-staff{margin-left:0}
+}
+@media (prefers-reduced-motion:reduce){.pkg-nav a{transition:none}}
+</style>
 </head>
 <body>
+<nav class="pkg-nav" aria-label="Resources in this pack"><div class="pkg-nav-inner"><span class="pkg-nav-label">Statement Types</span><a href="index.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10l9-7 9 7v10a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1z"/></svg>Home</a><a href="WMSI_GP0457_Y10_T1_W2-3_Statement-Types-and-Generalisation_TOOL.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h11l5 5v11a1 1 0 01-1 1H4a1 1 0 01-1-1V5a1 1 0 011-1z"/><path d="M14 4v6h6"/></svg>Notes &amp; Video</a><a href="mindmap.html" aria-current="page"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="5" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="19" cy="19" r="2"/><path d="M9.9 9.9L6.4 6.4M14.1 9.9l3.5-3.5M14.1 14.1l3.5 3.5"/></svg>Mind Map</a><a href="WMSI_GP0457_Y10_T1_W2-3_Find-Your-Gap_Diagnostic-Targeted-Practice_TOOL.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/><circle cx="12" cy="12" r="5"/></svg>Find Your Gap</a></div></nav>
 
 <a class="skip-link" href="#stage">Skip to mind map</a>
 
@@ -343,9 +397,14 @@ const DATA = {
       no:"A 2024 survey of 200 students in one city found that 60% reported feeling anxious after extended social media use.",
       note:"The second sentence is just a <strong>fact</strong> — it stays honest about its sample. The first takes that same sample and stretches it to <em>“teenagers everywhere.”</em> That stretch is the generalisation.",
       signals:["always","never","everyone","all [group]","no one","every time"],
+      more:[
+        "All young people who use social media platforms will eventually experience a decline in their mental wellbeing.",
+        "Since one student in my class felt anxious after using their phone, it proves that social media always harms every teenager."
+      ],
       children:[
         {name:"Definition", sub:"Small case applied to everyone, or absolute claims"},
         {name:"Signal words", sub:"always · never · everyone · all"},
+        {name:"Example", sub:"“…so teenagers everywhere are being harmed by their phones.”", ex:true},
         {name:"Exam focus", sub:"Question 1(b) — 3 marks total"},
         {name:"Explaining it", sub:"Name the stretch, or name the absolute word"}
       ]
@@ -356,8 +415,13 @@ const DATA = {
       yes:"The World Health Organization reported a rise in reported cases of teen anxiety between 2015 and 2023.",
       no:"Social media is the worst thing that has ever happened to young people.",
       note:"A fact can still be <em>selectively chosen</em> or presented with bias — being factual doesn't automatically make a source balanced.",
+      more:[
+        "Studies have shown that a significant percentage of teenagers check their notifications within minutes of waking up.",
+        "Many social media platforms have age restrictions that prevent children under 13 from creating accounts."
+      ],
       children:[
         {name:"Definition", sub:"Verifiable using evidence"},
+        {name:"Example", sub:"“The WHO reported a rise in teen anxiety between 2015 and 2023.”", ex:true},
         {name:"Where it appears", sub:"Q2, Q3, Q4 — as evidence"},
         {name:"Nuance", sub:"Can still be presented with bias"}
       ]
@@ -368,8 +432,13 @@ const DATA = {
       yes:"I think schools should ban phones completely — it's the only way students will focus.",
       no:"Every young person deserves the right to switch off without judgement.",
       note:"That second one is a <strong>value</strong>, not an opinion. A value states a <em>principle</em> about what matters; an opinion is a specific judgement or recommendation.",
+      more:[
+        "I believe that the only way to stop cyberbullying is to make the internet completely anonymous.",
+        "It is my opinion that teenagers were much happier before the invention of the smartphone."
+      ],
       children:[
         {name:"Definition", sub:"Personal view, cannot be proven"},
+        {name:"Example", sub:"“I think schools should ban phones completely.”", ex:true},
         {name:"Where it appears", sub:"Q2, Q3 — evaluating reasoning"},
         {name:"Nuance", sub:"Judgement, not underlying principle"}
       ]
@@ -380,8 +449,13 @@ const DATA = {
       yes:"Protecting children's mental health should always come before a company's profit.",
       no:"If nothing changes, mental health referrals will keep rising over the next decade.",
       note:"That second one is a <strong>prediction</strong> — it's about the future, not about what matters.",
+      more:[
+        "Protecting the mental wellbeing of the next generation is more important than the profits of technology firms.",
+        "Young people should have the right to disconnect from the digital world whenever they choose."
+      ],
       children:[
         {name:"Definition", sub:"Underlying principles of right and wrong"},
+        {name:"Example", sub:"“Children's mental health should come before company profit.”", ex:true},
         {name:"Where it appears", sub:"Q3, Q4 — perspectives"}
       ]
     },
@@ -391,8 +465,13 @@ const DATA = {
       yes:"App developers claim their new 'focus mode' reduces screen time by half.",
       no:"App developers' internal data, reviewed by an independent auditor, showed a 48% reduction in screen time among test users.",
       note:"The second version is a claim <em>with evidence</em> — far stronger. Always ask: <strong>what evidence backs this, and who is making it?</strong>",
+      more:[
+        "Social media influencers claim that their content helps to promote body positivity among their young followers.",
+        "Researchers assert that there is a direct link between the number of followers a teenager has and their level of self-worth."
+      ],
       children:[
         {name:"Definition", sub:"Assertion put forward as true"},
+        {name:"Example", sub:"“App developers claim their focus mode halves screen time.”", ex:true},
         {name:"Where it appears", sub:"Q3 — analysing arguments"},
         {name:"Evaluating it", sub:"Check the evidence and the source"}
       ]
@@ -403,8 +482,13 @@ const DATA = {
       yes:"Experts warn that without regulation, screen-related anxiety cases will double by 2030.",
       no:"Screen-related anxiety cases doubled between 2015 and 2023.",
       note:"The second is a <strong>fact</strong> — past tense, and checkable right now. Tense is your quickest tell.",
+      more:[
+        "Experts suggest that by 2030, most mental health therapy for teenagers will be conducted through artificial intelligence.",
+        "The number of hours spent on mobile devices is likely to decrease as new wearable technologies are developed."
+      ],
       children:[
         {name:"Definition", sub:"Expected future events"},
+        {name:"Example", sub:"“…anxiety cases will double by 2030.”", ex:true},
         {name:"Where it appears", sub:"Q2, Q4 — future consequences"},
         {name:"Distinction", sub:"Cannot be checked yet"}
       ]
@@ -415,8 +499,13 @@ const DATA = {
       yes:"A wellness-app company's blog only cites studies where its product improved user mood, and never mentions studies with no effect.",
       no:"A university research summary presents both studies that found benefits and studies that found no significant effect.",
       note:"Bias is about <strong>selection</strong> — what's left in and what's left out — not necessarily about lying.",
+      more:[
+        "The article exclusively discusses the negative impacts of screen time and ignores all data regarding social connectivity.",
+        "This documentary only interviews students who are happy with their digital lives and omits any mention of online risks."
+      ],
       children:[
         {name:"Definition", sub:"One-sided slant in selection"},
+        {name:"Example", sub:"A blog citing only studies that flatter its own product.", ex:true},
         {name:"Where it appears", sub:"Q2 — evaluating research"},
         {name:"Key idea", sub:"Look at what is left out"}
       ]
@@ -427,8 +516,13 @@ const DATA = {
       yes:"A company that sells “digital detox” retreats publishes an article on the dangers of phone use.",
       no:"An independent, government-funded health body publishes findings on phone use and anxiety.",
       note:"A vested interest doesn't automatically make a source <em>wrong</em> — but it is a reason to check the evidence more carefully.",
+      more:[
+        "A company that sells software to track children's phone use publishes a report on the dangers of unsupervised internet access.",
+        "The developer of a new social media app claims that their platform is the only one that does not harm mental health."
+      ],
       children:[
         {name:"Definition", sub:"Personal or financial stake"},
+        {name:"Example", sub:"A “digital detox” retreat warning about phone use.", ex:true},
         {name:"Where it appears", sub:"Q2, Q3 — source reliability"},
         {name:"Nuance", sub:"Not automatically wrong — check carefully"}
       ]
@@ -516,10 +610,19 @@ function renderRadial(){
 
         const right = Math.cos(la) >= -0.15;
         const lg = el('g',{});
-        lg.appendChild(el('circle',{cx:lx,cy:ly,r:6,fill:col,stroke:'#FEFCF8','stroke-width':2}));
+        // example nodes get a gold diamond so a real statement is visible at a glance
+        if (k.ex){
+          lg.appendChild(el('rect',{x:lx-6,y:ly-6,width:12,height:12,fill:'#C8922A',
+            stroke:'#FEFCF8','stroke-width':2,transform:`rotate(45 ${lx} ${ly})`}));
+        } else {
+          lg.appendChild(el('circle',{cx:lx,cy:ly,r:6,fill:col,stroke:'#FEFCF8','stroke-width':2}));
+        }
         const tx = lx + (right?14:-14);
-        const nameT = el('text',{x:tx,y:ly-2,'text-anchor':right?'start':'end',fill:'#1a1a1a','font-size':14.5,'font-weight':700,class:'node-label'},k.name);
-        const subT  = el('text',{x:tx,y:ly+15,'text-anchor':right?'start':'end',fill:'#3d3d3d','font-size':12.5,class:'node-sub'},k.sub);
+        const anchor = right?'start':'end';
+        const nameT = el('text',{x:tx,y:ly-2,'text-anchor':anchor,
+          fill: k.ex?'#7d5b12':'#1a1a1a','font-size':14.5,'font-weight':700,class:'node-label'}, k.name);
+        const subT  = el('text',{x:tx,y:ly+15,'text-anchor':anchor,fill:'#3d3d3d','font-size':12.5,
+          class:'node-sub', 'font-style': k.ex?'italic':'normal'}, k.sub);
         lg.append(nameT,subT);
         gLeaves.appendChild(lg);
       });
@@ -613,8 +716,10 @@ function renderTree(){
     body.id='body-'+b.id;
     b.children.forEach(k=>{
       const leaf=document.createElement('button');
-      leaf.className='leaf'; leaf.type='button';
-      leaf.innerHTML=`<strong>${k.name}</strong><br>${k.sub}`;
+      leaf.className='leaf'+(k.ex?' leaf-ex':''); leaf.type='button';
+      leaf.innerHTML= k.ex
+        ? `<strong>${k.name}</strong><br><span class="leaf-quote">${k.sub}</span>`
+        : `<strong>${k.name}</strong><br>${k.sub}`;
       leaf.addEventListener('click',()=>{ showDetail(b); document.getElementById('detail').scrollIntoView({behavior:'smooth',block:'start'}); });
       body.appendChild(leaf);
     });
@@ -663,6 +768,14 @@ function showDetail(b){
   }
   if (b.note) html += `<div class="detail-note">${b.note}</div>`;
   if (b.signals) html += `<div class="signals">` + b.signals.map(s=>`<span class="signal">${esc(s)}</span>`).join('') + `</div>`;
+
+  if (b.more && b.more.length){
+    html += `<div class="more-block">
+      <div class="more-head">More statements of this type <span class="more-count">${b.more.length}</span></div>
+      <ul class="more-list">` +
+      b.more.map(m=>`<li>“${esc(m)}”</li>`).join('') +
+      `</ul></div>`;
+  }
 
   html += `<div class="detail-actions">
     <a href="WMSI_GP0457_Y10_T1_W2-3_Statement-Types-and-Generalisation_TOOL.html">Open full notes &amp; video →</a>
