@@ -24,9 +24,14 @@
   --cream-dark: #ede7d9;
   --white: #FEFCF8;
   --border: #d0c9bc;
-  --text: #1e1e1e;
-  --text-mid: #4a4a4a;
-  --text-muted: #888888;
+  --text: #1a1a1a;
+  --text-mid: #3d3d3d;
+  /* was #888888 — only 3.46:1 on white cards, below the 4.5:1 minimum.
+     #5f5f5f measures 6.23:1 while staying visibly "muted". */
+  --text-muted: #5f5f5f;
+  /* --gold on --gold-pale was 2.53:1; this deeper tone is 5.69:1 for badge text */
+  --gold-text: #7d5b12;
+  --teal-text: #124343;  /* 9.37:1 on --teal-pale */
   --success: #1a6b3c;
   --success-bg: #e8f5ee;
   --error: #b91c1c;
@@ -104,11 +109,34 @@ body {
 .pill.gold { background: var(--gold); color: var(--navy); border-color: var(--gold); }
 
 /* Tab nav */
+/* The 6 tabs measure ~910px against a 327px mobile viewport. Without an edge
+   fade there is no cue that tabs 4-6 exist, so students never reach the
+   Generalisation Drill. The wrapper paints a gradient over the right edge and
+   removes it once the strip is scrolled to the end. */
+.tab-nav-wrap { position: relative; }
+.tab-nav-wrap::after {
+  content: "";
+  position: absolute; right: 0; top: 0; bottom: 0; width: 46px;
+  background: linear-gradient(90deg, rgba(27,42,74,0) 0%, var(--navy-light) 82%);
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.25s ease;
+}
+.tab-nav-wrap.at-end::after { opacity: 0; }
+.tab-nav-wrap .more-cue {
+  position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+  color: var(--gold-light); pointer-events: none;
+  transition: opacity 0.25s ease;
+  display: flex; align-items: center;
+}
+.tab-nav-wrap.at-end .more-cue { opacity: 0; }
 .tab-nav {
   display: flex;
   gap: 2px;
   overflow-x: auto;
   scrollbar-width: none;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
 .tab-nav::-webkit-scrollbar { display: none; }
 .tab-btn {
@@ -209,8 +237,9 @@ main { max-width: 1100px; margin: 0 auto; padding: 32px 24px 80px; }
 .term-tile:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
 .term-tile.priority { border-left-color: var(--gold); background: var(--gold-pale); }
 .term-tile .tname { font-weight: 700; font-size: 15.5px; color: var(--navy); margin-bottom: 3px; }
-.term-tile .twhere { font-family: var(--font-mono); font-size: 11px; color: var(--teal); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; }
-.term-tile.priority .twhere { color: var(--gold); font-weight: 700; }
+.term-tile .twhere { font-family: var(--font-mono); font-size: 11px; color: var(--teal-text); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; }
+/* --gold on --gold-pale measured 2.53:1; --gold-text is 6.1:1 on the same background */
+.term-tile.priority .twhere { color: var(--gold-text); font-weight: 700; }
 .term-tile .tdef { font-size: 13px; color: var(--text-mid); }
 
 .exam-context {
@@ -245,8 +274,12 @@ main { max-width: 1100px; margin: 0 auto; padding: 32px 24px 80px; }
 
 .concept-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; flex-wrap: wrap; margin-bottom: 14px; }
 .concept-head h3 { font-family: var(--font-display); font-size: 24px; color: var(--navy); }
-.concept-badge { font-family: var(--font-mono); font-size: 11px; font-weight: 700; padding: 5px 11px; border-radius: 6px; background: var(--teal-pale); color: var(--teal); white-space: nowrap; }
+.concept-badge { font-family: var(--font-mono); font-size: 11px; font-weight: 700; padding: 5px 11px; border-radius: 6px; background: var(--teal-pale); color: var(--teal-text); white-space: nowrap; }
 .concept-badge.priority { background: var(--gold); color: var(--navy); }
+
+/* The "why the difference matters" note under each concept's examples.
+   Was an inline style, which beat the mobile type scale. */
+.concept-note { font-size: 13px; color: var(--text-mid); }
 
 .concept-def { font-size: 15px; color: var(--text); margin-bottom: 18px; padding: 14px 16px; background: var(--cream); border-radius: 8px; border-left: 4px solid var(--teal); }
 .concept-card .concept-def.priority-def { border-left-color: var(--gold); }
@@ -500,6 +533,41 @@ main { max-width: 1100px; margin: 0 auto; padding: 32px 24px 80px; }
   .video-block { padding: 18px 16px 16px; }
 }
 
+/* ══════════ MOBILE READABILITY ══════════
+   Audited at 375px: dominant body sizes were 10.5-13.5px, well under the
+   16px minimum for mobile reading. These bumps apply only on small screens,
+   so the desktop/projection density is untouched. */
+@media (max-width: 767px) {
+  body { font-size: 16px; line-height: 1.62; }
+
+  .section-desc,
+  .concept-def,
+  .example-box,
+  .term-tile .tdef,
+  .exam-box p,
+  .video-sub,
+  .video-fallback { font-size: 15.5px; }
+
+  .concept-card p,
+  .concept-note,
+  .sort-item .stmt { font-size: 15.5px; }
+  .video-badge, .slabel, .export-panel-label { font-size: 12.5px; }
+
+  .term-tile .tname { font-size: 16.5px; }
+  .term-tile .twhere,
+  .concept-badge,
+  .example-box .exlabel { font-size: 12.5px; }
+
+  .sort-item .stmt .src { font-size: 12.5px; }
+  .opt-btn { font-size: 14.5px; padding: 11px 15px; min-height: 44px; }
+  .arena-opt { font-size: 15px; }
+  .signal-word, .video-tip { font-size: 12.5px; }
+
+  /* touch targets */
+  .tab-btn { font-size: 14.5px; padding: 14px 17px; min-height: 48px; }
+  .concept-chip { font-size: 14.5px; padding: 10px 15px; min-height: 44px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
@@ -519,16 +587,42 @@ main { max-width: 1100px; margin: 0 auto; padding: 32px 24px 80px; }
       <span class="pill">Health &amp; Wellbeing strand</span>
       <span class="pill">Year 10 · Term 1</span>
     </div>
-    <nav class="tab-nav">
-      <button class="tab-btn active" onclick="switchTab('tab1')"><span class="tnum">1</span> Overview</button>
-      <button class="tab-btn" onclick="switchTab('tab2')"><span class="tnum">2</span> The Eight Terms</button>
-      <button class="tab-btn" onclick="switchTab('tab3')"><span class="tnum">3</span> Sort &amp; Classify</button>
-      <button class="tab-btn" onclick="switchTab('tab4')"><span class="tnum">4</span> Generalisation Drill</button>
-      <button class="tab-btn" onclick="switchTab('tab5')"><span class="tnum">5</span> Mixed Arena</button>
-      <button class="tab-btn" onclick="switchTab('tab6')"><span class="tnum">6</span> Exit Check</button>
-    </nav>
+    <div class="tab-nav-wrap" id="tabNavWrap">
+      <nav class="tab-nav" id="tabNav">
+        <button class="tab-btn active" onclick="switchTab('tab1')"><span class="tnum">1</span> Overview</button>
+        <button class="tab-btn" onclick="switchTab('tab2')"><span class="tnum">2</span> The Eight Terms</button>
+        <button class="tab-btn" onclick="switchTab('tab3')"><span class="tnum">3</span> Sort &amp; Classify</button>
+        <button class="tab-btn" onclick="switchTab('tab4')"><span class="tnum">4</span> Generalisation Drill</button>
+        <button class="tab-btn" onclick="switchTab('tab5')"><span class="tnum">5</span> Mixed Arena</button>
+        <button class="tab-btn" onclick="switchTab('tab6')"><span class="tnum">6</span> Exit Check</button>
+      </nav>
+      <span class="more-cue" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+      </span>
+    </div>
   </div>
 </header>
+
+<script>
+/* Hide the edge fade once the tab strip is scrolled to its end, and keep the
+   active tab scrolled into view when switching. */
+(function(){
+  var nav = document.getElementById('tabNav'), wrap = document.getElementById('tabNavWrap');
+  if (!nav || !wrap) return;
+  function sync(){
+    var atEnd = nav.scrollLeft + nav.clientWidth >= nav.scrollWidth - 4;
+    var noOverflow = nav.scrollWidth <= nav.clientWidth + 1;
+    wrap.classList.toggle('at-end', atEnd || noOverflow);
+  }
+  nav.addEventListener('scroll', sync, {passive:true});
+  window.addEventListener('resize', sync);
+  nav.addEventListener('click', function(e){
+    var b = e.target.closest('.tab-btn');
+    if (b) setTimeout(function(){ b.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'}); }, 0);
+  });
+  sync();
+})();
+</script>
 
 <main>
 
@@ -683,7 +777,7 @@ main { max-width: 1100px; margin: 0 auto; padding: 32px 24px 80px; }
           <p class="quote">"A 2024 survey of 200 students in one city found that 60% reported feeling anxious after extended social media use."</p>
         </div>
       </div>
-      <p style="font-size:13px; color:var(--text-mid); margin-bottom:10px;">The second sentence is just a <strong>fact</strong> — it stays honest about its sample size (200 students, one city) and doesn't stretch the claim any further. The first sentence takes that same small sample and applies it to <em>"teenagers everywhere."</em> That stretch is the generalisation.</p>
+      <p class="concept-note" style="margin-bottom:10px;">The second sentence is just a <strong>fact</strong> — it stays honest about its sample size (200 students, one city) and doesn't stretch the claim any further. The first sentence takes that same small sample and applies it to <em>"teenagers everywhere."</em> That stretch is the generalisation.</p>
       <div class="signal-words">
         <span class="signal-word">always</span><span class="signal-word">never</span><span class="signal-word">everyone</span>
         <span class="signal-word">all [group]</span><span class="signal-word">no one</span><span class="signal-word">every time</span>
@@ -700,7 +794,7 @@ main { max-width: 1100px; margin: 0 auto; padding: 32px 24px 80px; }
         <div class="example-box is-example"><div class="exlabel">✓ Fact</div><p class="quote">"The World Health Organization reported a rise in reported cases of teen anxiety between 2015 and 2023."</p></div>
         <div class="example-box not-example"><div class="exlabel">✗ Not a fact — it's an opinion</div><p class="quote">"Social media is the worst thing that has ever happened to young people."</p></div>
       </div>
-      <p style="font-size:13px; color:var(--text-mid);">A fact can still be selectively chosen or presented with bias — being factual doesn't automatically mean a source is balanced.</p>
+      <p class="concept-note">A fact can still be selectively chosen or presented with bias — being factual doesn't automatically mean a source is balanced.</p>
     </div>
   </div>
 
@@ -713,7 +807,7 @@ main { max-width: 1100px; margin: 0 auto; padding: 32px 24px 80px; }
         <div class="example-box is-example"><div class="exlabel">✓ Opinion</div><p class="quote">"I think schools should ban phones completely — it's the only way students will focus."</p></div>
         <div class="example-box not-example"><div class="exlabel">✗ Not an opinion — it's a value</div><p class="quote">"Every young person deserves the right to switch off without judgement."</p></div>
       </div>
-      <p style="font-size:13px; color:var(--text-mid);">Opinions and values overlap — the difference is that a value expresses a <em>principle</em> about what matters, while an opinion is usually a specific judgement or recommendation.</p>
+      <p class="concept-note">Opinions and values overlap — the difference is that a value expresses a <em>principle</em> about what matters, while an opinion is usually a specific judgement or recommendation.</p>
     </div>
   </div>
 
@@ -726,7 +820,7 @@ main { max-width: 1100px; margin: 0 auto; padding: 32px 24px 80px; }
         <div class="example-box is-example"><div class="exlabel">✓ Claim (unsupported)</div><p class="quote">"App developers claim their new 'focus mode' reduces screen time by half."</p></div>
         <div class="example-box not-example"><div class="exlabel">A claim WITH evidence becomes stronger</div><p class="quote">"App developers' internal data, reviewed by an independent auditor, showed a 48% reduction in screen time among test users."</p></div>
       </div>
-      <p style="font-size:13px; color:var(--text-mid);">Your job when evaluating a claim is to ask: <em>what evidence backs this up, and who is making it?</em></p>
+      <p class="concept-note">Your job when evaluating a claim is to ask: <em>what evidence backs this up, and who is making it?</em></p>
     </div>
   </div>
 
@@ -763,7 +857,7 @@ main { max-width: 1100px; margin: 0 auto; padding: 32px 24px 80px; }
         <div class="example-box is-example"><div class="exlabel">✓ Shows bias</div><p class="quote">A wellness-app company's blog only cites studies where its product improved user mood, and never mentions studies with no effect.</p></div>
         <div class="example-box not-example"><div class="exlabel">✗ Balanced — not biased</div><p class="quote">A university research summary presents both studies that found benefits and studies that found no significant effect.</p></div>
       </div>
-      <p style="font-size:13px; color:var(--text-mid);">Bias is about <em>selection</em> — what's left in, and what's left out — not necessarily about lying.</p>
+      <p class="concept-note">Bias is about <em>selection</em> — what's left in, and what's left out — not necessarily about lying.</p>
     </div>
   </div>
 
@@ -776,7 +870,7 @@ main { max-width: 1100px; margin: 0 auto; padding: 32px 24px 80px; }
         <div class="example-box is-example"><div class="exlabel">✓ Vested interest present</div><p class="quote">A company that sells "digital detox" retreats publishes an article on the dangers of phone use.</p></div>
         <div class="example-box not-example"><div class="exlabel">✗ No obvious vested interest</div><p class="quote">An independent, government-funded health body publishes findings on phone use and anxiety.</p></div>
       </div>
-      <p style="font-size:13px; color:var(--text-mid);">A vested interest doesn't automatically make a source wrong — but it's a reason to check the evidence more carefully.</p>
+      <p class="concept-note">A vested interest doesn't automatically make a source wrong — but it's a reason to check the evidence more carefully.</p>
     </div>
   </div>
 </section>

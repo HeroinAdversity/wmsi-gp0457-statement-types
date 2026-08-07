@@ -21,12 +21,17 @@
   --cream: #F5F0E8;
   --cream-dark: #ede7d9;
   --white: #FEFCF8;
-  --border: #d0c9bc;
-  --text: #1e1e1e;
-  --text-mid: #4a4a4a;
-  --text-muted: #888888;
-  --zh-color: #6b3fa0;
+  --border: #c4bcac;
+  --text: #1a1a1a;
+  --text-mid: #3d3d3d;
+  /* #888888 measured 3.13:1 on cream — below the 4.5:1 minimum */
+  --text-muted: #5f5f5f;
+  --zh-color: #5a3391;
   --zh-bg: #f0eaf8;
+  /* deepened variants for text use; the base tones stay for fills and borders */
+  --teal-text: #124343;
+  --gold-text: #7d5b12;
+  --violet-text: #4a2d75;
   --radius: 10px;
 
   --font-display: 'Playfair Display', Georgia, serif;
@@ -234,7 +239,8 @@ body {
   white-space: nowrap;
 }
 .badge.start { background: var(--gold); color: #fff; }
-.badge.practice { background: var(--teal-pale); color: var(--teal); border: 1px solid var(--teal-light); }
+.badge.practice { background: var(--teal-pale); color: var(--teal-text); border: 1px solid var(--teal-light); }
+.badge.revise { background: var(--zh-bg); color: var(--violet-text); border: 1px solid #a58bd0; }
 .badge.teacher { background: var(--navy-soft); color: var(--navy); border: 1px solid #b9c4d8; }
 
 .card h3 {
@@ -395,6 +401,23 @@ body {
   .card:hover, .card:focus-visible, .teacher-card:hover { transform: none; }
 }
 
+/* Mobile readability: audited sizes were 10-14.5px, under the 16px minimum. */
+@media (max-width: 767px) {
+  body { font-size: 16px; }
+  .priority p,
+  .card p,
+  .teacher-card p { font-size: 15.5px; }
+  .section-desc { font-size: 15px; }
+  .term-pill { font-size: 14.5px; padding: 9px 15px; }
+  .term-pill .zh-mini { font-size: 13px; }
+  .chip { font-size: 12.5px; padding: 5px 10px; }
+  .badge { font-size: 11.5px; }
+  .card-num, .card-go, .section-label, .footer { font-size: 12.5px; }
+  .card h3 { font-size: 21px; }
+  /* give the whole card a comfortable tap area */
+  .card { padding: 22px 20px 20px; }
+}
+
 @media (max-width: 640px) {
   .header { padding: 42px 20px 48px; }
   .cards { grid-template-columns: 1fr; }
@@ -470,6 +493,21 @@ body {
       <div class="card-meta">
         <span class="chip">Diagnostic</span>
         <span class="chip">Targeted practice</span>
+      </div>
+      <div class="card-go">Open resource <span class="arrow">→</span></div>
+    </a>
+
+    <a class="card anim d6" href="mindmap.html">
+      <div class="card-top">
+        <span class="card-num">03</span>
+        <span class="badge revise">Revise</span>
+      </div>
+      <h3>Interactive Mind Map</h3>
+      <span class="zh">思维导图</span>
+      <p>All eight terms on one screen. Tap any branch for its definition, a worked example and a non-example, plus the five confusion pairs that cost the most marks.</p>
+      <div class="card-meta">
+        <span class="chip">Quick revision</span>
+        <span class="chip">Searchable</span>
       </div>
       <div class="card-go">Open resource <span class="arrow">→</span></div>
     </a>
