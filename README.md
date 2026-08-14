@@ -11,7 +11,11 @@ Covers the eight statement types named in the Cambridge IGCSE Global Perspective
 | `index.html` | Everyone | Landing page and entry point |
 | `WMSI_GP0457_Y10_T1_W2-3_Statement-Types-and-Generalisation_TOOL.html` | Students | Main self-study notes — video explainer, eight terms, sorting drill, generalisation hunter, mixed arena, exit check |
 | `WMSI_GP0457_Y10_T1_W2-3_Find-Your-Gap_Diagnostic-Targeted-Practice_TOOL.html` | Students | Diagnostic that identifies confused pairs and routes to targeted practice |
-| `WMSI_GP0457_Y10_T1_W2-3_Teacher-Dashboard.html` | Staff | Lesson sequencing, timings, answer keys |
+| `WMSI_GP0457_Y10_T1_W2-3_Statement-Types-Intensive_TOOL.html` | Students | 120-minute deep-practice session: reference guide, 24-statement rapid sort, two source deep-dives, four confusable-pairs clinics, create-your-own task, 5 exam-style questions, self-assessment and export |
+| `mindmap.html` | Students | Interactive mind map revision of all eight terms |
+| `WMSI_GP0457_The-Source_Claim-vs-Evidence_TOOL.html` | Students | Separate Paper 1 Q1 skill: claim vs sourced evidence, developed (Level 3) evaluative comments |
+| `WMSI_GP0457_Y10_T1_W2-3_Teacher-Dashboard.html` | Staff | Lesson sequencing, timings, answer keys; imports results from the diagnostic and main statement-types tools |
+| `WMSI_GP0457_Y10_T1_W2-3_Statement-Types-Intensive_Teacher-Dashboard.html` | Staff | Imports export codes/JSON from Statement Types Intensive, aggregates class scores, flags students under 60%, exports CSV |
 | `assets/statement-types-overview.mp4` | Students | Video explainer, embedded in the main tool |
 | `video-source.md` | — | Source brief the video was generated from |
 
