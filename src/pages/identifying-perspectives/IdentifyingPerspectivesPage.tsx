@@ -45,18 +45,15 @@ export function IdentifyingPerspectivesPage() {
   return (
     <>
       {/* HERO */}
-      <section className="pt-8 md:pt-14 pb-8 border-b border-[color:var(--color-line)]">
+      <section className="pt-12 md:pt-16 pb-10 border-b border-[color:var(--color-line)]">
         <Container size="wide">
-          <Eyebrow color="cobalt">
-            <Bi en="Strand 1 · Perspectives · Paper 1 Q1" zh="主线 1 · 观点 · 卷一第 1 题" />
-          </Eyebrow>
-          <DisplayH1 className="mt-4 max-w-[22ch]">
+          <DisplayH1 className="max-w-[22ch]">
             <Bi en="Identifying & Explaining Perspectives" zh="识别与解释观点" />
           </DisplayH1>
-          <Body className="mt-5 max-w-[60ch] text-[color:var(--color-ink-2)]">
+          <Body className="mt-6 max-w-[62ch] text-[color:var(--color-ink-2)]">
             <Bi
-              en="Global · National · Local · Personal — and how culture shapes each one. Built around Cambridge's Table A mark scheme and the Oxford Global Perspectives 3rd edition textbook."
-              zh="全球 · 国家 · 地方 · 个人——以及文化如何影响每一个层次。围绕剑桥表 A 评分标准与牛津《全球视野》第三版教材构建。"
+              en="Global, national, local, personal, and how culture shapes each one. Built around Cambridge's Table A mark scheme and the Oxford Global Perspectives 3rd edition textbook."
+              zh="全球、国家、地方、个人，以及文化如何影响每一个层次。围绕剑桥表 A 评分标准与牛津《全球视野》第三版教材构建。"
             />
           </Body>
         </Container>
@@ -66,22 +63,19 @@ export function IdentifyingPerspectivesPage() {
       <div className="sticky top-[64px] z-30 bg-[color:var(--color-paper)]/95 backdrop-blur-md border-b border-[color:var(--color-line)]">
         <Container size="wide">
           <nav className="flex gap-1 py-3 overflow-x-auto scrollbar-none" role="tablist">
-            {TABS.map((t, i) => (
+            {TABS.map((t) => (
               <button
                 key={t.id}
                 type="button"
                 role="tab"
                 aria-selected={tab === t.id}
                 onClick={() => setTabAndUrl(t.id)}
-                className={`shrink-0 inline-flex items-center gap-2 text-[13.5px] font-semibold px-3.5 py-2 rounded-full transition-colors ${
+                className={`shrink-0 text-[13.5px] font-semibold px-3.5 py-2 rounded-full transition-colors ${
                   tab === t.id
                     ? 'bg-[color:var(--color-ink)] text-[color:var(--color-paper)]'
                     : 'text-[color:var(--color-ink-2)] hover:text-[color:var(--color-ink)] hover:bg-[color:var(--color-paper-2)]'
                 }`}
               >
-                <span className="font-mono text-[10px] tabular-nums opacity-60">
-                  {String(i + 1).padStart(2, '0')}
-                </span>
                 <Bi en={t.en} zh={t.zh} />
               </button>
             ))}
@@ -119,14 +113,14 @@ function OverviewTab() {
             en={
               <>
                 Cambridge defines a <em>perspective</em> as a viewpoint on an issue that is supported by reasoning
-                and evidence — different from an <em>opinion</em>, which is a view not necessarily based on fact or
-                knowledge. Every global issue can be seen from more than one perspective, and those perspectives
+                and evidence. That's different from an <em>opinion</em>, which is a view not necessarily based on
+                fact or knowledge. Every global issue can be seen from more than one perspective, and those perspectives
                 usually sit at one of four levels.
               </>
             }
             zh={
               <>
-                剑桥将「观点」（perspective）定义为：对某一议题的看法，并有推理和证据作支持——这与
+                剑桥将「观点」（perspective）定义为：对某一议题的看法，并有推理和证据作支持：这与
                 「意见」（opinion）不同，后者不一定基于事实或知识。每一个全球性议题都可以从不止一个角度去看，
                 而这些角度通常可以归入以下四个层次之一。
               </>
@@ -139,9 +133,6 @@ function OverviewTab() {
       <div className="grid gap-10 lg:grid-cols-[minmax(0,340px)_1fr] items-start">
         <div>
           <ConcentricDiagram lang={lang} />
-          <p className="mt-4 font-mono text-[10.5px] uppercase tracking-[0.16em] text-[color:var(--color-ink-3)]">
-            <Bi en="Fig. 01 · The four levels, ringed by the cultural lens" zh="图 01 · 四大层次，外圈为文化透镜" />
-          </p>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">
@@ -169,8 +160,8 @@ function OverviewTab() {
 
       <Callout tone="violet" eyebrow={<Bi en="Cultural lens" zh="文化透镜" />}>
         <Bi
-          en="Culture isn't a fifth level sitting alongside the other four — it's a lens that colours how national, local, and personal perspectives form. Two neighbouring countries can hold very different national perspectives on the same border because their national identities are built on different histories. Two communities within the same country can see a local issue differently because of different traditions, religion, or language. Learning to notice this cultural lens is part of explaining why perspectives differ — a skill the Oxford textbook (Ch. 1) and Cambridge's mark scheme both specifically reward."
-          zh="文化并不是与前面四个层次并列的「第五个层次」，而是一面透镜，会为国家、地方和个人层面的观点染上不同的色彩。两个相邻国家可能因为各自的民族历史叙事不同，而对同一条边界持有截然不同的国家观点；同一个国家内的两个社区，也可能因为传统、宗教或语言的不同，对同一个地方议题看法不同。学会留意这层「文化透镜」，正是解释「为什么观点会不一样」这项技能的一部分——牛津教材第一章与剑桥评分标准都特别看重这项能力。"
+          en="Culture isn't a fifth level sitting alongside the other four: it's a lens that colours how national, local, and personal perspectives form. Two neighbouring countries can hold very different national perspectives on the same border because their national identities are built on different histories. Two communities within the same country can see a local issue differently because of different traditions, religion, or language. Learning to notice this cultural lens is part of explaining why perspectives differ: a skill the Oxford textbook (Ch. 1) and Cambridge's mark scheme both specifically reward."
+          zh="文化并不是与前面四个层次并列的「第五个层次」，而是一面透镜，会为国家、地方和个人层面的观点染上不同的色彩。两个相邻国家可能因为各自的民族历史叙事不同，而对同一条边界持有截然不同的国家观点；同一个国家内的两个社区，也可能因为传统、宗教或语言的不同，对同一个地方议题看法不同。学会留意这层「文化透镜」，正是解释「为什么观点会不一样」这项技能的一部分：牛津教材第一章与剑桥评分标准都特别看重这项能力。"
         />
       </Callout>
 
@@ -201,8 +192,8 @@ function OverviewTab() {
             en={
               <>
                 The Oxford textbook (Ch. 1, "Identifying global, national, and local issues") also names a fifth,
-                intermediate level: <strong>regional</strong>. An issue that spans several neighbouring countries — say,
-                haze across Southeast Asia, or drought across the Horn of Africa — is regional, not national and not
+                intermediate level: <strong>regional</strong>. An issue that spans several neighbouring countries: say,
+                haze across Southeast Asia, or drought across the Horn of Africa: is regional, not national and not
                 yet global. Cambridge's Q1(a) and Q1(b) only require the four core levels, but the regional layer is
                 useful when you write your Individual Report or Team Project.
               </>
@@ -210,7 +201,7 @@ function OverviewTab() {
             zh={
               <>
                 牛津教材第一章（「识别全球、国家与地方议题」）还提到一个介于国家与全球之间的第五层次：<strong>地区层面 (regional)</strong>。
-                跨越几个邻国的议题——例如东南亚的雾霾，或非洲之角的干旱——就属于地区层面，还不是全国的，也还没有全球化。
+                跨越几个邻国的议题：例如东南亚的雾霾，或非洲之角的干旱：就属于地区层面，还不是全国的，也还没有全球化。
                 剑桥卷一第 1(a)、1(b) 题只要求掌握四个核心层次，但在你写「个人报告」或「团队项目」时，「地区层面」这一层特别有用。
               </>
             }
@@ -221,16 +212,16 @@ function OverviewTab() {
           <Bi
             en={
               <>
-                A perspective is not a fixed identity — <em>perspectives can change over time</em>. The Oxford textbook
+                A perspective is not a fixed identity: <em>perspectives can change over time</em>. The Oxford textbook
                 gives the example of a well-known astronaut who flew multiple missions but later, in older age,
                 turned against further space exploration. When a source describes how someone's view <em>shifted</em>,
-                that shift itself is worth naming — it often reveals which value or experience did the shifting.
+                that shift itself is worth naming: it often reveals which value or experience did the shifting.
               </>
             }
             zh={
               <>
-                观点并不是一成不变的身份——<em>观点会随时间改变</em>。牛津教材举了一位曾多次执行任务的知名宇航员为例：
-                他在晚年反过来反对进一步的太空探索。当资料在描述某个人观点<em>发生转变</em>时，这个转变本身就值得点出——它往往能揭示是哪一项价值观或经历在起作用。
+                观点并不是一成不变的身份：<em>观点会随时间改变</em>。牛津教材举了一位曾多次执行任务的知名宇航员为例：
+                他在晚年反过来反对进一步的太空探索。当资料在描述某个人观点<em>发生转变</em>时，这个转变本身就值得点出：它往往能揭示是哪一项价值观或经历在起作用。
               </>
             }
           />
@@ -240,7 +231,7 @@ function OverviewTab() {
   );
 }
 
-/* Concentric diagram — cleaner version of the SVG in the original */
+/* Concentric diagram: cleaner version of the SVG in the original */
 function ConcentricDiagram({ lang }: { lang: 'en' | 'zh' }) {
   const labels =
     lang === 'zh'
@@ -283,19 +274,19 @@ function FrameworkTab() {
           <Bi
             en={
               <>
-                <strong>"Identify"</strong> means naming which level a perspective sits at, and whose it is — no
+                <strong>"Identify"</strong> means naming which level a perspective sits at, and whose it is: no
                 reasoning required. <strong>"Describe"</strong> means stating the points of a topic and giving its
-                characteristics and main features — clear and full, but without justification.{' '}
-                <strong>"Explain"</strong> goes further still — setting out reasons, making relationships clear, and
+                characteristics and main features: clear and full, but without justification.{' '}
+                <strong>"Explain"</strong> goes further still: setting out reasons, making relationships clear, and
                 saying why and/or how, supported with evidence. These are Cambridge's own definitions, and they
                 matter: a "describe" question and an "explain" question are marked on different things.
               </>
             }
             zh={
               <>
-                <strong>「识别」(identify)</strong>是指说出一个观点属于哪个层次、是谁的观点——不需要说明理由。
-                <strong>「描述」(describe)</strong>是指说明某一主题的要点，列出其特征与主要方面——要清楚而全面，但不需要论证。
-                <strong>「解释」(explain)</strong>则要求更进一步——说明理由、理清关系，并说明为什么／如何，并有证据支持。这些是剑桥官方定义，非常关键：「描述」题与「解释」题的评分标准并不相同。
+                <strong>「识别」(identify)</strong>是指说出一个观点属于哪个层次、是谁的观点：不需要说明理由。
+                <strong>「描述」(describe)</strong>是指说明某一主题的要点，列出其特征与主要方面：要清楚而全面，但不需要论证。
+                <strong>「解释」(explain)</strong>则要求更进一步：说明理由、理清关系，并说明为什么／如何，并有证据支持。这些是剑桥官方定义，非常关键：「描述」题与「解释」题的评分标准并不相同。
               </>
             }
           />
@@ -351,8 +342,8 @@ function FrameworkTab() {
 
       <Callout tone="amber">
         <Bi
-          en="A source rarely spells out all five elements with equal clarity, and the same sentence can sometimes serve two elements at once — you'll see this in the worked example below. A strong answer covers as many elements as the source genuinely supports, backed by specific words from the text. Don't invent an element that isn't there just to complete the set."
-          zh="一份资料很少会把这五个要素都同样清楚地写出来，有时同一句话甚至能同时体现两个要素——你会在下面的范例中看到这一点。一个出色的答案，会尽可能覆盖资料真正能支持的要素，并有资料中的具体词语作为依据。不要为了凑齐五项，而生造一个资料中并不存在的要素。"
+          en="A source rarely spells out all five elements with equal clarity, and the same sentence can sometimes serve two elements at once: you'll see this in the worked example below. A strong answer covers as many elements as the source genuinely supports, backed by specific words from the text. Don't invent an element that isn't there just to complete the set."
+          zh="一份资料很少会把这五个要素都同样清楚地写出来，有时同一句话甚至能同时体现两个要素：你会在下面的范例中看到这一点。一个出色的答案，会尽可能覆盖资料真正能支持的要素，并有资料中的具体词语作为依据。不要为了凑齐五项，而生造一个资料中并不存在的要素。"
         />
       </Callout>
 
@@ -361,8 +352,8 @@ function FrameworkTab() {
           en={
             <>
               The Oxford textbook (Ch. 1) frames source analysis as two moves: <strong>provenance</strong> (where the
-              source came from — its owner, credentials, format, whether it's primary or secondary) and{' '}
-              <strong>content</strong> (what the material actually says — its claims, arguments, and judgements). The
+              source came from: its owner, credentials, format, whether it's primary or secondary) and{' '}
+              <strong>content</strong> (what the material actually says: its claims, arguments, and judgements). The
               Five Elements above unpack the <em>content</em>. But before you describe a perspective, always ask:{' '}
               <em>whose perspective is this, and why should I trust their framing?</em> That single question separates
               a Level 2 answer from a Level 3 one on Q1(d).
@@ -370,8 +361,8 @@ function FrameworkTab() {
           }
           zh={
             <>
-              牛津教材第一章将资料分析归纳为两步：<strong>出处 (provenance)</strong>——资料来自哪里？作者是谁、其资历如何、
-              是什么格式、是一手还是二手？——以及<strong>内容 (content)</strong>——资料实际说了什么？它的断言、论点与判断是什么？
+              牛津教材第一章将资料分析归纳为两步：<strong>出处 (provenance)</strong>：资料来自哪里？作者是谁、其资历如何、
+              是什么格式、是一手还是二手？：以及<strong>内容 (content)</strong>：资料实际说了什么？它的断言、论点与判断是什么？
               上面的五要素分析的是<em>内容</em>。但在你描述某个观点之前，请务必先问：
               <em>这是谁的观点？我为什么应该信任这种表述方式？</em>
               就是这一个问题，把 Q1(d) 的等级 2 答案与等级 3 答案区分开来。
@@ -442,7 +433,7 @@ function FrameworkTab() {
 
       <div>
         <DisplayH3 className="mb-3">
-          <Bi en="Worked example — from the real 2026 paper" zh="范例 —— 来自 2026 年真题" />
+          <Bi en="Worked example: from the real 2026 paper" zh="范例 ： 来自 2026 年真题" />
         </DisplayH3>
         <p className="text-[13px] text-[color:var(--color-ink-3)] font-mono uppercase tracking-[0.12em] mb-5">
           <Bi
@@ -487,32 +478,32 @@ const WORKED_EXAMPLE = [
   {
     labelEn: 'Issues',
     labelZh: '议题',
-    en: '"a lack of fitness, loneliness and insecurity" — the continuing effects of the pandemic GSO is responding to.',
-    zh: '“缺乏运动、孤独感和不安全感”——疫情持续带来、GSO 正在应对的影响。',
+    en: '"a lack of fitness, loneliness and insecurity": the continuing effects of the pandemic GSO is responding to.',
+    zh: '“缺乏运动、孤独感和不安全感”：疫情持续带来、GSO 正在应对的影响。',
   },
   {
     labelEn: 'Values',
     labelZh: '价值观',
-    en: '"sports contribute to our social and cultural understanding" / "emphasise the importance of inclusion" — GSO values sport and inclusion.',
-    zh: '“体育有助于增进我们的社会与文化理解”／“强调包容的重要性”——GSO 看重体育与包容。',
+    en: '"sports contribute to our social and cultural understanding" / "emphasise the importance of inclusion": GSO values sport and inclusion.',
+    zh: '“体育有助于增进我们的社会与文化理解”／“强调包容的重要性”：GSO 看重体育与包容。',
   },
   {
     labelEn: 'Causes',
     labelZh: '原因',
-    en: '"in response to the many continuing effects of the Covid-19 pandemic" — GSO frames the pandemic as the cause; "should not be underestimated" implies underestimation of sport as a secondary cause.',
-    zh: '“以应对新冠疫情持续带来的种种影响”——GSO 将疫情视为原因；“不容小觑”则暗示对体育的低估是另一个原因。',
+    en: '"in response to the many continuing effects of the Covid-19 pandemic": GSO frames the pandemic as the cause; "should not be underestimated" implies underestimation of sport as a secondary cause.',
+    zh: '“以应对新冠疫情持续带来的种种影响”：GSO 将疫情视为原因；“不容小觑”则暗示对体育的低估是另一个原因。',
   },
   {
     labelEn: 'Consequences',
     labelZh: '后果',
-    en: 'The same phrase — "lack of fitness, loneliness and insecurity" — doubles as a consequence; "improved the health of local people" is a positive consequence of GSO\'s own work.',
+    en: 'The same phrase: "lack of fitness, loneliness and insecurity": doubles as a consequence; "improved the health of local people" is a positive consequence of GSO\'s own work.',
     zh: '同一句“缺乏运动、孤独感和不安全感”，同时也可以作为后果；“改善了当地居民的健康状况”则是 GSO 自身工作带来的正面后果。',
   },
   {
     labelEn: 'Actions',
     labelZh: '行动',
-    en: '"work with local governments, NGOs, and local communities to create sustainable sports programmes" — GSO\'s actual programme of action.',
-    zh: '“与地方政府、非政府组织及地方社区合作，共同打造可持续的全民体育项目”——GSO 实际采取的行动。',
+    en: '"work with local governments, NGOs, and local communities to create sustainable sports programmes": GSO\'s actual programme of action.',
+    zh: '“与地方政府、非政府组织及地方社区合作，共同打造可持续的全民体育项目”：GSO 实际采取的行动。',
   },
 ];
 
@@ -530,7 +521,7 @@ function CaseStudyTab() {
         <p className="text-[15.5px] leading-[1.6] pretty">
           <Bi
             en="For six years, the nations of Kavara and Denrith disputed ownership of the Miren Valley, a fertile farming region on their shared border. A ceasefire has now held for two years. Families displaced during the conflict are slowly returning, though many still live in camps. Below are four voices connected to the valley."
-            zh="六年来，卡瓦拉（Kavara）与登里斯（Denrith）两国一直在争夺共同边境上一片肥沃农业地区——米伦谷（Miren Valley）的主权。目前，停火已维持两年。在冲突期间流离失所的家庭正逐渐返回家园，但仍有许多人生活在难民营中。以下是四位与米伦谷相关人士的心声。"
+            zh="六年来，卡瓦拉（Kavara）与登里斯（Denrith）两国一直在争夺共同边境上一片肥沃农业地区：米伦谷（Miren Valley）的主权。目前，停火已维持两年。在冲突期间流离失所的家庭正逐渐返回家园，但仍有许多人生活在难民营中。以下是四位与米伦谷相关人士的心声。"
           />
         </p>
       </div>
@@ -607,8 +598,8 @@ function PracticeTab() {
         </DisplayH2>
         <Body className="mt-5">
           <Bi
-            en="Read each statement. Choose which level of perspective it represents, then check your answer. For four of the ten, you'll also write a short WHY explanation — the reasoning is where the marks live."
-            zh="阅读下面每一句话，判断它属于哪一个层次，然后核对答案。其中四题还需要你写一段简短的「为什么」说明——理由才是拿分的关键。"
+            en="Read each statement. Choose which level of perspective it represents, then check your answer. For four of the ten, you'll also write a short WHY explanation: the reasoning is where the marks live."
+            zh="阅读下面每一句话，判断它属于哪一个层次，然后核对答案。其中四题还需要你写一段简短的「为什么」说明：理由才是拿分的关键。"
           />
         </Body>
       </div>
@@ -698,16 +689,16 @@ function ExamPracticeTab() {
         <Bi
           en={
             <>
-              Question 1 is <strong>Cambridge IGCSE 0457/13, June 2026, Question 1(c)</strong> — a released past paper,
+              Question 1 is <strong>Cambridge IGCSE 0457/13, June 2026, Question 1(c)</strong>: a released past paper,
               reproduced unaltered for WMSI's internal revision. Questions 2–4 are <strong>original practice</strong> written
-              in the same style and length (350–400 words) and same format — they are <strong>not</strong> from any real Cambridge paper.
+              in the same style and length (350–400 words) and same format: they are <strong>not</strong> from any real Cambridge paper.
               Each question has its own self-assessment tool, adapted from the official Table A mark scheme.
             </>
           }
           zh={
             <>
-              第一题是<strong>剑桥 IGCSE 0457/13，2026 年 6 月第 1(c) 题</strong>——已发布的历年真题，用于 WMSI 校内复习，原文未作任何改动。
-              第 2 至 4 题是<strong>原创练习</strong>，按相同的风格与篇幅（350–400 字）撰写，格式一致——
+              第一题是<strong>剑桥 IGCSE 0457/13，2026 年 6 月第 1(c) 题</strong>：已发布的历年真题，用于 WMSI 校内复习，原文未作任何改动。
+              第 2 至 4 题是<strong>原创练习</strong>，按相同的风格与篇幅（350–400 字）撰写，格式一致：
               但它们<strong>并非</strong>取自任何真实的剑桥试卷。每道题都配有根据官方表 A 评分标准改编的自我评估工具。
             </>
           }
@@ -732,9 +723,9 @@ function ExamQuestion({ q }: { q: (typeof DESCRIBE_QUESTIONS)[number] }) {
   const result = useMemo(() => {
     const n = Object.values(checked).filter(Boolean).length;
     if (!use) return null;
-    if (n >= 4 && use === 'frequent') return { label: { en: 'Likely Level 3 — Clear analysis', zh: '可能达到等级 3 —— 清晰分析' }, range: '5–6' };
-    if (n >= 2 && (use === 'frequent' || use === 'some')) return { label: { en: 'Likely Level 2 — Some analysis', zh: '可能达到等级 2 —— 一定程度的分析' }, range: '3–4' };
-    if (n >= 1) return { label: { en: 'Likely Level 1 — Limited analysis', zh: '可能达到等级 1 —— 有限分析' }, range: '1–2' };
+    if (n >= 4 && use === 'frequent') return { label: { en: 'Likely Level 3: Clear analysis', zh: '可能达到等级 3 ： 清晰分析' }, range: '5–6' };
+    if (n >= 2 && (use === 'frequent' || use === 'some')) return { label: { en: 'Likely Level 2: Some analysis', zh: '可能达到等级 2 ： 一定程度的分析' }, range: '3–4' };
+    if (n >= 1) return { label: { en: 'Likely Level 1: Limited analysis', zh: '可能达到等级 1 ： 有限分析' }, range: '1–2' };
     return { label: { en: 'No creditable elements checked yet', zh: '目前尚未勾选任何可得分的要素' }, range: '0' };
   }, [checked, use]);
 
@@ -770,14 +761,14 @@ function ExamQuestion({ q }: { q: (typeof DESCRIBE_QUESTIONS)[number] }) {
           <Bi
             en={
               <>
-                <strong>Command word — Describe:</strong> state the points of a topic / give characteristics and main features.
-                Lighter than "explain" — you are not required to justify reasoning, just cover the perspective's features
+                <strong>Command word: Describe:</strong> state the points of a topic / give characteristics and main features.
+                Lighter than "explain": you are not required to justify reasoning, just cover the perspective's features
                 clearly and fully.
               </>
             }
             zh={
               <>
-                <strong>指令词 —— 描述 (Describe)：</strong>说明某一主题的要点／列出主要特征。比「解释」更轻——不需要论证理由，
+                <strong>指令词 ： 描述 (Describe)：</strong>说明某一主题的要点／列出主要特征。比「解释」更轻：不需要论证理由，
                 只需清楚而全面地说明这个观点的各项特征。
               </>
             }
@@ -801,13 +792,13 @@ function ExamQuestion({ q }: { q: (typeof DESCRIBE_QUESTIONS)[number] }) {
             en={
               <>
                 Go back through what you wrote. Tick a box only if your answer covers that element <em>and</em> supports it
-                with a specific word, phrase, or detail from the source — not just a general description.
+                with a specific word, phrase, or detail from the source: not just a general description.
               </>
             }
             zh={
               <>
                 回顾你写的内容。只有当你的答案涉及了该要素，<em>并且</em>用资料中的具体词语、短语或细节作支持时，
-                才勾选该项——而不是泛泛而谈。
+                才勾选该项：而不是泛泛而谈。
               </>
             }
           />
@@ -831,7 +822,7 @@ function ExamQuestion({ q }: { q: (typeof DESCRIBE_QUESTIONS)[number] }) {
                   <strong>
                     <Bi en={el.labelEn} zh={el.labelZh} />
                   </strong>{' '}
-                  — <Bi en={el.descEn} zh={el.descZh} />
+                 : <Bi en={el.descEn} zh={el.descZh} />
                 </span>
               </label>
             );
@@ -881,8 +872,8 @@ function ExamQuestion({ q }: { q: (typeof DESCRIBE_QUESTIONS)[number] }) {
             </p>
             <p className="mt-2 text-[12.5px] text-[color:var(--color-ink-3)]">
               <Bi
-                en="This is a self-assessment estimate to guide your revision — it is not an official mark. Only your teacher's judgement counts for real feedback."
-                zh="这只是用于帮助复习的自我评估估计——并非正式分数。只有老师的评判才是真正的反馈。"
+                en="This is a self-assessment estimate to guide your revision: it is not an official mark. Only your teacher's judgement counts for real feedback."
+                zh="这只是用于帮助复习的自我评估估计：并非正式分数。只有老师的评判才是真正的反馈。"
               />
             </p>
           </div>
@@ -892,26 +883,26 @@ function ExamQuestion({ q }: { q: (typeof DESCRIBE_QUESTIONS)[number] }) {
           <div className="mt-5 bg-[color:var(--color-amber-soft)] border-l-[3px] border-[color:var(--color-amber)] rounded-r-md p-4">
             <p className="font-semibold text-[13.5px] mb-2 text-[color:var(--color-ink)]">
               <Bi
-                en="Table A — Analysis of issues and perspectives (AO1), 6 marks"
-                zh="表 A —— 议题与观点分析 (AO1)，共 6 分"
+                en="Table A: Analysis of issues and perspectives (AO1), 6 marks"
+                zh="表 A ： 议题与观点分析 (AO1)，共 6 分"
               />
             </p>
             <p className="text-[13.5px] mb-1.5 text-[color:var(--color-ink)]">
               <Bi
-                en={<><strong>Level 3 (5–6 marks) — Clear analysis:</strong> describes a wide range of elements of the perspective; frequent use of relevant material and examples taken from the source.</>}
-                zh={<><strong>等级 3（5–6 分）—— 清晰分析：</strong>描述了该观点广泛的多个要素；频繁使用了资料中的相关材料与例子。</>}
+                en={<><strong>Level 3 (5–6 marks): Clear analysis:</strong> describes a wide range of elements of the perspective; frequent use of relevant material and examples taken from the source.</>}
+                zh={<><strong>等级 3（5–6 分）： 清晰分析：</strong>描述了该观点广泛的多个要素；频繁使用了资料中的相关材料与例子。</>}
               />
             </p>
             <p className="text-[13.5px] mb-1.5 text-[color:var(--color-ink)]">
               <Bi
-                en={<><strong>Level 2 (3–4 marks) — Some analysis:</strong> describes a range of elements; some use of relevant material and examples.</>}
-                zh={<><strong>等级 2（3–4 分）—— 一定分析：</strong>描述了一定范围的要素；使用了部分资料中的相关材料与例子。</>}
+                en={<><strong>Level 2 (3–4 marks): Some analysis:</strong> describes a range of elements; some use of relevant material and examples.</>}
+                zh={<><strong>等级 2（3–4 分）： 一定分析：</strong>描述了一定范围的要素；使用了部分资料中的相关材料与例子。</>}
               />
             </p>
             <p className="text-[13.5px] mb-2 text-[color:var(--color-ink)]">
               <Bi
-                en={<><strong>Level 1 (1–2 marks) — Limited analysis:</strong> describes a limited range of elements; little or no use of material and examples.</>}
-                zh={<><strong>等级 1（1–2 分）—— 有限分析：</strong>描述的观点要素范围有限；很少或没有使用资料中的材料与例子。</>}
+                en={<><strong>Level 1 (1–2 marks): Limited analysis:</strong> describes a limited range of elements; little or no use of material and examples.</>}
+                zh={<><strong>等级 1（1–2 分）： 有限分析：</strong>描述的观点要素范围有限；很少或没有使用资料中的材料与例子。</>}
               />
             </p>
             <p className="text-[12.5px] text-[color:var(--color-ink-3)]">
@@ -942,8 +933,8 @@ function YourTurnTab() {
         </DisplayH2>
         <Body className="mt-5">
           <Bi
-            en="This is a full-length practice passage (like the ones in Exam Practice), but here you get sentence frames and a model answer to lean on — this is supported practice, not a test."
-            zh="这是一段完整篇幅的练习段落（与「应试练习」中的段落类似），但这里有句型框架和范文可供你参考——这是有支持的练习，而不是测验。"
+            en="This is a full-length practice passage (like the ones in Exam Practice), but here you get sentence frames and a model answer to lean on: this is supported practice, not a test."
+            zh="这是一段完整篇幅的练习段落（与「应试练习」中的段落类似），但这里有句型框架和范文可供你参考：这是有支持的练习，而不是测验。"
           />
         </Body>
       </div>

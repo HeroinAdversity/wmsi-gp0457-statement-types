@@ -63,15 +63,9 @@ function SiteHeader({
         >
           <Link to="/" className="flex items-center gap-3 group">
             <WMSIMark />
-            <div className="hidden sm:block">
-              <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--color-ink-3)] leading-tight">
-                WMSI · Ipoh
-              </p>
-              <p className="font-display text-[15px] leading-tight text-[color:var(--color-ink)]">
-                Global Perspectives
-                <span className="font-mono text-[10.5px] ml-1.5 text-[color:var(--color-ink-3)]">0457</span>
-              </p>
-            </div>
+            <p className="hidden sm:block font-display text-[16px] leading-tight text-[color:var(--color-ink)]">
+              WMSI Global Perspectives
+            </p>
           </Link>
 
           <nav className="hidden lg:flex items-center gap-1">
@@ -193,34 +187,24 @@ function MobileMenu({ lang }: { lang: 'en' | 'zh' }) {
 function SiteFooter() {
   const { lang } = useLanguage();
   return (
-    <footer className="mt-24 border-t border-[color:var(--color-line)] py-12 bg-[color:var(--color-paper-2)]">
+    <footer className="mt-24 border-t border-[color:var(--color-line)] py-10 bg-[color:var(--color-paper-2)]">
       <Container size="wide">
-        <div className="grid gap-8 md:grid-cols-[1fr_auto] items-start">
+        <div className="flex items-center gap-3 mb-3">
+          <WMSIMark />
           <div>
-            <div className="flex items-center gap-3 mb-4">
-              <WMSIMark />
-              <div>
-                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-[color:var(--color-ink-3)]">
-                  Wesley Methodist School International · Ipoh
-                </p>
-                <p className="font-display text-[16px] text-[color:var(--color-ink)] mt-0.5">
-                  IGCSE Global Perspectives 0457
-                </p>
-              </div>
-            </div>
-            <p className="text-[13.5px] text-[color:var(--color-ink-2)] max-w-[52ch] leading-relaxed">
-              {lang === 'zh'
-                ? '面向 Y10 学生与教师的自学与教学资源。所有内容以剑桥考试大纲和牛津教材第三版为依据。'
-                : 'Self-study and teaching resources for Y10 students and staff. All content aligned to the Cambridge 0457 syllabus and the Oxford Global Perspectives 3rd edition textbook.'}
+            <p className="font-display text-[15px] text-[color:var(--color-ink)]">
+              Wesley Methodist School International, Ipoh
             </p>
-          </div>
-          <div className="text-[12px] font-mono text-[color:var(--color-ink-3)] md:text-right">
-            <p>Y10 · Term 1 · 2026 – 2027</p>
-            <p className="mt-1">
-              {lang === 'zh' ? '最后更新' : 'Last updated'} · {new Date().toISOString().slice(0, 7)}
+            <p className="text-[13px] text-[color:var(--color-ink-3)] mt-0.5">
+              IGCSE Global Perspectives 0457
             </p>
           </div>
         </div>
+        <p className="text-[13px] text-[color:var(--color-ink-2)] max-w-[62ch] leading-relaxed">
+          {lang === 'zh'
+            ? '面向 Y10 学生与教师的自学与教学资源。所有内容以剑桥考试大纲与牛津教材第三版为依据。凡出自剑桥历年真题的题目与资料均在页面上清楚标注，其余为原创练习。'
+            : 'Self-study and teaching resources for Y10. Content aligned to the Cambridge 0457 syllabus and the Oxford Global Perspectives 3rd edition textbook. Released past-paper material is labelled inline; everything else is original practice.'}
+        </p>
       </Container>
     </footer>
   );
