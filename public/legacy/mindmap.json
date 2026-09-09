@@ -1,0 +1,137 @@
+{
+  "name": "Cambridge IGCSE Global Perspectives (0457) - Types of Statements",
+  "children": [
+    {
+      "name": "Generalisation",
+      "children": [
+        {
+          "name": "Definition: Small case to everyone/absolute claims"
+        },
+        {
+          "name": "Signal Words: Always, never, everyone, all"
+        },
+        {
+          "name": "Exam Focus: Question 1(b) (3 marks)"
+        },
+        {
+          "name": "Explanation: Identify stretch or absolute word"
+        }
+      ]
+    },
+    {
+      "name": "Fact",
+      "children": [
+        {
+          "name": "Definition: Verifiable via evidence"
+        },
+        {
+          "name": "Application: Q2, Q3, Q4 evidence"
+        },
+        {
+          "name": "Nuance: Can still be presented with bias"
+        }
+      ]
+    },
+    {
+      "name": "Opinion",
+      "children": [
+        {
+          "name": "Definition: Personal unprovable view"
+        },
+        {
+          "name": "Application: Evaluating reasoning (Q2, Q3)"
+        },
+        {
+          "name": "Nuance: Specific judgement vs principle"
+        }
+      ]
+    },
+    {
+      "name": "Value",
+      "children": [
+        {
+          "name": "Definition: Underlying principles of right/wrong"
+        },
+        {
+          "name": "Application: Perspectives (Q3, Q4)"
+        }
+      ]
+    },
+    {
+      "name": "Claim",
+      "children": [
+        {
+          "name": "Definition: Assertion put forward as true"
+        },
+        {
+          "name": "Application: Analysing arguments (Q3)"
+        },
+        {
+          "name": "Evaluation: Check evidence and source"
+        }
+      ]
+    },
+    {
+      "name": "Prediction",
+      "children": [
+        {
+          "name": "Definition: Expected future events"
+        },
+        {
+          "name": "Application: Future consequences (Q2, Q4)"
+        },
+        {
+          "name": "Distinction: Uncheckable now"
+        }
+      ]
+    },
+    {
+      "name": "Bias",
+      "children": [
+        {
+          "name": "Definition: One-sided slant or selection"
+        },
+        {
+          "name": "Application: Evaluating research (Q2)"
+        },
+        {
+          "name": "Key: Focuses on what is left out"
+        }
+      ]
+    },
+    {
+      "name": "Vested Interest",
+      "children": [
+        {
+          "name": "Definition: Personal/financial stake in info"
+        },
+        {
+          "name": "Application: Source reliability (Q2, Q3)"
+        },
+        {
+          "name": "Nuance: Requires careful evidence check"
+        }
+      ]
+    },
+    {
+      "name": "Common Confusions",
+      "children": [
+        {
+          "name": "Generalisation vs Fact (Sample size)"
+        },
+        {
+          "name": "Opinion vs Value (Judgement vs Principle)"
+        },
+        {
+          "name": "Prediction vs Fact (Future vs Past)"
+        },
+        {
+          "name": "Bias vs Vested Interest (Presentation vs Stake)"
+        },
+        {
+          "name": "Claim vs Fact (Assertion vs Verification)"
+        }
+      ]
+    }
+  ]
+}

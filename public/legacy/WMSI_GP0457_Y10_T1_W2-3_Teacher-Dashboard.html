@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teacher Dashboard — Statement Types &amp; Diagnostic Results</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --navy: #1B2A4A;
+  --navy-light: #243658;
+  --navy-soft: #e8ecf4;
+  --gold: #C8922A;
+  --gold-light: #f0c86a;
+  --gold-pale: #fdf4e3;
+  --teal: #1A5C5C;
+  --teal-pale: #e0f0f0;
+  --cream: #F5F0E8;
+  --cream-dark: #ede7d9;
+  --white: #FEFCF8;
+  --border: #d0c9bc;
+  --text: #1e1e1e;
+  --text-mid: #4a4a4a;
+  --text-muted: #888888;
+  --success: #1a6b3c;
+  --success-bg: #e8f5ee;
+  --error: #b91c1c;
+  --error-bg: #fee2e2;
+  --radius: 10px;
+
+  --violet: #6C63FF;
+  --violet-dark: #4b41e0;
+  --violet-pale: #ecebff;
+
+  --track-gen: #C8922A; --track-gen-bg: #fdf4e3; --track-gen-text: #7a5a15;
+  --track-pairs: #1A5C5C; --track-pairs-bg: #e0f0f0; --track-pairs-text: #1A5C5C;
+  --track-context: #6C63FF; --track-context-bg: #ecebff; --track-context-text: #4b41e0;
+
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.10);
+  --transition: 0.2s ease;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-body); background: var(--cream); color: var(--text); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+
+.site-header { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%); color: var(--white); padding: 26px 24px; box-shadow: var(--shadow-md); }
+.header-inner { max-width: 1100px; margin: 0 auto; }
+.eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-light); margin-bottom: 10px; }
+.header-title { font-family: var(--font-display); font-weight: 800; font-size: clamp(24px, 4vw, 32px); margin-bottom: 6px; }
+.header-sub { font-size: 14px; color: #cfd6e6; max-width: 700px; }
+
+main { max-width: 1100px; margin: 0 auto; padding: 32px 24px 90px; }
+
+.card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow-sm); margin-bottom: 22px; }
+.section-lead { font-family: var(--font-display); font-weight: 700; font-size: 19px; color: var(--navy); margin-bottom: 8px; }
+.section-desc { font-size: 13.5px; color: var(--text-mid); margin-bottom: 16px; }
+
+/* ═══ INPUT PANEL ═══ */
+.input-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+.input-tab-btn {
+  font-family: var(--font-body); font-weight: 600; font-size: 13px; padding: 8px 16px;
+  border-radius: 999px; border: 1.5px solid var(--border); background: var(--cream); color: var(--text-mid); cursor: pointer;
+}
+.input-tab-btn.active { background: var(--navy); border-color: var(--navy); color: var(--white); }
+.input-panel { display: none; }
+.input-panel.active { display: block; }
+
+.paste-box {
+  width: 100%; min-height: 90px; font-family: var(--font-mono); font-size: 12.5px;
+  padding: 12px 14px; border: 1.5px solid var(--border); border-radius: 8px; resize: vertical;
+}
+.paste-box:focus { outline: none; border-color: var(--gold); }
+
+.upload-zone {
+  border: 2px dashed var(--border); border-radius: 10px; padding: 30px; text-align: center;
+  cursor: pointer; transition: all var(--transition); background: var(--cream);
+}
+.upload-zone:hover, .upload-zone.dragover { border-color: var(--gold); background: var(--gold-pale); }
+.upload-zone input[type=file] { display: none; }
+.upload-zone .upload-icon { font-size: 28px; margin-bottom: 8px; }
+.upload-zone .upload-text { font-size: 13.5px; color: var(--text-mid); }
+.upload-zone .upload-hint { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+.btn {
+  font-family: var(--font-body); font-weight: 700; font-size: 13.5px;
+  padding: 11px 22px; border-radius: 8px; border: none; cursor: pointer; transition: all var(--transition);
+}
+.btn-primary { background: var(--navy); color: var(--white); }
+.btn-primary:hover { background: var(--navy-light); }
+.btn-ghost { background: transparent; border: 1.5px solid var(--border); color: var(--text-mid); }
+.btn-ghost:hover { border-color: var(--navy); color: var(--navy); }
+.btn-gold { background: var(--gold); color: var(--navy); }
+.btn-gold:hover { background: var(--gold-light); }
+
+.add-row { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+
+.status-msg { font-size: 13px; padding: 10px 13px; border-radius: 7px; margin-top: 10px; display: none; }
+.status-msg.show { display: block; }
+.status-msg.success { background: var(--success-bg); color: var(--success); }
+.status-msg.error { background: var(--error-bg); color: var(--error); }
+
+/* ═══ SUMMARY STATS ═══ */
+.summary-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 20px; }
+.stat-card { background: var(--navy-soft); border-radius: 10px; padding: 16px; text-align: center; }
+.stat-card .stat-num { font-family: var(--font-mono); font-size: 26px; font-weight: 700; color: var(--navy); }
+.stat-card .stat-label { font-size: 11.5px; color: var(--text-mid); text-transform: uppercase; letter-spacing: 0.03em; margin-top: 4px; }
+
+/* ═══ FILTER TABS ═══ */
+.filter-row { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+.filter-btn {
+  font-family: var(--font-body); font-weight: 600; font-size: 12.5px; padding: 7px 14px;
+  border-radius: 999px; border: 1.5px solid var(--border); background: var(--white); color: var(--text-mid); cursor: pointer;
+}
+.filter-btn.active { background: var(--gold); border-color: var(--gold); color: var(--navy); }
+
+/* ═══ ROSTER TABLES ═══ */
+.roster-section-title { font-family: var(--font-display); font-size: 16px; color: var(--navy); margin: 20px 0 10px; }
+.roster-table { width: 100%; border-collapse: collapse; }
+.roster-table th, .roster-table td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); font-size: 13px; }
+.roster-table th { font-family: var(--font-mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.03em; color: var(--text-muted); }
+.roster-table tr:hover { background: var(--cream); }
+
+.track-chip { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px; display: inline-block; white-space: nowrap; }
+.score-cell { font-family: var(--font-mono); font-weight: 600; }
+.flag-cell { font-size: 12px; }
+.flag-warn { color: var(--error); font-weight: 700; }
+.flag-ok { color: var(--success); }
+
+.empty-state { text-align: center; padding: 50px 20px; color: var(--text-muted); }
+.empty-state .icon { font-size: 40px; margin-bottom: 12px; }
+
+.tool-source-badge { font-family: var(--font-mono); font-size: 10px; padding: 2px 7px; border-radius: 5px; background: var(--cream-dark); color: var(--text-muted); margin-left: 6px; }
+
+.delete-btn { background: none; border: none; color: var(--error); cursor: pointer; font-size: 15px; padding: 2px 6px; }
+.delete-btn:hover { opacity: 0.7; }
+
+.notice-box { background: var(--gold-pale); border: 1px solid var(--gold); border-radius: 8px; padding: 12px 15px; font-size: 12.5px; color: var(--text-mid); margin-top: 18px; }
+
+.reflection-cell { max-width: 280px; font-size: 12.5px; color: var(--text-mid); font-style: italic; }
+</style>
+
+<style>
+/* ══════════ PACKAGE NAV (shared across all pages in this pack) ══════════
+   Self-contained: hardcoded palette so it renders identically regardless of
+   which page's token set it lands in. */
+.pkg-nav{background:#16233d;border-bottom:1px solid rgba(240,200,106,.28);
+  font-family:'DM Sans',system-ui,sans-serif;position:relative;z-index:120}
+.pkg-nav-inner{max-width:1240px;margin:0 auto;display:flex;align-items:center;
+  gap:4px;padding:0 14px;overflow-x:auto;scrollbar-width:none}
+.pkg-nav-inner::-webkit-scrollbar{display:none}
+.pkg-nav-label{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;color:#8b98b5;white-space:nowrap;
+  padding-right:14px;margin-right:6px;border-right:1px solid rgba(255,255,255,.14);flex-shrink:0}
+.pkg-nav a{display:inline-flex;align-items:center;gap:7px;white-space:nowrap;
+  font-size:14px;font-weight:600;color:#c9d3e6;text-decoration:none;
+  padding:13px 14px;min-height:48px;border-bottom:3px solid transparent;transition:color .18s,border-color .18s,background .18s}
+.pkg-nav a:hover{color:#fff;background:rgba(255,255,255,.06)}
+.pkg-nav a:focus-visible{outline:3px solid #f0c86a;outline-offset:-3px}
+.pkg-nav a[aria-current="page"]{color:#f0c86a;border-bottom-color:#C8922A}
+.pkg-nav a svg{flex-shrink:0}
+.pkg-nav .is-staff{color:#9fb0cc;margin-left:auto;border-left:1px solid rgba(255,255,255,.14)}
+@media (max-width:640px){
+  .pkg-nav-label{display:none}
+  .pkg-nav a{font-size:13.5px;padding:12px 11px}
+  .pkg-nav .is-staff{margin-left:0}
+}
+@media (prefers-reduced-motion:reduce){.pkg-nav a{transition:none}}
+</style>
+</head>
+<body>
+<nav class="pkg-nav" aria-label="Resources in this pack"><div class="pkg-nav-inner"><span class="pkg-nav-label">Statement Types</span><a href="index.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10l9-7 9 7v10a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1z"/></svg>Home</a><a href="WMSI_GP0457_Y10_T1_W2-3_Statement-Types-and-Generalisation_TOOL.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h11l5 5v11a1 1 0 01-1 1H4a1 1 0 01-1-1V5a1 1 0 011-1z"/><path d="M14 4v6h6"/></svg>Notes &amp; Video</a><a href="mindmap.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="5" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="19" cy="19" r="2"/><path d="M9.9 9.9L6.4 6.4M14.1 9.9l3.5-3.5M14.1 14.1l3.5 3.5"/></svg>Mind Map</a><a href="WMSI_GP0457_Y10_T1_W2-3_Find-Your-Gap_Diagnostic-Targeted-Practice_TOOL.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/><circle cx="12" cy="12" r="5"/></svg>Find Your Gap</a><a href="WMSI_GP0457_Y10_T1_W2-3_Statement-Types-Intensive_TOOL.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>Intensive Practice</a><a href="WMSI_GP0457_The-Source_Claim-vs-Evidence_TOOL.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>The Source</a><a class="is-staff" href="WMSI_GP0457_Y10_T1_W2-3_Teacher-Dashboard.html" aria-current="page"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 9h8M8 13h5"/></svg>Teacher Dashboard</a><a class="is-staff" href="WMSI_GP0457_Y10_T1_W2-3_Statement-Types-Intensive_Teacher-Dashboard.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>Intensive Dashboard</a></div></nav>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="eyebrow">Cambridge IGCSE 0457 · Component 1 · Teacher Dashboard</div>
+    <h1 class="header-title">Class Results — Statement Types &amp; Generalisation</h1>
+    <p class="header-sub">Paste or upload each student's result code from either practice tool. Everything here lives only in this browser tab — export before you close it if you want to keep it.</p>
+  </div>
+</header>
+
+<main>
+
+  <!-- ═══ INPUT PANEL ═══ -->
+  <div class="card">
+    <div class="section-lead">Add a student result</div>
+    <p class="section-desc">Works with codes from either tool: <strong>Find Your Gap</strong> (diagnostic) or <strong>Reading Between the Lines</strong> (statement types).</p>
+
+    <div class="input-tabs">
+      <button class="input-tab-btn active" onclick="switchInputMode('paste', this)">Paste code</button>
+      <button class="input-tab-btn" onclick="switchInputMode('upload', this)">Upload file</button>
+    </div>
+
+    <div class="input-panel active" id="inputPanelPaste">
+      <textarea class="paste-box" id="pasteCodeBox" placeholder="Paste the student's result code here..."></textarea>
+      <div class="add-row">
+        <button class="btn btn-primary" onclick="addFromPaste()">Add to class results</button>
+        <button class="btn btn-ghost" onclick="document.getElementById('pasteCodeBox').value=''">Clear</button>
+      </div>
+    </div>
+
+    <div class="input-panel" id="inputPanelUpload">
+      <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+        <div class="upload-icon">📁</div>
+        <div class="upload-text">Click to choose file(s), or drag and drop here</div>
+        <div class="upload-hint">Accepts .json result files — multiple files at once is fine</div>
+        <input type="file" id="fileInput" accept=".json" multiple>
+      </div>
+    </div>
+
+    <div class="status-msg" id="statusMsg"></div>
+  </div>
+
+  <!-- ═══ SUMMARY ═══ -->
+  <div class="card" id="summaryCard" style="display:none;">
+    <div class="section-lead">Class summary</div>
+    <div class="summary-stats" id="summaryStats"></div>
+
+    <div class="filter-row" id="filterRow">
+      <button class="filter-btn active" onclick="setFilter('all', this)">All results</button>
+      <button class="filter-btn" onclick="setFilter('diagnostic', this)">Diagnostic only</button>
+      <button class="filter-btn" onclick="setFilter('statement-types', this)">Statement Types only</button>
+      <button class="filter-btn" onclick="setFilter('flagged', this)">⚠ Needs attention</button>
+    </div>
+  </div>
+
+  <!-- ═══ RESULTS ═══ -->
+  <div id="resultsContainer">
+    <div class="card">
+      <div class="empty-state">
+        <div class="icon">📋</div>
+        <p>No student results added yet. Paste a code or upload a file above to get started.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ EXPORT CLASS RESULTS ═══ -->
+  <div class="card" id="exportClassCard" style="display:none;">
+    <div class="section-lead">Export class results</div>
+    <p class="section-desc">Save everything collected in this session before you close the tab — nothing here is stored automatically.</p>
+    <div class="add-row">
+      <button class="btn btn-gold" onclick="exportClassCsv()">Download as CSV</button>
+      <button class="btn btn-ghost" onclick="exportClassJson()">Download as JSON</button>
+      <button class="btn btn-ghost" onclick="clearAllResults()" style="margin-left:auto; color:var(--error); border-color:var(--error);">Clear all results</button>
+    </div>
+    <div class="notice-box">CSV is best for opening in Excel/Sheets to keep alongside your tracker. JSON preserves full detail (including reflection answers) if you want to re-import into this dashboard later in the session.</div>
+  </div>
+
+</main>
+
+<script>
+/* ══════════════════════════════════════════════
+   STATE — all in-memory, this browser session only
+   ══════════════════════════════════════════════ */
+let classResults = []; // array of { toolId, studentName, timestamp, data }
+let currentFilter = 'all';
+
+const TRACK_META = {
+  generalisation: { name: 'Generalisation', bg: 'var(--track-gen-bg)', text: 'var(--track-gen-text)' },
+  pairs: { name: 'Confusable Pairs', bg: 'var(--track-pairs-bg)', text: 'var(--track-pairs-text)' },
+  context: { name: 'Context Clues', bg: 'var(--track-context-bg)', text: 'var(--track-context-text)' }
+};
+
+/* ══════════════════════════════════════════════
+   INPUT MODE SWITCHING
+   ══════════════════════════════════════════════ */
+function switchInputMode(mode, btn) {
+  document.querySelectorAll('.input-tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.input-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(mode === 'paste' ? 'inputPanelPaste' : 'inputPanelUpload').classList.add('active');
+}
+
+/* ══════════════════════════════════════════════
+   DECODE + VALIDATE
+   ══════════════════════════════════════════════ */
+function decodeRecord(code) {
+  try {
+    const json = decodeURIComponent(escape(atob(code.trim())));
+    const record = JSON.parse(json);
+    if (!record.toolId || !record.studentName || !record.data) {
+      throw new Error('Missing required fields');
+    }
+    if (record.toolId !== 'diagnostic' && record.toolId !== 'statement-types') {
+      throw new Error('Unrecognised tool ID — this code may be from a different resource');
+    }
+    return { ok: true, record };
+  } catch (e) {
+    return { ok: false, error: e.message };
+  }
+}
+
+function showStatus(msg, isError) {
+  const el = document.getElementById('statusMsg');
+  el.textContent = msg;
+  el.className = `status-msg show ${isError ? 'error' : 'success'}`;
+  setTimeout(() => { el.classList.remove('show'); }, 3500);
+}
+
+/* ══════════════════════════════════════════════
+   ADD FROM PASTE
+   ══════════════════════════════════════════════ */
+function addFromPaste() {
+  const box = document.getElementById('pasteCodeBox');
+  const code = box.value.trim();
+  if (!code) {
+    showStatus('Paste a result code first.', true);
+    return;
+  }
+  const result = decodeRecord(code);
+  if (!result.ok) {
+    showStatus(`Could not read this code — ${result.error}. Check it was copied in full.`, true);
+    return;
+  }
+  const wasAdded = addResultToClass(result.record);
+  box.value = '';
+  if (wasAdded) {
+    showStatus(`Added ${result.record.studentName}'s result.`, false);
+  } else {
+    showStatus(`${result.record.studentName}'s result was already added — skipped duplicate.`, true);
+  }
+}
+
+/* ══════════════════════════════════════════════
+   ADD FROM FILE UPLOAD
+   ══════════════════════════════════════════════ */
+document.getElementById('fileInput').addEventListener('change', (e) => {
+  handleFiles(e.target.files);
+});
+
+const uploadZone = document.getElementById('uploadZone');
+uploadZone.addEventListener('dragover', (e) => { e.preventDefault(); uploadZone.classList.add('dragover'); });
+uploadZone.addEventListener('dragleave', () => { uploadZone.classList.remove('dragover'); });
+uploadZone.addEventListener('drop', (e) => {
+  e.preventDefault();
+  uploadZone.classList.remove('dragover');
+  handleFiles(e.dataTransfer.files);
+});
+
+function handleFiles(fileList) {
+  let addedCount = 0;
+  let duplicateCount = 0;
+  let errorCount = 0;
+  const files = Array.from(fileList);
+  let processed = 0;
+
+  if (files.length === 0) return;
+
+  files.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const record = JSON.parse(event.target.result);
+        if (!record.toolId || !record.studentName || !record.data) {
+          throw new Error('Missing required fields');
+        }
+        const wasAdded = addResultToClass(record);
+        if (wasAdded) addedCount++;
+        else duplicateCount++;
+      } catch (e) {
+        errorCount++;
+      }
+      processed++;
+      if (processed === files.length) {
+        const parts = [];
+        if (addedCount > 0) parts.push(`Added ${addedCount} result${addedCount > 1 ? 's' : ''}`);
+        if (duplicateCount > 0) parts.push(`${duplicateCount} duplicate${duplicateCount > 1 ? 's' : ''} skipped`);
+        if (errorCount > 0) parts.push(`${errorCount} file(s) could not be read`);
+        const isError = addedCount === 0;
+        showStatus(parts.length > 0 ? parts.join(', ') + '.' : 'No files processed.', isError);
+      }
+    };
+    reader.readAsText(file);
+  });
+}
+
+/* ══════════════════════════════════════════════
+   ADD TO CLASS ROSTER (dedupe by name+timestamp)
+   ══════════════════════════════════════════════ */
+function addResultToClass(record) {
+  const alreadyExists = classResults.some(r => r.studentName === record.studentName && r.timestamp === record.timestamp && r.toolId === record.toolId);
+  if (alreadyExists) {
+    return false; // caller decides how to message this
+  }
+  classResults.push(record);
+  renderDashboard();
+  return true;
+}
+
+function removeResult(index) {
+  classResults.splice(index, 1);
+  renderDashboard();
+}
+
+function clearAllResults() {
+  if (!confirm('Remove all collected results from this dashboard? This cannot be undone (unless you already exported).')) return;
+  classResults = [];
+  renderDashboard();
+}
+
+/* ══════════════════════════════════════════════
+   FILTERING
+   ══════════════════════════════════════════════ */
+function setFilter(filter, btn) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderDashboard(false); // don't rebuild stats/filter row, just results
+}
+
+function isFlagged(record) {
+  if (record.toolId === 'diagnostic') {
+    return record.data.improved === false;
+  }
+  if (record.toolId === 'statement-types') {
+    const [sortCorrect, sortTotal] = record.data.sortAndClassify.split('/').map(Number);
+    const [checklistDone, checklistTotal] = record.data.exitChecklistComplete.split('/').map(Number);
+    return (sortTotal > 0 && sortCorrect / sortTotal < 0.5) || (checklistTotal > 0 && checklistDone / checklistTotal < 0.5);
+  }
+  return false;
+}
+
+function getFilteredResults() {
+  if (currentFilter === 'all') return classResults;
+  if (currentFilter === 'flagged') return classResults.filter(isFlagged);
+  return classResults.filter(r => r.toolId === currentFilter);
+}
+
+/* ══════════════════════════════════════════════
+   RENDER
+   ══════════════════════════════════════════════ */
+function renderDashboard(rebuildStats = true) {
+  const container = document.getElementById('resultsContainer');
+  const summaryCard = document.getElementById('summaryCard');
+  const exportCard = document.getElementById('exportClassCard');
+
+  if (classResults.length === 0) {
+    summaryCard.style.display = 'none';
+    exportCard.style.display = 'none';
+    container.innerHTML = `
+      <div class="card">
+        <div class="empty-state">
+          <div class="icon">📋</div>
+          <p>No student results added yet. Paste a code or upload a file above to get started.</p>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  summaryCard.style.display = 'block';
+  exportCard.style.display = 'block';
+
+  if (rebuildStats) {
+    const diagCount = classResults.filter(r => r.toolId === 'diagnostic').length;
+    const stCount = classResults.filter(r => r.toolId === 'statement-types').length;
+    const flaggedCount = classResults.filter(isFlagged).length;
+    document.getElementById('summaryStats').innerHTML = `
+      <div class="stat-card"><div class="stat-num">${classResults.length}</div><div class="stat-label">Total results</div></div>
+      <div class="stat-card"><div class="stat-num">${diagCount}</div><div class="stat-label">Diagnostic runs</div></div>
+      <div class="stat-card"><div class="stat-num">${stCount}</div><div class="stat-label">Statement Types runs</div></div>
+      <div class="stat-card" style="background:${flaggedCount > 0 ? 'var(--error-bg)' : 'var(--success-bg)'};">
+        <div class="stat-num" style="color:${flaggedCount > 0 ? 'var(--error)' : 'var(--success)'};">${flaggedCount}</div>
+        <div class="stat-label">Needs attention</div>
+      </div>
+    `;
+  }
+
+  const filtered = getFilteredResults();
+  const diagResults = filtered.filter(r => r.toolId === 'diagnostic');
+  const stResults = filtered.filter(r => r.toolId === 'statement-types');
+
+  let html = '';
+
+  if (diagResults.length > 0) {
+    html += `<div class="roster-section-title">Find Your Gap — Diagnostic results</div>
+    <div class="card">
+      <table class="roster-table">
+        <thead><tr><th>Name</th><th>Weakest area</th><th>Diagnostic score</th><th>Re-test</th><th>Improved?</th><th></th></tr></thead>
+        <tbody>`;
+    diagResults.forEach((r) => {
+      const globalIdx = classResults.indexOf(r);
+      const meta = TRACK_META[r.data.assignedTrack] || { name: r.data.assignedTrack, bg: 'var(--cream-dark)', text: 'var(--text-mid)' };
+      const improved = r.data.improved;
+      html += `<tr>
+        <td>${escapeHtml(r.studentName)}</td>
+        <td><span class="track-chip" style="background:${meta.bg}; color:${meta.text};">${meta.name}</span></td>
+        <td class="score-cell">${r.data.diagnosticScoreInWeakArea}</td>
+        <td class="score-cell">${r.data.retestScore}</td>
+        <td class="flag-cell ${improved ? 'flag-ok' : 'flag-warn'}">${improved ? '✓ Yes' : '⚠ Not yet'}</td>
+        <td><button class="delete-btn" onclick="removeResult(${globalIdx})" title="Remove">✕</button></td>
+      </tr>`;
+    });
+    html += `</tbody></table></div>`;
+  }
+
+  if (stResults.length > 0) {
+    html += `<div class="roster-section-title">Reading Between the Lines — Statement Types results</div>
+    <div class="card">
+      <table class="roster-table">
+        <thead><tr><th>Name</th><th>Sort &amp; Classify</th><th>Gen. Drill XP</th><th>Mixed Arena</th><th>Checklist</th><th>Reflection</th><th></th></tr></thead>
+        <tbody>`;
+    stResults.forEach((r) => {
+      const globalIdx = classResults.indexOf(r);
+      html += `<tr>
+        <td>${escapeHtml(r.studentName)}</td>
+        <td class="score-cell">${r.data.sortAndClassify}</td>
+        <td class="score-cell">${r.data.generalisationDrillXp}</td>
+        <td class="score-cell">${r.data.mixedArenaScore} <span style="color:var(--text-muted); font-weight:400;">(streak ${r.data.mixedArenaBestStreak})</span></td>
+        <td class="score-cell">${r.data.exitChecklistComplete}</td>
+        <td class="reflection-cell">"${escapeHtml(r.data.reflectionAnswer)}"</td>
+        <td><button class="delete-btn" onclick="removeResult(${globalIdx})" title="Remove">✕</button></td>
+      </tr>`;
+    });
+    html += `</tbody></table></div>`;
+  }
+
+  if (filtered.length === 0) {
+    html = `<div class="card"><div class="empty-state"><div class="icon">🔍</div><p>No results match this filter.</p></div></div>`;
+  }
+
+  container.innerHTML = html;
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+/* ══════════════════════════════════════════════
+   EXPORT CLASS RESULTS
+   ══════════════════════════════════════════════ */
+function exportClassCsv() {
+  if (classResults.length === 0) return;
+  const rows = [['Student Name', 'Tool', 'Timestamp', 'Weakest Area / Category', 'Score 1', 'Score 2', 'Score 3', 'Flag', 'Notes']];
+
+  classResults.forEach(r => {
+    if (r.toolId === 'diagnostic') {
+      rows.push([
+        r.studentName, 'Diagnostic (Find Your Gap)', r.timestamp,
+        (TRACK_META[r.data.assignedTrack] || {}).name || r.data.assignedTrack,
+        r.data.diagnosticScoreInWeakArea, r.data.retestScore, '',
+        r.data.improved ? 'OK' : 'NEEDS ATTENTION', ''
+      ]);
+    } else {
+      rows.push([
+        r.studentName, 'Statement Types (Reading Between the Lines)', r.timestamp,
+        '', r.data.sortAndClassify, r.data.generalisationDrillXp, r.data.mixedArenaScore,
+        isFlagged(r) ? 'NEEDS ATTENTION' : 'OK',
+        r.data.reflectionAnswer
+      ]);
+    }
+  });
+
+  const csv = rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')).join('\n');
+  downloadBlob(csv, 'text/csv', `gp0457-class-results-${dateStamp()}.csv`);
+}
+
+function exportClassJson() {
+  if (classResults.length === 0) return;
+  const json = JSON.stringify({ exportedAt: new Date().toISOString(), results: classResults }, null, 2);
+  downloadBlob(json, 'application/json', `gp0457-class-results-${dateStamp()}.json`);
+}
+
+function dateStamp() {
+  return new Date().toISOString().split('T')[0];
+}
+
+function downloadBlob(content, mimeType, filename) {
+  const blob = new Blob([content], { type: mimeType });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>

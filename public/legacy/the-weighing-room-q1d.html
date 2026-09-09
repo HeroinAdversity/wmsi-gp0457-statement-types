@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Weighing Room — Q1(d) Significance Skills</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --slate:#4B5D67;
+  --slate-light:#6E8089;
+  --plum:#59405C;
+  --plum-light:#7A5C7D;
+  --deep:#322F3D;
+  --deep-soft:#403C4D;
+  --rose:#87556F;
+  --rose-light:#A5768E;
+  --cream:#F1EBBB;
+  --cream-soft:#F8F4D9;
+  --cream-dim:#E4DCA1;
+  --ink:#2B2733;
+  --paper:#FBF9EE;
+  --white:#FFFFFF;
+  --radius:10px;
+  --radius-sm:6px;
+  --shadow:0 8px 24px rgba(50,47,61,0.14);
+  --shadow-sm:0 2px 8px rgba(50,47,61,0.10);
+  --font-display:'Playfair Display',serif;
+  --font-body:'DM Sans',sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:var(--font-body);
+  background:var(--paper);
+  color:var(--ink);
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+img,svg{max-width:100%;display:block;}
+button{font-family:inherit;cursor:pointer;}
+textarea{font-family:inherit;}
+
+/* ============ HEADER ============ */
+.hero{
+  position:relative;
+  background:linear-gradient(180deg,var(--slate) 0%, var(--plum) 55%, var(--deep) 100%);
+  color:var(--cream-soft);
+  padding:38px 24px 54px;
+  overflow:hidden;
+}
+.hero-inner{
+  max-width:1080px;
+  margin:0 auto;
+  position:relative;
+  z-index:2;
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:28px;
+  flex-wrap:wrap;
+}
+.hero-code{
+  font-family:var(--font-mono);
+  font-size:12.5px;
+  letter-spacing:0.03em;
+  color:var(--cream);
+  opacity:0.85;
+  margin-bottom:10px;
+}
+.hero h1{
+  font-family:var(--font-display);
+  font-weight:800;
+  font-size:clamp(34px,5.4vw,54px);
+  margin:0 0 8px 0;
+  line-height:1.04;
+  color:var(--white);
+}
+.hero p.lede{
+  font-size:16.5px;
+  max-width:520px;
+  color:var(--cream);
+  margin:0;
+  opacity:0.92;
+}
+.hero-scale{
+  width:150px;
+  height:150px;
+  flex-shrink:0;
+}
+.hero-sky-dot{
+  position:absolute;
+  border-radius:50%;
+  background:var(--cream);
+  opacity:0.5;
+}
+.progress-strip{
+  max-width:1080px;
+  margin:-26px auto 0;
+  position:relative;
+  z-index:3;
+  padding:0 24px;
+}
+.progress-card{
+  background:var(--white);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:14px 18px;
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+.progress-label{
+  font-family:var(--font-mono);
+  font-size:11.5px;
+  color:var(--slate);
+  margin-right:6px;
+  white-space:nowrap;
+}
+.progress-dot{
+  width:11px;height:11px;border-radius:50%;
+  background:var(--cream-dim);
+  border:2px solid var(--cream-dim);
+  transition:all .25s ease;
+}
+.progress-dot.done{
+  background:var(--rose);
+  border-color:var(--rose);
+}
+
+/* ============ TABS ============ */
+.tabbar{
+  max-width:1080px;
+  margin:22px auto 0;
+  padding:0 24px;
+  display:flex;
+  gap:6px;
+  overflow-x:auto;
+  scrollbar-width:thin;
+}
+.tabbtn{
+  border:none;
+  background:transparent;
+  color:var(--slate);
+  font-weight:600;
+  font-size:14.5px;
+  padding:11px 16px;
+  border-radius:var(--radius-sm) var(--radius-sm) 0 0;
+  white-space:nowrap;
+  border-bottom:3px solid transparent;
+  transition:all .18s ease;
+}
+.tabbtn:hover{background:var(--cream-soft);}
+.tabbtn.active{
+  color:var(--deep);
+  border-bottom:3px solid var(--rose);
+  background:var(--cream-soft);
+}
+.tabpanel{display:none;}
+.tabpanel.active{display:block;animation:fadein .35s ease;}
+@keyframes fadein{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+.container{
+  max-width:1080px;
+  margin:0 auto;
+  padding:28px 24px 80px;
+}
+.panel{
+  background:var(--white);
+  border-radius:var(--radius);
+  padding:28px 30px;
+  box-shadow:var(--shadow-sm);
+  margin-bottom:22px;
+}
+.panel h2{
+  font-family:var(--font-display);
+  font-weight:800;
+  font-size:26px;
+  color:var(--deep);
+  margin:0 0 6px 0;
+}
+.panel h3{
+  font-family:var(--font-display);
+  font-weight:700;
+  font-size:19px;
+  color:var(--plum);
+  margin:22px 0 10px 0;
+}
+.panel p{font-size:15.5px;color:var(--ink);max-width:760px;}
+.section-tag{
+  font-family:var(--font-mono);
+  font-size:12px;
+  color:var(--rose);
+  font-weight:600;
+  margin-bottom:6px;
+}
+
+/* ============ REUSABLE COMPONENTS ============ */
+.exam-frame{
+  border:1.5px solid var(--deep);
+  border-radius:var(--radius-sm);
+  padding:16px 18px;
+  background:var(--cream-soft);
+  margin:14px 0;
+}
+.exam-frame .qmeta{
+  display:flex;
+  justify-content:space-between;
+  font-family:var(--font-mono);
+  font-size:11.5px;
+  color:var(--slate);
+  margin-bottom:8px;
+}
+.exam-frame .qstem{
+  font-size:15.5px;
+  color:var(--deep);
+}
+.exam-frame .marks{
+  font-family:var(--font-mono);
+  font-weight:600;
+  color:var(--rose);
+}
+
+.source-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+  margin:14px 0;
+}
+@media(max-width:720px){.source-grid{grid-template-columns:1fr;}}
+.source-box{
+  background:var(--paper);
+  border:1px solid var(--cream-dim);
+  border-left:4px solid var(--slate);
+  border-radius:var(--radius-sm);
+  padding:14px 16px;
+}
+.source-box.two{border-left-color:var(--rose);}
+.source-box .src-label{
+  font-family:var(--font-mono);
+  font-size:11.5px;
+  font-weight:600;
+  color:var(--slate);
+  text-transform:none;
+  margin-bottom:6px;
+  display:block;
+}
+.source-box.two .src-label{color:var(--rose);}
+.source-box p{font-size:14px;margin:0;color:var(--ink);}
+
+.btn{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:var(--rose);
+  color:var(--white);
+  border:none;
+  padding:11px 18px;
+  border-radius:var(--radius-sm);
+  font-weight:600;
+  font-size:14.5px;
+  transition:all .18s ease;
+}
+.btn:hover{background:var(--plum);transform:translateY(-1px);}
+.btn.secondary{
+  background:transparent;
+  color:var(--plum);
+  border:1.5px solid var(--plum);
+}
+.btn.secondary:hover{background:var(--cream-soft);}
+.btn:disabled{opacity:0.45;cursor:not-allowed;transform:none;}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;}
+
+/* toolkit cards */
+.toolkit-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(178px,1fr));
+  gap:14px;
+  margin:16px 0;
+}
+.toolkit-card{
+  background:var(--paper);
+  border:1.5px solid var(--cream-dim);
+  border-radius:var(--radius);
+  padding:16px;
+  transition:all .2s ease;
+  cursor:default;
+}
+.toolkit-card:hover{
+  border-color:var(--rose);
+  box-shadow:var(--shadow-sm);
+  transform:translateY(-2px);
+}
+.toolkit-card .tk-icon{width:34px;height:34px;margin-bottom:10px;}
+.toolkit-card h4{
+  font-family:var(--font-display);
+  font-size:16.5px;
+  margin:0 0 6px 0;
+  color:var(--deep);
+}
+.toolkit-card .tk-def{font-size:13.5px;color:var(--slate);margin:0 0 8px 0;}
+.toolkit-card .tk-starter{
+  font-family:var(--font-mono);
+  font-size:12px;
+  color:var(--rose);
+  background:var(--cream-soft);
+  padding:8px 10px;
+  border-radius:6px;
+  display:block;
+}
+
+/* matching exercise */
+.match-item{
+  background:var(--paper);
+  border:1px solid var(--cream-dim);
+  border-radius:var(--radius-sm);
+  padding:12px 14px;
+  margin-bottom:10px;
+}
+.match-item p{font-size:14.5px;margin:0 0 10px 0;}
+.match-options{display:flex;gap:8px;flex-wrap:wrap;}
+.chip{
+  border:1.5px solid var(--slate);
+  color:var(--slate);
+  background:transparent;
+  padding:7px 13px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:600;
+  transition:all .15s ease;
+}
+.chip:hover{background:var(--cream-soft);}
+.chip.correct{background:var(--rose);border-color:var(--rose);color:var(--white);}
+.chip.wrong{background:var(--deep-soft);border-color:var(--deep-soft);color:var(--white);opacity:0.6;}
+.match-feedback{font-size:13px;margin-top:8px;font-weight:600;min-height:18px;}
+.match-feedback.ok{color:#3d6b4a;}
+.match-feedback.no{color:var(--rose);}
+
+/* worked model annotation */
+.model-answer{
+  font-size:15.5px;
+  line-height:1.85;
+  background:var(--paper);
+  border-radius:var(--radius-sm);
+  padding:18px 20px;
+  border:1px solid var(--cream-dim);
+}
+.anno{
+  cursor:pointer;
+  border-bottom:2px dotted var(--rose);
+  transition:background .15s ease;
+  border-radius:3px;
+  padding:0 1px;
+}
+.anno:hover, .anno.open{background:var(--cream-dim);}
+.anno-note{
+  display:none;
+  background:var(--deep);
+  color:var(--cream-soft);
+  font-family:var(--font-mono);
+  font-size:12px;
+  padding:9px 12px;
+  border-radius:6px;
+  margin:6px 0 10px 0;
+  max-width:520px;
+}
+.anno-note.show{display:block;animation:fadein .2s ease;}
+
+.level-compare{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+  gap:12px;
+  margin-top:14px;
+}
+.level-card{
+  border-radius:var(--radius-sm);
+  padding:13px 14px;
+  font-size:13.5px;
+  border:1.5px solid var(--cream-dim);
+  background:var(--paper);
+}
+.level-card .lv-tag{
+  font-family:var(--font-mono);
+  font-size:11px;
+  font-weight:700;
+  color:var(--white);
+  background:var(--slate);
+  padding:2px 8px;
+  border-radius:999px;
+  display:inline-block;
+  margin-bottom:8px;
+}
+.level-card.l4 .lv-tag{background:#3d6b4a;}
+.level-card.l3 .lv-tag{background:var(--rose);}
+.level-card.l2 .lv-tag{background:var(--plum-light);}
+.level-card.l1 .lv-tag{background:var(--deep-soft);}
+
+/* level meter */
+.level-meter{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:16px 0;
+}
+.lm-track{
+  flex:1;
+  height:10px;
+  background:var(--cream-dim);
+  border-radius:999px;
+  overflow:hidden;
+}
+.lm-fill{
+  height:100%;
+  background:linear-gradient(90deg,var(--slate),var(--rose));
+  width:12.5%;
+  transition:width .5s ease;
+  border-radius:999px;
+}
+.lm-label{
+  font-family:var(--font-mono);
+  font-size:12.5px;
+  font-weight:700;
+  color:var(--plum);
+  white-space:nowrap;
+}
+
+.builder-box{
+  background:var(--paper);
+  border:1.5px dashed var(--rose-light);
+  border-radius:var(--radius-sm);
+  padding:16px 18px;
+  font-size:15px;
+  line-height:1.8;
+  min-height:70px;
+}
+.builder-box .added{animation:fadein .4s ease;}
+.prompt-btn{
+  background:var(--white);
+  border:1.5px solid var(--slate);
+  color:var(--deep);
+  padding:11px 15px;
+  border-radius:var(--radius-sm);
+  font-size:14px;
+  font-weight:600;
+  text-align:left;
+  width:100%;
+  margin-bottom:9px;
+  transition:all .15s ease;
+}
+.prompt-btn:hover:not(:disabled){border-color:var(--rose);background:var(--cream-soft);}
+.prompt-btn:disabled{opacity:0.4;text-decoration:line-through;cursor:default;}
+.prompt-btn .pb-tag{
+  display:block;
+  font-family:var(--font-mono);
+  font-size:10.5px;
+  color:var(--rose);
+  margin-bottom:3px;
+}
+
+/* exam practice */
+.practice-nav{
+  display:flex;
+  gap:8px;
+  margin-bottom:18px;
+  flex-wrap:wrap;
+}
+.pnav-btn{
+  width:40px;height:40px;
+  border-radius:50%;
+  border:2px solid var(--cream-dim);
+  background:var(--white);
+  color:var(--slate);
+  font-weight:700;
+  font-family:var(--font-mono);
+  font-size:14px;
+}
+.pnav-btn.active{border-color:var(--rose);background:var(--rose);color:var(--white);}
+.pnav-btn.completed{border-color:#3d6b4a;}
+.pset{display:none;}
+.pset.active{display:block;animation:fadein .3s ease;}
+.pset .topic-tag{
+  font-family:var(--font-mono);
+  font-size:11.5px;
+  color:var(--white);
+  background:var(--plum);
+  display:inline-block;
+  padding:3px 10px;
+  border-radius:999px;
+  margin-bottom:10px;
+}
+textarea.response{
+  width:100%;
+  min-height:130px;
+  border:1.5px solid var(--cream-dim);
+  border-radius:var(--radius-sm);
+  padding:12px 14px;
+  font-size:14.5px;
+  resize:vertical;
+  color:var(--ink);
+}
+textarea.response:focus{outline:none;border-color:var(--rose);}
+.wordcount{font-family:var(--font-mono);font-size:12px;color:var(--slate);margin-top:5px;}
+
+.checklist{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0;}
+.check-chip{
+  border:1.5px solid var(--cream-dim);
+  background:var(--paper);
+  padding:8px 13px;
+  border-radius:8px;
+  font-size:13px;
+  font-weight:600;
+  color:var(--slate);
+}
+.check-chip input{margin-right:6px;}
+
+.band-select{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0;}
+.band-opt{
+  border:1.5px solid var(--cream-dim);
+  background:var(--white);
+  padding:9px 13px;
+  border-radius:var(--radius-sm);
+  font-size:13px;
+  font-weight:600;
+  color:var(--deep);
+  text-align:left;
+  max-width:190px;
+}
+.band-opt.selected{border-color:var(--rose);background:var(--cream-soft);}
+.band-opt b{display:block;font-family:var(--font-mono);color:var(--rose);}
+
+.reveal-panel{
+  display:none;
+  background:var(--deep);
+  color:var(--cream-soft);
+  border-radius:var(--radius-sm);
+  padding:16px 18px;
+  margin-top:14px;
+  font-size:14px;
+}
+.reveal-panel.show{display:block;animation:fadein .3s ease;}
+.reveal-panel h4{
+  font-family:var(--font-display);
+  color:var(--white);
+  margin:0 0 8px 0;
+  font-size:16px;
+}
+.reveal-panel ul{margin:6px 0 14px 18px;padding:0;}
+.reveal-panel li{margin-bottom:4px;}
+
+.callout{
+  border-left:4px solid var(--rose);
+  background:var(--cream-soft);
+  padding:14px 16px;
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+  font-size:14.5px;
+  margin:14px 0;
+}
+.callout.journal{border-left-color:var(--slate);}
+.callout.bonus{border-left-color:var(--slate);background:var(--cream-dim);}
+.callout b{color:var(--plum);}
+
+.journal-box{
+  background:var(--deep);
+  color:var(--cream-soft);
+  border-radius:var(--radius);
+  padding:20px 24px;
+}
+.journal-box h3{color:var(--white);margin-top:0;}
+.journal-box ul{padding-left:18px;}
+.journal-box li{margin-bottom:6px;}
+
+.export-area{
+  background:var(--paper);
+  border:1px solid var(--cream-dim);
+  border-radius:var(--radius-sm);
+  padding:14px 16px;
+  margin-top:12px;
+}
+textarea.exportcode{
+  width:100%;min-height:70px;font-family:var(--font-mono);font-size:11.5px;
+  border:1px solid var(--cream-dim);border-radius:6px;padding:10px;color:var(--slate);
+}
+.name-input{
+  padding:9px 12px;border:1.5px solid var(--cream-dim);border-radius:var(--radius-sm);
+  font-size:14px;margin-right:8px;width:220px;
+}
+.stat-row{display:flex;gap:18px;flex-wrap:wrap;margin:14px 0;}
+.stat{
+  background:var(--paper);border-radius:var(--radius-sm);padding:12px 16px;
+  border:1px solid var(--cream-dim);min-width:110px;
+}
+.stat b{display:block;font-family:var(--font-display);font-size:22px;color:var(--plum);}
+.stat span{font-size:12px;color:var(--slate);}
+
+@media(prefers-reduced-motion: reduce){
+  *{animation-duration:0.001ms !important;transition-duration:0.001ms !important;}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-sky-dot" style="width:8px;height:8px;top:24px;left:12%;"></div>
+  <div class="hero-sky-dot" style="width:5px;height:5px;top:60px;left:22%;"></div>
+  <div class="hero-sky-dot" style="width:6px;height:6px;top:38px;left:78%;"></div>
+  <div class="hero-sky-dot" style="width:4px;height:4px;top:80px;left:88%;"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-code">CAMBRIDGE IGCSE GLOBAL PERSPECTIVES 0457 &nbsp;·&nbsp; PAPER 1, QUESTION 1(d)</div>
+      <h1>The Weighing Room</h1>
+      <p class="lede">Sources give you three or four benefits, causes or consequences. Your job is to decide which one carries the most weight — and prove it. That's Q1(d), worth 8 of your 70 marks on Paper 1.</p>
+    </div>
+    <svg class="hero-scale" viewBox="0 0 150 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <line x1="75" y1="22" x2="75" y2="118" stroke="#F1EBBB" stroke-width="3"/>
+      <circle cx="75" cy="20" r="5" fill="#F1EBBB"/>
+      <line x1="30" y1="45" x2="120" y2="45" stroke="#F1EBBB" stroke-width="3"/>
+      <line x1="30" y1="45" x2="22" y2="72" stroke="#F1EBBB" stroke-width="2"/>
+      <line x1="30" y1="45" x2="38" y2="72" stroke="#F1EBBB" stroke-width="2"/>
+      <path d="M14 72 Q22 90 30 72 Z" fill="none" stroke="#F1EBBB" stroke-width="2"/>
+      <line x1="120" y1="45" x2="112" y2="60" stroke="#F1EBBB" stroke-width="2"/>
+      <line x1="120" y1="45" x2="128" y2="60" stroke="#F1EBBB" stroke-width="2"/>
+      <path d="M104 60 Q112 74 120 60 Z" fill="none" stroke="#F1EBBB" stroke-width="2"/>
+      <rect x="55" y="118" width="40" height="8" rx="2" fill="#F1EBBB"/>
+      <rect x="65" y="126" width="20" height="8" rx="2" fill="#F1EBBB" opacity="0.7"/>
+    </svg>
+  </div>
+</header>
+
+<div class="progress-strip">
+  <div class="progress-card">
+    <span class="progress-label">YOUR PROGRESS</span>
+    <span class="progress-dot" data-progress="overview" title="Overview"></span>
+    <span class="progress-dot" data-progress="toolkit" title="Toolkit"></span>
+    <span class="progress-dot" data-progress="model" title="Worked Model"></span>
+    <span class="progress-dot" data-progress="levelup" title="Level-Up"></span>
+    <span class="progress-dot" data-progress="practice" title="Exam Practice"></span>
+    <span class="progress-dot" data-progress="journal" title="Journal"></span>
+  </div>
+</div>
+
+<nav class="tabbar" id="tabbar">
+  <button class="tabbtn active" data-tab="overview">1 · Overview</button>
+  <button class="tabbtn" data-tab="toolkit">2 · The Toolkit</button>
+  <button class="tabbtn" data-tab="model">3 · Worked Model</button>
+  <button class="tabbtn" data-tab="levelup">4 · Level-Up</button>
+  <button class="tabbtn" data-tab="practice">5 · Exam Practice</button>
+  <button class="tabbtn" data-tab="journal">6 · Progress &amp; Journal</button>
+</nav>
+
+<main class="container">
+
+<!-- ================= TAB 1: OVERVIEW ================= -->
+<section class="tabpanel active" id="tab-overview">
+
+  <div class="panel">
+    <div class="section-tag">WHERE THIS SITS IN YOUR EXAM</div>
+    <h2>Paper 1 in one picture</h2>
+    <p>Paper 1 is 1 hour 25 minutes and worth 70 marks. It has four compulsory questions, all based on sources you read on the day — you are never tested on prior knowledge of the topic itself, only on what you can do with the sources in front of you.</p>
+    <div class="stat-row">
+      <div class="stat"><b>Q1 · 18</b><span>several short parts, incl. 1(d)</span></div>
+      <div class="stat"><b>Q2 · 16</b><span>evaluating research/evidence</span></div>
+      <div class="stat"><b>Q3 · 16</b><span>judging two arguments</span></div>
+      <div class="stat"><b>Q4 · 20</b><span>assessing a course of action</span></div>
+    </div>
+    <p>Question 1(d) is the last part of Question 1. It is marked out of <b>8</b>, against a level-based scheme examiners call <b>Table B: Analysis of issues and perspectives</b>. That's about 11% of the whole paper riding on one skill — which makes it worth getting very good at.</p>
+  </div>
+
+  <div class="panel">
+    <div class="section-tag">THE DISGUISE</div>
+    <h2>One question, four different costumes</h2>
+    <p>Q1(d) never uses the same wording twice. Here are four real exam stems. Read them and notice what stays exactly the same underneath the surface wording.</p>
+    <div class="exam-frame">
+      <div class="qmeta"><span>2026 series, Variant 11</span><span class="marks">[8]</span></div>
+      <div class="qstem">Sources 1 and 2 identify <b>benefits</b> of cooperatives. Which benefit do you think is the most significant? Explain why.</div>
+    </div>
+    <div class="exam-frame">
+      <div class="qmeta"><span>2026 series, Variant 12</span><span class="marks">[8]</span></div>
+      <div class="qstem">Sources 1 and 2 suggest <b>causes</b> of vehicle crime. Which cause do you think is the most significant? Explain why.</div>
+    </div>
+    <div class="exam-frame">
+      <div class="qmeta"><span>Practice paper</span><span class="marks">[8]</span></div>
+      <div class="qstem">Sources 1 and 2 describe <b>consequences</b> of rising food prices. Which consequence do you think is the most significant? Explain why.</div>
+    </div>
+    <div class="exam-frame">
+      <div class="qmeta"><span>Practice paper</span><span class="marks">[8]</span></div>
+      <div class="qstem">Sources 1 and 2 raise <b>challenges</b> linked to social media use. Which challenge do you think is the most significant? Explain why.</div>
+    </div>
+    <div class="callout">
+      <b>Notice:</b> "benefit", "cause", "consequence" and "challenge" are just different nouns for the same thing — a point raised in the sources. The instruction never changes: <i>pick one, then argue why it outweighs the others.</i> Learn the skill once and it works whatever noun turns up on the day.
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="section-tag">WHAT'S ACTUALLY BEING MARKED</div>
+    <h2>Choosing is free. Justifying is the marks.</h2>
+    <p>This is the single most common misunderstanding at this stage: students think the mark is for spotting a good benefit or a shocking consequence. It isn't. There is no list of "correct" answers — almost any point from the sources can reach full marks if the explanation is strong enough. In plain English, here's what separates the levels:</p>
+    <div class="level-compare">
+      <div class="level-card l1"><span class="lv-tag">1–2 marks</span>An opinion is stated but barely explained. It may not really connect to the issue at all.</div>
+      <div class="level-card l2"><span class="lv-tag">3–4 marks</span>The opinion has an explanation, but it's thin, and only loosely tied to the source material.</div>
+      <div class="level-card l3"><span class="lv-tag">5–6 marks</span>A believable explanation, mostly linked to the issue, with some support.</div>
+      <div class="level-card l4"><span class="lv-tag">7–8 marks</span>A clearly explained opinion, well supported, and consistently tied to the specific issue in front of you.</div>
+    </div>
+    <p style="margin-top:14px;">So the real question isn't "which one is most significant?" — it's "<b>what makes something significant, and can I prove it applies here?</b>" That's exactly what Tab 2 gives you.</p>
+    <div class="btn-row">
+      <button class="btn" onclick="goToTab('toolkit')">Open the Significance Toolkit →</button>
+    </div>
+  </div>
+
+</section>
+
+<!-- ================= TAB 2: TOOLKIT ================= -->
+<section class="tabpanel" id="tab-toolkit">
+
+  <div class="panel">
+    <div class="section-tag">FIVE TESTS</div>
+    <h2>The Significance Toolkit</h2>
+    <p>Every strong Q1(d) answer runs the point it picks through one or more of these five tests. Think of each one as a weight you can place on the scale to show why your chosen point outweighs the others. You don't need all five in one answer — two used well beats five used badly.</p>
+
+    <div class="toolkit-grid" id="toolkit-grid">
+      <div class="toolkit-card" data-crit="crowd">
+        <svg class="tk-icon" viewBox="0 0 40 40"><circle cx="20" cy="12" r="5" fill="#87556F"/><circle cx="9" cy="27" r="4" fill="#4B5D67"/><circle cx="31" cy="27" r="4" fill="#4B5D67"/><circle cx="20" cy="30" r="4" fill="#4B5D67"/></svg>
+        <h4>The Crowd Test</h4>
+        <p class="tk-def">Does this hit a few people, or loads of people — a town, a country, the world?</p>
+        <span class="tk-starter">"...this matters because it affects [X] people, not just a small group."</span>
+      </div>
+      <div class="toolkit-card" data-crit="hurt">
+        <svg class="tk-icon" viewBox="0 0 40 40"><path d="M20 32 C10 25 5 18 5 12 C5 7 9 4 13 4 C16 4 19 6 20 9 C21 6 24 4 27 4 C31 4 35 7 35 12 C35 18 30 25 20 32 Z" fill="none" stroke="#87556F" stroke-width="2.5"/><line x1="14" y1="14" x2="20" y2="20" stroke="#2B2733" stroke-width="2"/><line x1="20" y1="20" x2="17" y2="24" stroke="#2B2733" stroke-width="2"/><line x1="17" y1="24" x2="23" y2="28" stroke="#2B2733" stroke-width="2"/></svg>
+        <h4>The Hurt Test</h4>
+        <p class="tk-def">Does this just annoy people a bit, or does it really damage their lives?</p>
+        <span class="tk-starter">"...it has the greatest effect on [group]'s daily life, because..."</span>
+      </div>
+      <div class="toolkit-card" data-crit="fair">
+        <svg class="tk-icon" viewBox="0 0 40 40"><path d="M20 5 L34 12 L34 22 C34 30 27 35 20 37 C13 35 6 30 6 22 L6 12 Z" fill="none" stroke="#59405C" stroke-width="2.5"/></svg>
+        <h4>The Fair Test</h4>
+        <p class="tk-def">Is there a right-or-wrong issue here — is someone being treated unfairly?</p>
+        <span class="tk-starter">"...it is the most ethically serious, since it involves..."</span>
+      </div>
+      <div class="toolkit-card" data-crit="domino">
+        <svg class="tk-icon" viewBox="0 0 40 40"><rect x="6" y="18" width="6" height="16" fill="#4B5D67" transform="rotate(0 9 26)"/><rect x="16" y="14" width="6" height="18" fill="#87556F" transform="rotate(18 19 23)"/><rect x="26" y="10" width="6" height="20" fill="#59405C" transform="rotate(32 29 20)"/></svg>
+        <h4>The Domino Test</h4>
+        <p class="tk-def">Does it cause other problems, or spread to affect other people or things?</p>
+        <span class="tk-starter">"...this doesn't stop there — it also leads to..."</span>
+      </div>
+      <div class="toolkit-card" data-crit="stuck">
+        <svg class="tk-icon" viewBox="0 0 40 40"><rect x="11" y="18" width="18" height="15" rx="2" fill="none" stroke="#87556F" stroke-width="2.5"/><path d="M15 18 V12 C15 8 17 5 20 5 C23 5 25 8 25 12 V18" fill="none" stroke="#87556F" stroke-width="2.5"/><circle cx="20" cy="25" r="2" fill="#87556F"/></svg>
+        <h4>The Stuck Test</h4>
+        <p class="tk-def">Once it happens, is it easy to undo — or does it last, and stay hard to fix?</p>
+        <span class="tk-starter">"...unlike the others, this is difficult to solve because..."</span>
+      </div>
+    </div>
+
+    <div class="callout bonus">
+      <b>Bonus move — Back It Up:</b> none of the five tests above, but it makes any of them stronger. If your source quotes an expert, a study, or an organisation backing up the point you've chosen, say so. <i>"Source 2 shows that public health researchers also identify this as..."</i> An opinion backed by someone else's evidence is harder to argue with than a bare opinion.
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="section-tag">CHECK YOUR EAR FOR IT</div>
+    <h2>Spot the test being used</h2>
+    <p>Each line below is a short justification. Click the test you think it's using. These are written in the style examiners reward — not copied from any real script.</p>
+
+    <div class="match-item" data-answer="crowd">
+      <p>"I think this is the most significant because it doesn't just affect one town — it affects people in almost every country that relies on this trade."</p>
+      <div class="match-options">
+        <button class="chip">Crowd Test</button><button class="chip">Fair Test</button><button class="chip">Stuck Test</button><button class="chip">Hurt Test</button>
+      </div>
+      <div class="match-feedback"></div>
+    </div>
+    <div class="match-item" data-answer="hurt">
+      <p>"I think this is the most significant because the families affected here don't just lose a little income — they lose their home completely, with nowhere else to go."</p>
+      <div class="match-options">
+        <button class="chip">Domino Test</button><button class="chip">Hurt Test</button><button class="chip">Crowd Test</button><button class="chip">Fair Test</button>
+      </div>
+      <div class="match-feedback"></div>
+    </div>
+    <div class="match-item" data-answer="fair">
+      <p>"I think this is the most significant because it isn't right that one group is treated so differently, just because of where they happened to be born."</p>
+      <div class="match-options">
+        <button class="chip">Fair Test</button><button class="chip">Stuck Test</button><button class="chip">Crowd Test</button><button class="chip">Domino Test</button>
+      </div>
+      <div class="match-feedback"></div>
+    </div>
+    <div class="match-item" data-answer="domino">
+      <p>"This is the most significant cause because it doesn't just create one problem — a family losing income leads to children leaving school, which makes it harder for that family to recover, and it starts to affect the whole neighbourhood as local shops lose customers too."</p>
+      <div class="match-options">
+        <button class="chip">Hurt Test</button><button class="chip">Domino Test</button><button class="chip">Crowd Test</button><button class="chip">Stuck Test</button>
+      </div>
+      <div class="match-feedback"></div>
+    </div>
+    <div class="match-item" data-answer="stuck">
+      <p>"Even once the immediate event is over, this particular effect can still be found decades later, whereas the other consequences fade within a few years."</p>
+      <div class="match-options">
+        <button class="chip">Stuck Test</button><button class="chip">Fair Test</button><button class="chip">Crowd Test</button><button class="chip">Domino Test</button>
+      </div>
+      <div class="match-feedback"></div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn" onclick="goToTab('model')">See the Toolkit used in a full answer →</button>
+    </div>
+  </div>
+
+</section>
+
+<!-- ================= TAB 3: WORKED MODEL ================= -->
+<section class="tabpanel" id="tab-model">
+
+  <div class="panel">
+    <div class="section-tag">VEHICLE TOPIC: SOCIAL IDENTITY AND INCLUSION</div>
+    <h2>Read the sources</h2>
+    <p>These two sources (written for practice, in the style of a real insert) both discuss the same issue from different angles — a report extract, and an interview transcript. This mix is typical of Question 1's source material.</p>
+    <div class="source-grid">
+      <div class="source-box">
+        <span class="src-label">SOURCE 1 — Employers' association briefing</span>
+        <p>When Star Fasteners, a small manufacturing company, began actively recruiting employees with physical and sensory disabilities in 2019, managers expected mainly to fulfil a moral obligation. Three years on, the company's own figures tell a different story. Staff turnover in departments with a mixed-ability workforce fell from 34% to 11% annually — far below the sector average. Employees interviewed said they felt more loyal to a company that had adapted its processes for them, and were less likely to leave for a marginally higher salary elsewhere. A national employers' association has since published guidance encouraging other manufacturers to consider similar hiring practices, citing loyalty and retention as the clearest measurable benefit. The association's 2023 survey of 240 companies found that firms with inclusive hiring policies reported 18% lower recruitment costs than firms without such policies. Government incentive schemes, including reduced payroll tax for employers meeting inclusion quotas, were also mentioned by several companies as a reason for expanding their hiring practices, although managers were divided on how much this financial incentive alone had driven their decision.</p>
+      </div>
+      <div class="source-box two">
+        <span class="src-label">SOURCE 2 — Interview with Mei Ling Tan, operations manager</span>
+        <p><i>Interviewer:</i> What changed after you started hiring more staff with disabilities on the assembly line?<br><br>
+        <i>Mei Ling:</i> Honestly, we expected it to slow things down at first. We had to redesign two stations — lower the benches, add larger control buttons. But those redesigned stations turned out to be easier and faster for everyone to use, not just the staff we'd hired. Our overall error rate on that line actually dropped.<br><br>
+        <i>Interviewer:</i> Did you notice anything else?<br><br>
+        <i>Mei Ling:</i> Morale changed. Staff who'd worked here for years started saying the factory felt like somewhere that looked after its people. We also had a write-up in the local newspaper, which brought us more job applicants than any advert we've placed. But honestly, the biggest thing for me was watching two colleagues — one with and one without a hearing impairment — sort out a shared signal system between themselves without being asked to.</p>
+      </div>
+    </div>
+    <div class="exam-frame">
+      <div class="qmeta"><span>Worked example</span><span class="marks">[8]</span></div>
+      <div class="qstem">Sources 1 and 2 identify benefits of employing people with disabilities. Which benefit do you think is the most significant? Explain why.</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="section-tag">CLICK EACH UNDERLINED PART</div>
+    <h2>A full Level 4 answer, annotated</h2>
+    <p>Click on any dotted phrase to see what job it's doing. Notice this answer only properly explains <b>one</b> benefit in depth — it doesn't try to cover all five just to prove it read both sources.</p>
+    <div class="model-answer" id="model-answer">
+      <span class="anno" data-note="Clear, specific opinion stated immediately — no throat-clearing.">I think the most significant benefit is that redesigning workstations for staff with disabilities ended up improving conditions for the entire workforce, not just the employees the changes were originally made for.</span>
+      <span class="anno" data-note="TOOLKIT: The Crowd Test — the benefit is shown to extend beyond the group it was designed for.">This matters because the benefit reaches every worker on the line, not only the small group it was designed for.</span>
+      <span class="anno" data-note="BONUS MOVE: Back It Up — a direct, specific use of Source 2 (a named detail, not a vague 'the source says...').">Source 2 shows that when Star Fasteners lowered benches and enlarged control buttons for staff with sensory and physical disabilities, the error rate on that whole assembly line fell — meaning colleagues without disabilities benefited from the same redesign.</span>
+      <span class="anno" data-note="COMPARATIVE REASONING — required for Level 4: shows why this beats an alternative, rather than just describing it in isolation.">This makes it more significant than the government incentive scheme mentioned in Source 1, because a tax incentive only benefits the company's finances, whereas this benefit reaches every worker and improves the product itself.</span>
+      <span class="anno" data-note="TOOLKIT: The Domino Test — one change is shown triggering a chain of further effects.">It also creates a kind of chain reaction: fewer errors likely means less wasted material and less rework, which could make the whole factory more efficient, not just safer for a small group of staff.</span>
+      <span class="anno" data-note="Table B, Level 4: the opinion is 'consistently related to the identified issue' — this closing line ties everything back to the original claim.">For this reason, I think this benefit outweighs the others identified in the sources, because its effects spread furthest and touch the day-to-day experience of the most people.</span>
+    </div>
+    <div class="anno-note" id="anno-note-box"></div>
+  </div>
+
+  <div class="panel">
+    <div class="section-tag">THE SAME STARTING IDEA, THREE WAYS</div>
+    <h2>What separates the levels?</h2>
+    <p>Here's a different benefit from the sources — <i>staff loyalty and lower turnover</i> — written at three different quality levels. Same idea, same sources, very different marks.</p>
+    <div class="level-compare">
+      <div class="level-card l1"><span class="lv-tag">Level 1 · 1–2</span>"I think the most significant benefit is that workers stay longer. This is good for the company."</div>
+      <div class="level-card l2"><span class="lv-tag">Level 2 · 3–4</span>"I think the most significant benefit is that staff stay longer at the company, because Source 1 says turnover dropped a lot. This means the company doesn't have to keep replacing workers."</div>
+      <div class="level-card l3"><span class="lv-tag">Level 3 · 5–6</span>"I think the most significant benefit is that staff turnover fell from 34% to 11%, as shown in Source 1. This matters because replacing staff is expensive and time-consuming, so lower turnover saves the company money and keeps experienced workers on site."</div>
+    </div>
+    <div class="callout">
+      <b>Spot the pattern:</b> Level 1 has no source evidence and no real reasoning. Level 2 adds a source but the reasoning ("this is good for the company") is generic. Level 3 adds a specific figure and a clear consequence. To reach Level 4, this answer would still need one more thing: <b>a direct comparison</b> showing why loyalty beats the other benefits on offer — exactly the move used in the annotated model above.
+    </div>
+    <div class="btn-row">
+      <button class="btn" onclick="goToTab('levelup')">Try building an answer yourself →</button>
+    </div>
+  </div>
+
+</section>
+
+<!-- ================= TAB 4: LEVEL-UP CHALLENGE ================= -->
+<section class="tabpanel" id="tab-levelup">
+
+  <div class="panel">
+    <div class="section-tag">SAME SOURCES AS TAB 3</div>
+    <h2>Level-Up Challenge</h2>
+    <p>Below is a Level 1 answer about a third benefit from the sources — improved reputation. Click each button below, in order, to build it up toward Level 4. Watch the level meter move as you go.</p>
+
+    <div class="level-meter">
+      <span class="lm-label" id="lm-label">LEVEL 1 · 1–2 marks</span>
+      <div class="lm-track"><div class="lm-fill" id="lm-fill" style="width:25%;"></div></div>
+    </div>
+
+    <h3>Your growing answer</h3>
+    <div class="builder-box" id="builder-box">
+      I think the most significant benefit is that the company got more job applicants. This is good.
+    </div>
+
+    <h3>Build it up</h3>
+    <button class="prompt-btn" id="lu-btn-1" onclick="levelUpStep(1)">
+      <span class="pb-tag">STEP 1 · ADD SOURCE EVIDENCE</span>
+      Add a specific detail from the source
+    </button>
+    <button class="prompt-btn" id="lu-btn-2" onclick="levelUpStep(2)" disabled>
+      <span class="pb-tag">STEP 2 · USE A TOOLKIT TEST</span>
+      Explain why that detail actually matters
+    </button>
+    <button class="prompt-btn" id="lu-btn-3" onclick="levelUpStep(3)" disabled>
+      <span class="pb-tag">STEP 3 · COMPARE</span>
+      Show why it beats another benefit in the sources
+    </button>
+    <button class="prompt-btn" id="lu-btn-4" onclick="levelUpStep(4)" disabled>
+      <span class="pb-tag">STEP 4 · CONCLUDE</span>
+      Tie it back to your overall judgement
+    </button>
+
+    <div class="callout" id="lu-complete" style="display:none;">
+      <b>That's a Level 4 answer.</b> Notice it took four separate moves to get there — a source detail, a reason, a comparison, and a conclusion. That's the shape to aim for every time, whatever the topic on the day.
+    </div>
+
+    <div class="btn-row">
+      <button class="btn secondary" onclick="resetLevelUp()">Reset and try again</button>
+      <button class="btn" onclick="goToTab('practice')">Ready for exam practice →</button>
+    </div>
+  </div>
+
+</section>
+
+<!-- ================= TAB 5: EXAM PRACTICE ================= -->
+<section class="tabpanel" id="tab-practice">
+
+  <div class="panel">
+    <div class="section-tag">FIVE FULL PRACTICE SETS</div>
+    <h2>Exam Practice</h2>
+    <p>Five practice items, each with two sources (about 350–400 words combined) and a genuine Q1(d)-style question. The topics deliberately jump around — Digital World, Environment, Health, Social Identity, and Conflict and Peace — because the real exam never tells you the topic in advance. The skill is what transfers, not the content.</p>
+    <div class="practice-nav" id="practice-nav">
+      <button class="pnav-btn active" data-set="1" onclick="goToSet(1)">1</button>
+      <button class="pnav-btn" data-set="2" onclick="goToSet(2)">2</button>
+      <button class="pnav-btn" data-set="3" onclick="goToSet(3)">3</button>
+      <button class="pnav-btn" data-set="4" onclick="goToSet(4)">4</button>
+      <button class="pnav-btn" data-set="5" onclick="goToSet(5)">5</button>
+    </div>
+
+    <!-- SET 1: DIGITAL WORLD -->
+    <div class="pset active" id="pset-1">
+      <span class="topic-tag">DIGITAL WORLD</span>
+      <div class="source-grid">
+        <div class="source-box">
+          <span class="src-label">SOURCE 1 — Transport ministry survey</span>
+          <p>A transport ministry survey of 1,500 residents in a mid-sized city found that 62% of respondents used a ride-hailing app at least once a week, compared with just 9% five years earlier. Among users without their own vehicle, average commute times fell by around twelve minutes per trip, since ride-hailing filled gaps left by infrequent bus routes, particularly in the evenings. The survey also noted a rise in part-time earnings among drivers, many of whom said the flexible hours allowed them to combine driving with studying or caring for family members. However, traffic engineers pointed out that driver numbers on the road fluctuated sharply depending on the time of day, occasionally adding to congestion during peak hours. Local taxi associations argued that ride-hailing apps had reduced their own trade, though overall public satisfaction with transport options in the city had risen for the first time in a decade.</p>
+        </div>
+        <div class="source-box two">
+          <span class="src-label">SOURCE 2 — University student's diary entry</span>
+          <p>"I don't own a car, and the bus near campus stops running after 8pm, which used to be a real problem when I had evening classes. Now I just book a ride, and it's usually cheaper than expected if I share the trip with other students heading the same way. My mother, who drives for one of the apps three evenings a week, says it's the only job she's found that lets her pick her own hours around my little brother's school schedule. She did mention some weeks are worse than others — when demand is low, her earnings barely cover fuel. Our neighbour, who drove a licensed taxi for fifteen years, is less positive. He feels the apps were allowed to operate without the same rules his profession has always followed, which he thinks is unfair on drivers like him."</p>
+        </div>
+      </div>
+      <div class="exam-frame">
+        <div class="qmeta"><span>Practice item 1</span><span class="marks">[8]</span></div>
+        <div class="qstem">Sources 1 and 2 identify <b>benefits</b> of ride-hailing apps in cities. Which benefit do you think is the most significant? Explain why.</div>
+      </div>
+      <textarea class="response" data-set="1" placeholder="Write your answer here..."></textarea>
+      <div class="wordcount" data-set="1">0 words</div>
+      <h3>Which weights did you use?</h3>
+      <div class="checklist" data-set="1"></div>
+      <h3>Self-assess your level</h3>
+      <div class="band-select" data-set="1"></div>
+      <div class="btn-row">
+        <button class="btn secondary" onclick="toggleReveal(1)">Show indicative content &amp; tips</button>
+      </div>
+      <div class="reveal-panel" id="reveal-1">
+        <h4>Possible benefits candidates might identify</h4>
+        <ul>
+          <li>Shorter commute times / filling gaps left by limited bus routes (Crowd Test — helps everyone without a car, not just one group)</li>
+          <li>Flexible income for drivers balancing study or caregiving (Hurt Test — changes daily life for a specific group)</li>
+          <li>Rise in overall public satisfaction with transport (Crowd Test — city-wide effect; also a good spot for the Back It Up bonus move, since it's backed by survey data)</li>
+        </ul>
+        <h4>What would push this toward Level 4</h4>
+        <ul>
+          <li>Naming one benefit specifically rather than summarising both sources generally</li>
+          <li>Using a precise detail (a figure, a quote) rather than a paraphrase of "it helps people"</li>
+          <li>Explicitly comparing your choice against a different benefit from the sources, and saying why it wins</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SET 2: ENVIRONMENT -->
+    <div class="pset" id="pset-2">
+      <span class="topic-tag">ENVIRONMENT / CONSERVATION</span>
+      <div class="source-grid">
+        <div class="source-box">
+          <span class="src-label">SOURCE 1 — Water-quality report, Sungai Chantek</span>
+          <p>A water-quality report on Sungai Chantek, a river running through several villages in Perak, found plastic waste concentrations three times higher than the state average. Local fishers reported declining catches over six years, with some fish species becoming rare near the market town, partly because fish mistake small plastic fragments for food. Downstream, a water treatment plant serving around 40,000 residents reported rising filter maintenance costs as plastic increasingly clogged intake screens during the rainy season. Tourism operators running river tours noted a slight fall in visitor numbers over the same period, with several visitors mentioning visible rubbish in online reviews. The report recommended community clean-up schemes and better waste collection upstream, while acknowledging much of the plastic likely came from a wider catchment area beyond any single village's control.</p>
+        </div>
+        <div class="source-box two">
+          <span class="src-label">SOURCE 2 — Interview with Pak Rashid, fisherman</span>
+          <p>"When I was young, you could see straight to the riverbed near the old bridge. Now it's rare to pull in a net without finding plastic tangled in it. My income from fishing has dropped by more than half compared to ten years ago, and two younger fishermen in this village have already left to find factory work instead, because they can't rely on the river anymore. It isn't only about money for us — my grandchildren used to swim here every school holiday, but their mother won't let them anymore because of what washes up after heavy rain. I've heard the school now runs a river clean-up day, which is something, but one day a year won't undo what's built up over thirty years."</p>
+        </div>
+      </div>
+      <div class="exam-frame">
+        <div class="qmeta"><span>Practice item 2</span><span class="marks">[8]</span></div>
+        <div class="qstem">Sources 1 and 2 describe <b>consequences</b> of plastic pollution in Sungai Chantek. Which consequence do you think is the most significant? Explain why.</div>
+      </div>
+      <textarea class="response" data-set="2" placeholder="Write your answer here..."></textarea>
+      <div class="wordcount" data-set="2">0 words</div>
+      <h3>Which weights did you use?</h3>
+      <div class="checklist" data-set="2"></div>
+      <h3>Self-assess your level</h3>
+      <div class="band-select" data-set="2"></div>
+      <div class="btn-row">
+        <button class="btn secondary" onclick="toggleReveal(2)">Show indicative content &amp; tips</button>
+      </div>
+      <div class="reveal-panel" id="reveal-2">
+        <h4>Possible consequences candidates might identify</h4>
+        <ul>
+          <li>Falling fish stocks reducing fishers' income, pushing younger fishermen out of the village entirely (Stuck Test + Domino Test — a livelihood and a whole community are both affected)</li>
+          <li>Rising treatment costs affecting 40,000 residents downstream (Crowd Test)</li>
+          <li>Loss of safe recreational use of the river for local children (Hurt Test / Fair Test — a quality-of-life consequence, not just financial)</li>
+          <li>Decline in river tourism (Knock-on economic effect)</li>
+        </ul>
+        <h4>What would push this toward Level 4</h4>
+        <ul>
+          <li>Choosing one consequence and following it through, rather than listing several briefly</li>
+          <li>Quoting a specific detail from Pak Rashid's account or the report's figures</li>
+          <li>Explaining why this consequence is harder to reverse or wider-reaching than the others</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SET 3: HEALTH AND WELLBEING -->
+    <div class="pset" id="pset-3">
+      <span class="topic-tag">HEALTH AND WELLBEING</span>
+      <div class="source-grid">
+        <div class="source-box">
+          <span class="src-label">SOURCE 1 — Regional student wellbeing survey</span>
+          <p>A regional survey of 2,200 secondary school students found reported symptoms of anxiety had risen by 40% over five years. Asked what worried them most, 58% cited academic pressure and exam results, while 34% cited comparison with peers on social media. Counsellors interviewed for the report noted many students felt their exam results were treated as the single measure of their worth by teachers and family, with some describing sleepless nights before test dates. Students who felt less connected to a friendship group at school reported higher anxiety scores on average than those who felt well supported socially, regardless of academic performance. Researchers cautioned that these factors likely combine rather than act alone, though academic pressure was the most frequently mentioned single factor across every age group surveyed.</p>
+        </div>
+        <div class="source-box two">
+          <span class="src-label">SOURCE 2 — Interview with a school counsellor</span>
+          <p>"The students I see most often are not struggling with one single thing — but if I had to name what comes up in nearly every conversation, it's the fear of disappointing someone: a parent, a teacher, sometimes themselves. A student told me last month she'd stopped telling her parents her real grades because she couldn't face another conversation about 'wasted potential.' I also see a lot of comparison — a student doing well overall can still feel like a failure after scrolling through classmates' exam-result posts online. What worries me most, though, is how normal it's become for students to say they haven't slept properly in weeks. That's not something that resolves itself once exam season ends; it tends to follow students into the next term, and the one after that."</p>
+        </div>
+      </div>
+      <div class="exam-frame">
+        <div class="qmeta"><span>Practice item 3</span><span class="marks">[8]</span></div>
+        <div class="qstem">Sources 1 and 2 suggest <b>causes</b> of rising anxiety among secondary school students. Which cause do you think is the most significant? Explain why.</div>
+      </div>
+      <textarea class="response" data-set="3" placeholder="Write your answer here..."></textarea>
+      <div class="wordcount" data-set="3">0 words</div>
+      <h3>Which weights did you use?</h3>
+      <div class="checklist" data-set="3"></div>
+      <h3>Self-assess your level</h3>
+      <div class="band-select" data-set="3"></div>
+      <div class="btn-row">
+        <button class="btn secondary" onclick="toggleReveal(3)">Show indicative content &amp; tips</button>
+      </div>
+      <div class="reveal-panel" id="reveal-3">
+        <h4>Possible causes candidates might identify</h4>
+        <ul>
+          <li>Academic pressure / fear of disappointing family or teachers (most frequently cited — Crowd Test, since it turns up across every age group; also a good Back It Up moment, since it's backed by survey data)</li>
+          <li>Social media comparison with peers (Crowd Test + Fair Test)</li>
+          <li>Lack of social connection at school (Hurt Test)</li>
+          <li>Ongoing sleep loss that outlasts exam season (Stuck Test — it "follows students into the next term")</li>
+        </ul>
+        <h4>What would push this toward Level 4</h4>
+        <ul>
+          <li>Naming ONE cause and explaining it thoroughly, not summarising the whole survey</li>
+          <li>Using the counsellor's specific example (the student hiding her grades) as evidence, not just the statistics</li>
+          <li>Comparing your chosen cause against another to justify the ranking</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SET 4: SOCIAL IDENTITY AND INCLUSION -->
+    <div class="pset" id="pset-4">
+      <span class="topic-tag">SOCIAL IDENTITY AND INCLUSION</span>
+      <div class="source-grid">
+        <div class="source-box">
+          <span class="src-label">SOURCE 1 — Community integration survey</span>
+          <p>A community integration survey of 300 recently arrived families in a multicultural township found language barriers were the most commonly reported obstacle to settling in, cited by 71% of respondents, ahead of difficulty finding suitable housing (48%) and unfamiliarity with local job application processes (39%). Families reporting strong language barriers were also the least likely to say they had made friends outside their own community within the first year. Local community centres running free language classes reported waiting lists of up to four months. The survey noted children generally adapted to the local language faster than their parents through school, which sometimes placed children in the position of translating official documents and medical appointments for family members — a role support workers described as placing unusual pressure on some children.</p>
+        </div>
+        <div class="source-box two">
+          <span class="src-label">SOURCE 2 — Interview with Amara, a newcomer</span>
+          <p>"The hardest part wasn't finding a place to live, though that took a long time too. It was not being able to explain myself properly — at the clinic, at the bank, even at my son's school meetings. I remember standing at a counter, everyone behind me getting impatient, and just feeling so small. My son, who's eleven, ends up coming with me to translate sometimes, even for things I don't think an eleven-year-old should have to hear about, like discussing his little sister's illness with a doctor. I've made friends with other parents from my home country, but I still don't really know my neighbours, even after two years, because we've never had a proper conversation."</p>
+        </div>
+      </div>
+      <div class="exam-frame">
+        <div class="qmeta"><span>Practice item 4</span><span class="marks">[8]</span></div>
+        <div class="qstem">Sources 1 and 2 identify <b>challenges</b> faced by newcomers settling into a multicultural community. Which challenge do you think is the most significant? Explain why.</div>
+      </div>
+      <textarea class="response" data-set="4" placeholder="Write your answer here..."></textarea>
+      <div class="wordcount" data-set="4">0 words</div>
+      <h3>Which weights did you use?</h3>
+      <div class="checklist" data-set="4"></div>
+      <h3>Self-assess your level</h3>
+      <div class="band-select" data-set="4"></div>
+      <div class="btn-row">
+        <button class="btn secondary" onclick="toggleReveal(4)">Show indicative content &amp; tips</button>
+      </div>
+      <div class="reveal-panel" id="reveal-4">
+        <h4>Possible challenges candidates might identify</h4>
+        <ul>
+          <li>The language barrier (most cited, and shown to affect housing, jobs, and friendships — Crowd Test + Domino Test, since it spreads across many areas of life)</li>
+          <li>Children taking on adult translation responsibilities, including sensitive medical matters (strong Fair Test)</li>
+          <li>Long waiting lists for language classes (shows the challenge is structural, not just personal — Stuck Test)</li>
+          <li>Ongoing social isolation, "even after two years" (Stuck Test + Hurt Test)</li>
+        </ul>
+        <h4>What would push this toward Level 4</h4>
+        <ul>
+          <li>Picking one challenge and tracing its effects, rather than restating the survey's percentages</li>
+          <li>Using Amara's specific example (translating for her son's medical appointments) as evidence</li>
+          <li>Explaining clearly why this challenge outweighs, say, housing difficulty</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SET 5: WAR, CONFLICT AND PEACE -->
+    <div class="pset" id="pset-5">
+      <span class="topic-tag">WAR, CONFLICT AND PEACE</span>
+      <div class="source-grid">
+        <div class="source-box">
+          <span class="src-label">SOURCE 1 — Education-in-emergencies report</span>
+          <p>An education-in-emergencies report estimated that more than one million school-aged children affected by an ongoing regional conflict have missed at least one full year of formal schooling. Displaced families frequently moved between temporary shelters, making consistent school enrolment difficult even where schools remained open nearby. Girls were withdrawn from school earlier than boys on average, often to help with domestic duties or care for younger siblings while parents sought work or aid. Where temporary learning spaces were set up in camps, teacher shortages meant classes sometimes held more than 80 students, far above the recommended maximum. Children who missed more than two years of schooling were significantly less likely to return to formal education even after conflict ended in their area, since they had grown older than their expected grade level and often needed to work instead. Long-term unemployment and reduced lifetime earnings were identified as likely knock-on effects for this group.</p>
+        </div>
+        <div class="source-box two">
+          <span class="src-label">SOURCE 2 — Interview with a volunteer teacher</span>
+          <p>"I have children in my class from six years old up to fourteen, all in the same room, because there simply aren't enough teachers or tents for separate grades. Some of my older students haven't been in a classroom for three years. They've forgotten how to hold a pencil properly, and worse, some have stopped believing school still matters for them. I had one girl, about twelve, who was clearly bright, but her mother needed her at home to look after three younger children while she queued for food supplies. I understand the family's situation completely, but it means that girl's education may never resume, even once things become calmer here. It's really the older group I worry about most — they're at the age where missing school stops being a delay and starts being permanent."</p>
+        </div>
+      </div>
+      <div class="exam-frame">
+        <div class="qmeta"><span>Practice item 5</span><span class="marks">[8]</span></div>
+        <div class="qstem">Sources 1 and 2 describe <b>consequences</b> of conflict-driven displacement on children's education. Which consequence do you think is the most significant? Explain why.</div>
+      </div>
+      <textarea class="response" data-set="5" placeholder="Write your answer here..."></textarea>
+      <div class="wordcount" data-set="5">0 words</div>
+      <h3>Which weights did you use?</h3>
+      <div class="checklist" data-set="5"></div>
+      <h3>Self-assess your level</h3>
+      <div class="band-select" data-set="5"></div>
+      <div class="btn-row">
+        <button class="btn secondary" onclick="toggleReveal(5)">Show indicative content &amp; tips</button>
+      </div>
+      <div class="reveal-panel" id="reveal-5">
+        <h4>Possible consequences candidates might identify</h4>
+        <ul>
+          <li>Older children's education becoming permanently lost rather than delayed (Stuck Test — described explicitly as the point where "missing school stops being a delay and starts being permanent")</li>
+          <li>Girls withdrawn from school earlier than boys (Fair Test — an unequal impact on one group)</li>
+          <li>Overcrowded, under-resourced classrooms affecting all students in the camp (Crowd Test)</li>
+          <li>Long-term unemployment and reduced lifetime earnings (Domino Test — one lost year triggering lifelong consequences)</li>
+        </ul>
+        <h4>What would push this toward Level 4</h4>
+        <ul>
+          <li>Choosing one consequence and following its long-term implications, not just describing the immediate disruption</li>
+          <li>Using the teacher's specific example (the twelve-year-old girl) as evidence for your point</li>
+          <li>Comparing your chosen consequence against another using a Toolkit weight</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= TAB 6: PROGRESS & JOURNAL ================= -->
+<section class="tabpanel" id="tab-journal">
+
+  <div class="panel">
+    <div class="section-tag">SELF-CHECK</div>
+    <h2>Before you move on</h2>
+    <p>Tick these off honestly — they matter more than finishing quickly.</p>
+    <div class="checklist" id="selfcheck-list">
+      <label class="check-chip"><input type="checkbox"> I can explain why "benefit", "cause", "consequence" and "challenge" all test the same skill</label>
+      <label class="check-chip"><input type="checkbox"> I can name at least four of the seven Toolkit weights without looking</label>
+      <label class="check-chip"><input type="checkbox"> I understand why choosing a point is free, but justifying it is where the marks are</label>
+      <label class="check-chip"><input type="checkbox"> I know that a Level 4 answer must compare my choice against another option, not just describe it</label>
+      <label class="check-chip"><input type="checkbox"> I attempted at least 3 of the 5 exam practice items</label>
+    </div>
+    <div class="stat-row" id="practice-summary">
+      <div class="stat"><b id="summary-completed">0 / 5</b><span>practice items attempted</span></div>
+      <div class="stat"><b id="summary-words">0</b><span>total words written</span></div>
+    </div>
+  </div>
+
+  <div class="panel journal-box">
+    <div class="section-tag" style="color:#F1EBBB;">GP JOURNAL — COMPULSORY</div>
+    <h3>Journal prompt for today</h3>
+    <p style="color:#F8F4D9;">Open your GP journal now and write 3–4 sentences using these stems:</p>
+    <ul>
+      <li>One Significance Toolkit weight I now understand better is... because...</li>
+      <li>In the exam practice, I chose to write about... The weight(s) I used to justify it were...</li>
+      <li>Something I'd still like more practice with before the real exam is...</li>
+    </ul>
+    <p style="color:#F8F4D9; font-size:13px;">This is a normal WMSI GP journal entry, not something typed into this tool — keep it in the same journal you use for every lesson.</p>
+  </div>
+
+  <div class="panel">
+    <div class="section-tag">SEND YOUR WORK TO YOUR TEACHER</div>
+    <h2>Generate your code</h2>
+    <p>Type your name, then generate a code. Copy it and submit it the way your teacher has asked (e.g. paste into the class submission form).</p>
+    <input type="text" class="name-input" id="student-name" placeholder="Your full name">
+    <button class="btn" onclick="generateExport()">Generate my code</button>
+    <div class="export-area">
+      <textarea class="exportcode" id="export-output" readonly placeholder="Your code will appear here..."></textarea>
+      <div class="btn-row">
+        <button class="btn secondary" onclick="copyExport()">Copy code</button>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+</main>
+
+<script>
+const CRITERIA = [
+  {key:'crowd', label:'Crowd Test'},
+  {key:'hurt', label:'Hurt Test'},
+  {key:'fair', label:'Fair Test'},
+  {key:'domino', label:'Domino Test'},
+  {key:'stuck', label:'Stuck Test'},
+  {key:'backitup', label:'Back It Up (bonus)'}
+];
+const BANDS = [
+  {key:'0', label:'0', desc:'No creditable response'},
+  {key:'1-2', label:'1–2', desc:'Limited, little explanation'},
+  {key:'3-4', label:'3–4', desc:'Partial, minimal support'},
+  {key:'5-6', label:'5–6', desc:'Some justification'},
+  {key:'7-8', label:'7–8', desc:'Clear, well supported'}
+];
+const LABEL_TO_KEY = {
+  'Crowd Test':'crowd','Hurt Test':'hurt','Fair Test':'fair',
+  'Domino Test':'domino','Stuck Test':'stuck'
+};
+const STEP_TEXTS = {
+  1: " Source 2 shows that after a newspaper article about the company's inclusive hiring, they received more job applications than from any advert they had placed before.",
+  2: " This suggests the company's reputation genuinely improved among a wide pool of potential employees — not just a short-term news story, but a lasting change in how outsiders view the company.",
+  3: " This is more significant than the drop in staff turnover mentioned in Source 1, because a stronger reputation could keep attracting good staff long into the future, while lower turnover only protects the staff already employed.",
+  4: " For this reason, I believe improved reputation is the most significant benefit, because it has the potential to keep shaping the company's success well beyond the initial hiring decisions."
+};
+const LEVEL_LABELS = {1:'LEVEL 1 · 1–2 marks',2:'LEVEL 2 · 3–4 marks',3:'LEVEL 3 · 5–6 marks',4:'LEVEL 4 · 7–8 marks'};
+const LEVEL_WIDTH = {1:25,2:50,3:75,4:100};
+
+let state = { levelup:0, sets:{1:{},2:{},3:{},4:{},5:{}} };
+
+/* ---------- TAB NAV ---------- */
+function goToTab(name){
+  document.querySelectorAll('.tabbtn').forEach(b=>b.classList.toggle('active', b.dataset.tab===name));
+  document.querySelectorAll('.tabpanel').forEach(p=>p.classList.toggle('active', p.id==='tab-'+name));
+  if(['overview','toolkit','model'].includes(name)) markProgress(name);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+function markProgress(name){
+  const dot = document.querySelector('.progress-dot[data-progress="'+name+'"]');
+  if(dot) dot.classList.add('done');
+}
+document.querySelectorAll('.tabbtn').forEach(b=>{
+  b.addEventListener('click', ()=> goToTab(b.dataset.tab));
+});
+
+/* ---------- TOOLKIT MATCHING EXERCISE ---------- */
+document.querySelectorAll('.match-item').forEach(item=>{
+  const answer = item.dataset.answer;
+  const feedback = item.querySelector('.match-feedback');
+  item.querySelectorAll('.chip').forEach(chip=>{
+    chip.addEventListener('click', ()=>{
+      const key = LABEL_TO_KEY[chip.textContent.trim()];
+      if(key === answer){
+        chip.classList.add('correct');
+        item.querySelectorAll('.chip').forEach(c=>{ if(c!==chip) c.classList.add('wrong'); });
+        feedback.textContent = "Correct — that's the weight being used.";
+        feedback.className = 'match-feedback ok';
+      } else {
+        chip.classList.add('wrong');
+        feedback.textContent = 'Not quite — try another option.';
+        feedback.className = 'match-feedback no';
+      }
+    });
+  });
+});
+
+/* ---------- WORKED MODEL ANNOTATIONS ---------- */
+document.querySelectorAll('.anno').forEach(span=>{
+  span.addEventListener('click', ()=>{
+    document.querySelectorAll('.anno').forEach(a=>a.classList.remove('open'));
+    span.classList.add('open');
+    const box = document.getElementById('anno-note-box');
+    box.textContent = span.dataset.note;
+    box.classList.add('show');
+  });
+});
+
+/* ---------- LEVEL-UP CHALLENGE ---------- */
+function levelUpStep(n){
+  const box = document.getElementById('builder-box');
+  const span = document.createElement('span');
+  span.className = 'added';
+  span.textContent = STEP_TEXTS[n];
+  box.appendChild(span);
+  document.getElementById('lu-btn-'+n).disabled = true;
+  const level = Math.min(n+1, 4);
+  document.getElementById('lm-fill').style.width = LEVEL_WIDTH[level] + '%';
+  document.getElementById('lm-label').textContent = LEVEL_LABELS[level];
+  if(n < 4){ document.getElementById('lu-btn-'+(n+1)).disabled = false; }
+  if(n === 4){
+    document.getElementById('lu-complete').style.display = 'block';
+    state.levelup = 4;
+    markProgress('levelup');
+  }
+}
+function resetLevelUp(){
+  document.getElementById('builder-box').innerHTML = "I think the most significant benefit is that the company got more job applicants. This is good.";
+  for(let i=1;i<=4;i++){ document.getElementById('lu-btn-'+i).disabled = (i!==1); }
+  document.getElementById('lm-fill').style.width = '25%';
+  document.getElementById('lm-label').textContent = 'LEVEL 1 · 1–2 marks';
+  document.getElementById('lu-complete').style.display = 'none';
+  state.levelup = 0;
+}
+
+/* ---------- EXAM PRACTICE ---------- */
+function buildPracticeControls(){
+  for(let s=1; s<=5; s++){
+    const cl = document.querySelector('.checklist[data-set="'+s+'"]');
+    CRITERIA.forEach(c=>{
+      const label = document.createElement('label');
+      label.className = 'check-chip';
+      const input = document.createElement('input');
+      input.type = 'checkbox';
+      input.dataset.crit = c.key;
+      label.appendChild(input);
+      label.appendChild(document.createTextNode(' ' + c.label));
+      cl.appendChild(label);
+    });
+    cl.addEventListener('change', ()=>{
+      const checked = Array.from(cl.querySelectorAll('input:checked')).map(i=>i.dataset.crit);
+      state.sets[s].crit = checked;
+    });
+
+    const bs = document.querySelector('.band-select[data-set="'+s+'"]');
+    BANDS.forEach(b=>{
+      const btn = document.createElement('button');
+      btn.className = 'band-opt';
+      btn.type = 'button';
+      btn.innerHTML = '<b>' + b.label + '</b>' + b.desc;
+      btn.addEventListener('click', ()=>{
+        bs.querySelectorAll('.band-opt').forEach(o=>o.classList.remove('selected'));
+        btn.classList.add('selected');
+        state.sets[s].band = b.key;
+        updateCompletion(s);
+      });
+      bs.appendChild(btn);
+    });
+  }
+}
+
+document.querySelectorAll('textarea.response').forEach(ta=>{
+  ta.addEventListener('input', ()=>{
+    const s = ta.dataset.set;
+    const trimmed = ta.value.trim();
+    const words = trimmed.length ? trimmed.split(/\s+/).length : 0;
+    document.querySelector('.wordcount[data-set="'+s+'"]').textContent = words + ' words';
+    state.sets[s].words = words;
+    updateCompletion(s);
+  });
+});
+
+function updateCompletion(setNum){
+  const st = state.sets[setNum] || {};
+  const attempted = (st.words && st.words >= 15) || st.band;
+  const btn = document.querySelector('.pnav-btn[data-set="'+setNum+'"]');
+  if(attempted){ btn.classList.add('completed'); } else { btn.classList.remove('completed'); }
+  let completedCount = 0, totalWords = 0;
+  for(let i=1;i<=5;i++){
+    const s = state.sets[i] || {};
+    totalWords += (s.words || 0);
+    if((s.words && s.words >= 15) || s.band) completedCount++;
+  }
+  document.getElementById('summary-completed').textContent = completedCount + ' / 5';
+  document.getElementById('summary-words').textContent = totalWords;
+  if(completedCount >= 3){ markProgress('practice'); }
+}
+
+function goToSet(n){
+  document.querySelectorAll('.pnav-btn').forEach(b=>b.classList.toggle('active', b.dataset.set === String(n)));
+  document.querySelectorAll('.pset').forEach(p=>p.classList.remove('active'));
+  document.getElementById('pset-'+n).classList.add('active');
+}
+
+function toggleReveal(n){
+  document.getElementById('reveal-'+n).classList.toggle('show');
+}
+
+/* ---------- EXPORT ---------- */
+function generateExport(){
+  const name = document.getElementById('student-name').value.trim();
+  if(!name){ alert('Please enter your name first.'); return; }
+  let completedCount = 0, totalWords = 0;
+  const setsData = {};
+  for(let i=1;i<=5;i++){
+    const s = state.sets[i] || {};
+    setsData[i] = { words: s.words || 0, band: s.band || null, criteria: s.crit || [] };
+    totalWords += (s.words || 0);
+    if((s.words && s.words >= 15) || s.band) completedCount++;
+  }
+  const selfcheck = document.querySelectorAll('#selfcheck-list input:checked').length;
+  const payload = {
+    toolId: 'significance-judgement',
+    studentName: name,
+    timestamp: new Date().toISOString(),
+    data: {
+      levelUpCompleted: state.levelup >= 4,
+      practiceCompleted: completedCount,
+      totalWords: totalWords,
+      selfCheckTicked: selfcheck,
+      sets: setsData
+    }
+  };
+  const json = JSON.stringify(payload);
+  const encoded = btoa(unescape(encodeURIComponent(json)));
+  document.getElementById('export-output').value = encoded;
+  markProgress('journal');
+}
+function copyExport(){
+  const ta = document.getElementById('export-output');
+  if(!ta.value) return;
+  ta.select();
+  try{ document.execCommand('copy'); }catch(e){}
+  if(navigator.clipboard){ navigator.clipboard.writeText(ta.value).catch(()=>{}); }
+}
+
+/* ---------- INIT ---------- */
+buildPracticeControls();
+markProgress('overview');
+</script>
+</body>
+</html>

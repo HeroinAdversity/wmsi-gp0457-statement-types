@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reading Between the Lines — Statement Types &amp; Generalisations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&family=Noto+Sans+SC:wght@400;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+<style>
+:root {
+  /* ── ACADEMY PALETTE ── */
+  --navy: #1B2A4A;
+  --navy-light: #243658;
+  --navy-soft: #e8ecf4;
+  --gold: #C8922A;
+  --gold-light: #f0c86a;
+  --gold-pale: #fdf4e3;
+  --teal: #1A5C5C;
+  --teal-light: #247a7a;
+  --teal-pale: #e0f0f0;
+  --cream: #F5F0E8;
+  --cream-dark: #ede7d9;
+  --white: #FEFCF8;
+  --border: #d0c9bc;
+  --text: #1a1a1a;
+  --text-mid: #3d3d3d;
+  /* was #888888 — only 3.46:1 on white cards, below the 4.5:1 minimum.
+     #5f5f5f measures 6.23:1 while staying visibly "muted". */
+  --text-muted: #5f5f5f;
+  /* --gold on --gold-pale was 2.53:1; this deeper tone is 5.69:1 for badge text */
+  --gold-text: #7d5b12;
+  --teal-text: #124343;  /* 9.37:1 on --teal-pale */
+  --success: #1a6b3c;
+  --success-bg: #e8f5ee;
+  --error: #b91c1c;
+  --error-bg: #fee2e2;
+  --zh-color: #6b3fa0;
+  --zh-bg: #f0eaf8;
+  --radius: 10px;
+
+  /* GP electric accent for gamified sections */
+  --violet: #6C63FF;
+  --violet-light: #8981ff;
+  --violet-pale: #ecebff;
+  --violet-dark: #4b41e0;
+
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-zh: 'Noto Sans SC', sans-serif;
+  --font-game: 'Syne', sans-serif;
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.10);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.14);
+  --transition: 0.2s ease;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--cream);
+  color: var(--text);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ══════════ HEADER ══════════ */
+.site-header {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+  color: var(--white);
+  padding: 28px 24px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-md);
+}
+.header-inner { max-width: 1100px; margin: 0 auto; }
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  margin-bottom: 10px;
+}
+.header-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(24px, 4vw, 34px);
+  line-height: 1.15;
+  margin-bottom: 6px;
+}
+.header-title .zh { font-family: var(--font-zh); font-size: 0.55em; font-weight: 600; color: var(--gold-light); display: block; margin-top: 4px; }
+.header-sub { font-size: 14.5px; color: #cfd6e6; max-width: 760px; margin-bottom: 16px; }
+.pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+.pill {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: var(--white);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 999px;
+}
+.pill.gold { background: var(--gold); color: var(--navy); border-color: var(--gold); }
+
+/* Shrink the sticky header to a slim bar once the page is scrolled, so it
+   stops eating the viewport while students work through a tab. */
+.site-header,
+.header-title,
+.header-title .zh {
+  transition: padding var(--transition), font-size var(--transition), margin var(--transition);
+}
+.header-sub, .pills {
+  overflow: hidden;
+  max-height: 120px;
+  transition: max-height var(--transition), opacity var(--transition), margin var(--transition);
+}
+.site-header.is-compact { padding-top: 14px; box-shadow: var(--shadow-lg); }
+.site-header.is-compact .eyebrow { display: none; }
+.site-header.is-compact .header-title { font-size: 19px; margin-bottom: 0; }
+.site-header.is-compact .header-title .zh { font-size: 0; margin-top: 0; }
+.site-header.is-compact .header-sub,
+.site-header.is-compact .pills {
+  max-height: 0;
+  opacity: 0;
+  margin-bottom: 0;
+  pointer-events: none;
+}
+
+/* Tab nav */
+/* The 6 tabs measure ~910px against a 327px mobile viewport. Without an edge
+   fade there is no cue that tabs 4-6 exist, so students never reach the
+   Generalisation Drill. The wrapper paints a gradient over the right edge and
+   removes it once the strip is scrolled to the end. */
+.tab-nav-wrap { position: relative; }
+.tab-nav-wrap::after {
+  content: "";
+  position: absolute; right: 0; top: 0; bottom: 0; width: 46px;
+  background: linear-gradient(90deg, rgba(27,42,74,0) 0%, var(--navy-light) 82%);
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.25s ease;
+}
+.tab-nav-wrap.at-end::after { opacity: 0; }
+.tab-nav-wrap .more-cue {
+  position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+  color: var(--gold-light); pointer-events: none;
+  transition: opacity 0.25s ease;
+  display: flex; align-items: center;
+}
+.tab-nav-wrap.at-end .more-cue { opacity: 0; }
+.tab-nav {
+  display: flex;
+  gap: 2px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+.tab-nav::-webkit-scrollbar { display: none; }
+.tab-btn {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 13.5px;
+  white-space: nowrap;
+  background: transparent;
+  border: none;
+  color: #b8c1d9;
+  padding: 12px 18px;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.tab-btn .tnum {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  background: rgba(255,255,255,0.12);
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.tab-btn:hover { color: var(--white); }
+.tab-btn.active { color: var(--white); border-bottom-color: var(--gold); }
+.tab-btn.active .tnum { background: var(--gold); color: var(--navy); }
+
+/* ══════════ MAIN ══════════ */
+main { max-width: 1100px; margin: 0 auto; padding: 32px 24px 80px; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+.section-lead {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--navy);
+  margin-bottom: 8px;
+}
+.section-desc { font-size: 14.5px; color: var(--text-mid); max-width: 720px; margin-bottom: 24px; }
+
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px;
+  box-shadow: var(--shadow-sm);
+}
+
+/* ══════════ ZH toggle / annotation ══════════ */
+.zh-annotation {
+  font-family: var(--font-zh);
+  font-size: 12.5px;
+  color: var(--zh-color);
+  background: var(--zh-bg);
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 6px;
+  margin-top: 4px;
+}
+
+/* ══════════ TAB 1: OVERVIEW ══════════ */
+.priority-banner {
+  background: linear-gradient(135deg, var(--gold-pale), var(--white));
+  border: 2px solid var(--gold);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  margin-bottom: 26px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+.priority-banner .icon { font-size: 26px; flex-shrink: 0; }
+.priority-banner h3 { font-family: var(--font-display); color: var(--navy); font-size: 17px; margin-bottom: 4px; }
+.priority-banner p { font-size: 13.5px; color: var(--text-mid); }
+.priority-banner code {
+  font-family: var(--font-mono); background: var(--navy); color: var(--gold-light);
+  padding: 1px 7px; border-radius: 4px; font-size: 12px;
+}
+
+.term-map {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+.term-tile {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-left: 5px solid var(--teal);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.term-tile:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.term-tile.priority { border-left-color: var(--gold); background: var(--gold-pale); }
+.term-tile .tname { font-weight: 700; font-size: 15.5px; color: var(--navy); margin-bottom: 3px; }
+.term-tile .twhere { font-family: var(--font-mono); font-size: 11px; color: var(--teal-text); text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; }
+/* --gold on --gold-pale measured 2.53:1; --gold-text is 6.1:1 on the same background */
+.term-tile.priority .twhere { color: var(--gold-text); font-weight: 700; }
+.term-tile .tdef { font-size: 13px; color: var(--text-mid); }
+
+.exam-context {
+  margin-top: 28px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+@media (max-width: 700px) { .exam-context { grid-template-columns: 1fr; } }
+.exam-box {
+  background: var(--navy-soft);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+}
+.exam-box .marks { font-family: var(--font-mono); font-weight: 700; color: var(--navy); font-size: 13px; }
+.exam-box h4 { font-family: var(--font-display); color: var(--navy); font-size: 15px; margin: 4px 0 6px; }
+.exam-box p { font-size: 13px; color: var(--text-mid); }
+
+/* ══════════ TAB 2: CONCEPT CARDS ══════════ */
+.concept-nav { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 22px; }
+.concept-chip {
+  font-size: 12.5px; font-weight: 600; padding: 7px 14px; border-radius: 999px;
+  border: 1.5px solid var(--border); background: var(--white); color: var(--text-mid);
+  cursor: pointer; transition: all var(--transition);
+}
+.concept-chip.active { background: var(--teal); border-color: var(--teal); color: var(--white); }
+.concept-chip.is-priority.active { background: var(--gold); border-color: var(--gold); color: var(--navy); }
+
+.concept-card { display: none; }
+.concept-card.active { display: block; animation: fadeUp 0.35s ease; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(10px);} to { opacity:1; transform:translateY(0);} }
+
+.concept-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; flex-wrap: wrap; margin-bottom: 14px; }
+.concept-head h3 { font-family: var(--font-display); font-size: 24px; color: var(--navy); }
+.concept-badge { font-family: var(--font-mono); font-size: 11px; font-weight: 700; padding: 5px 11px; border-radius: 6px; background: var(--teal-pale); color: var(--teal-text); white-space: nowrap; }
+.concept-badge.priority { background: var(--gold); color: var(--navy); }
+
+/* The "why the difference matters" note under each concept's examples.
+   Was an inline style, which beat the mobile type scale. */
+.concept-note { font-size: 13px; color: var(--text-mid); }
+
+.concept-def { font-size: 15px; color: var(--text); margin-bottom: 18px; padding: 14px 16px; background: var(--cream); border-radius: 8px; border-left: 4px solid var(--teal); }
+.concept-card .concept-def.priority-def { border-left-color: var(--gold); }
+
+.example-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+@media (max-width: 700px) { .example-grid { grid-template-columns: 1fr; } }
+.example-box { border-radius: 8px; padding: 14px 16px; font-size: 13.5px; }
+.example-box.is-example { background: var(--success-bg); border: 1px solid #b7ddc4; }
+.example-box.not-example { background: var(--error-bg); border: 1px solid #f0b8b8; }
+.example-box .exlabel { font-family: var(--font-mono); font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+.example-box.is-example .exlabel { color: var(--success); }
+.example-box.not-example .exlabel { color: var(--error); }
+.example-box .quote { font-style: italic; }
+
+.signal-words { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 4px; }
+.signal-word { font-family: var(--font-mono); font-size: 12px; background: var(--navy); color: var(--gold-light); padding: 3px 9px; border-radius: 5px; }
+
+/* ══════════ TAB 3: SORT PRACTICE ══════════ */
+.sort-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+.sort-progress { font-family: var(--font-mono); font-size: 13px; color: var(--navy); font-weight: 700; }
+.sort-item {
+  background: var(--white); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 18px 20px; margin-bottom: 14px; box-shadow: var(--shadow-sm);
+}
+.sort-item .stmt { font-size: 15px; color: var(--text); margin-bottom: 12px; line-height: 1.5; }
+.sort-item .stmt .src { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); display:block; margin-top:6px; }
+.option-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.opt-btn {
+  font-size: 12.5px; font-weight: 600; padding: 7px 13px; border-radius: 7px;
+  border: 1.5px solid var(--border); background: var(--cream); color: var(--text-mid);
+  cursor: pointer; transition: all var(--transition);
+}
+.opt-btn:hover { border-color: var(--teal); }
+.opt-btn.selected { background: var(--navy); border-color: var(--navy); color: var(--white); }
+.opt-btn.correct-flash { background: var(--success); border-color: var(--success); color: var(--white); }
+.opt-btn.wrong-flash { background: var(--error); border-color: var(--error); color: var(--white); }
+.sort-feedback { font-size: 13px; padding: 10px 13px; border-radius: 7px; display: none; margin-top: 6px; }
+.sort-feedback.show { display: block; animation: fadeUp 0.25s ease; }
+.sort-feedback.correct { background: var(--success-bg); color: var(--success); }
+.sort-feedback.incorrect { background: var(--error-bg); color: var(--error); }
+
+.controls-row { display: flex; gap: 10px; margin-top: 20px; }
+.btn {
+  font-family: var(--font-body); font-weight: 700; font-size: 13.5px;
+  padding: 11px 22px; border-radius: 8px; border: none; cursor: pointer;
+  transition: all var(--transition);
+}
+.btn-primary { background: var(--navy); color: var(--white); }
+.btn-primary:hover { background: var(--navy-light); }
+.btn-ghost { background: transparent; border: 1.5px solid var(--border); color: var(--text-mid); }
+.btn-ghost:hover { border-color: var(--navy); color: var(--navy); }
+
+/* ══════════ TAB 4: GENERALISATION DRILL (violet accent) ══════════ */
+.drill-shell {
+  background: linear-gradient(135deg, var(--violet-pale), var(--white));
+  border: 2px solid var(--violet);
+  border-radius: 14px;
+  padding: 24px;
+}
+.drill-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 10px; }
+.drill-header h3 { font-family: var(--font-game); font-weight: 800; color: var(--violet-dark); font-size: 20px; }
+.xp-track { display: flex; align-items: center; gap: 10px; }
+.xp-badge { font-family: var(--font-mono); font-weight: 700; font-size: 13px; background: var(--violet); color: var(--white); padding: 6px 12px; border-radius: 999px; }
+.xp-bar-track { width: 140px; height: 8px; background: #ddd9ff; border-radius: 999px; overflow: hidden; }
+.xp-bar-fill { height: 100%; background: var(--violet); width: 0%; border-radius: 999px; transition: width 0.5s ease; }
+
+.stage-indicator { display: flex; gap: 6px; margin-bottom: 18px; }
+.stage-dot { flex: 1; height: 5px; border-radius: 999px; background: #ddd9ff; }
+.stage-dot.active { background: var(--violet); }
+.stage-dot.done { background: var(--violet-dark); }
+
+.gen-source-card {
+  background: var(--white); border-radius: 10px; padding: 16px 18px;
+  margin-bottom: 16px; box-shadow: var(--shadow-sm); font-size: 14px;
+}
+.gen-source-card .slabel { font-family: var(--font-mono); font-size: 10.5px; color: var(--violet-dark); font-weight: 700; margin-bottom: 6px; }
+.gen-stmt-option {
+  display: block; width: 100%; text-align: left;
+  background: var(--white); border: 2px solid #ddd9ff; border-radius: 10px;
+  padding: 14px 16px; margin-bottom: 10px; font-size: 14px; color: var(--text);
+  cursor: pointer; transition: all var(--transition);
+}
+.gen-stmt-option:hover { border-color: var(--violet); }
+.gen-stmt-option.chosen { border-color: var(--violet); background: var(--violet-pale); }
+.gen-stmt-option.correct-final { border-color: var(--success); background: var(--success-bg); }
+.gen-stmt-option.wrong-final { border-color: var(--error); background: var(--error-bg); }
+
+.explain-box textarea {
+  width: 100%; min-height: 90px; font-family: var(--font-body); font-size: 14px;
+  padding: 12px 14px; border: 2px solid #ddd9ff; border-radius: 10px; resize: vertical;
+}
+.explain-box textarea:focus { outline: none; border-color: var(--violet); }
+.word-count { font-family: var(--font-mono); font-size: 11.5px; color: var(--text-muted); margin-top: 6px; }
+
+.two-step-check { background: var(--white); border-radius: 10px; padding: 14px 16px; margin-top: 14px; font-size: 13px; color: var(--text-mid); border-left: 4px solid var(--violet); }
+.two-step-check strong { color: var(--violet-dark); }
+
+/* ══════════ TAB 5: MIXED ARENA ══════════ */
+.arena-shell {
+  background: var(--navy); border-radius: 14px; padding: 26px; color: var(--white);
+}
+.arena-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+.arena-top .lvl { font-family: var(--font-game); font-weight: 800; color: var(--gold-light); font-size: 15px; }
+.timer-display { font-family: var(--font-mono); font-size: 22px; font-weight: 700; color: var(--gold-light); background: rgba(255,255,255,0.08); padding: 6px 16px; border-radius: 8px; }
+.timer-display.urgent { color: #ff6b6b; }
+
+.arena-question { background: var(--white); color: var(--text); border-radius: 12px; padding: 22px; margin-bottom: 16px; }
+.arena-q-text { font-size: 15.5px; margin-bottom: 16px; }
+.arena-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 600px) { .arena-opts { grid-template-columns: 1fr; } }
+.arena-opt {
+  border: 2.5px solid var(--border); border-radius: 9px; padding: 12px 14px;
+  font-size: 13.5px; font-weight: 600; cursor: pointer; text-align: left;
+  background: var(--white); transition: all 0.15s ease;
+}
+.arena-opt:hover { border-color: var(--violet); }
+.arena-opt.correct { background: var(--success-bg); border-color: var(--success); }
+.arena-opt.wrong { background: var(--error-bg); border-color: var(--error); }
+
+.arena-stats { display: flex; gap: 14px; flex-wrap: wrap; }
+.stat-chip { background: rgba(255,255,255,0.08); border-radius: 8px; padding: 8px 14px; font-family: var(--font-mono); font-size: 12.5px; }
+.stat-chip b { color: var(--gold-light); }
+
+.achievements-strip { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 18px; }
+.ach-badge {
+  font-size: 11px; font-weight: 700; padding: 5px 10px; border-radius: 999px;
+  background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.35); border: 1px solid rgba(255,255,255,0.15);
+  transition: all 0.3s ease;
+}
+.ach-badge.unlocked { background: var(--gold); color: var(--navy); border-color: var(--gold); }
+
+.toast {
+  position: fixed; top: 90px; right: 24px; background: var(--gold); color: var(--navy);
+  font-weight: 700; font-size: 13px; padding: 12px 18px; border-radius: 9px;
+  box-shadow: var(--shadow-lg); z-index: 999; opacity: 0; pointer-events: none;
+}
+
+/* ══════════ TAB 6: EXIT CHECK ══════════ */
+.checklist-item-row { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+.checklist-item-row input { margin-top: 3px; width: 18px; height: 18px; accent-color: var(--gold); cursor: pointer; }
+.checklist-item-row label { font-size: 14px; cursor: pointer; }
+.progress-wrap { background: var(--cream-dark); border-radius: 999px; height: 10px; margin: 18px 0; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--gold); width: 0%; transition: width 0.4s ease; }
+.progress-label { font-family: var(--font-mono); font-size: 13px; color: var(--navy); font-weight: 700; margin-bottom: 6px; }
+
+.exit-reflect textarea {
+  width: 100%; min-height: 80px; font-family: var(--font-body); font-size: 14px;
+  padding: 12px 14px; border: 1.5px solid var(--border); border-radius: 8px; margin-top: 8px;
+}
+
+/* ═══ EXPORT PANEL ═══ */
+.export-panel { background: var(--navy-soft); border-radius: 10px; padding: 18px 20px; margin-top: 22px; }
+.export-panel-label { font-family: var(--font-mono); font-size: 11.5px; font-weight: 700; color: var(--navy); text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 10px; }
+.name-input-inline {
+  font-family: var(--font-body); font-size: 14px; padding: 10px 14px;
+  border: 1.5px solid var(--border); border-radius: 8px; width: 100%; max-width: 280px;
+}
+.name-input-inline:focus { outline: none; border-color: var(--gold); }
+.export-code-row { display: flex; gap: 10px; align-items: flex-start; flex-wrap: wrap; }
+.export-code-box {
+  flex: 1; min-width: 200px; font-family: var(--font-mono); font-size: 11.5px; color: var(--text-mid);
+  background: var(--white); border: 1.5px solid var(--border); border-radius: 8px; padding: 10px 12px;
+  resize: none; line-height: 1.4; word-break: break-all;
+}
+.export-alt-row { display: flex; align-items: center; gap: 10px; margin-top: 12px; font-size: 12.5px; color: var(--text-muted); }
+.copy-success { background: var(--success) !important; }
+
+/* ══════════ VIDEO EXPLAINER ══════════ */
+.video-block {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-left: 5px solid var(--teal);
+  border-radius: var(--radius);
+  padding: 22px 24px 20px;
+  margin-bottom: 26px;
+  box-shadow: var(--shadow-md);
+}
+.video-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 5px;
+}
+.video-head h3 {
+  font-family: var(--font-display);
+  font-size: 21px;
+  color: var(--navy);
+}
+.video-badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: var(--teal-pale);
+  color: var(--teal);
+  border: 1px solid var(--teal-light);
+  padding: 4px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.video-sub {
+  font-size: 13.5px;
+  color: var(--text-mid);
+  margin-bottom: 14px;
+}
+.video-sub .zh-annotation { margin-left: 4px; }
+.video-frame {
+  position: relative;
+  background: var(--navy);
+  border-radius: 8px;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+}
+.video-frame video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: var(--navy);
+}
+.video-fallback {
+  padding: 16px 18px;
+  margin-top: 12px;
+  background: var(--gold-pale);
+  border: 1px solid var(--gold);
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--text-mid);
+}
+.video-fallback a { color: #8a6216; font-weight: 700; }
+.video-tips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+.video-tip {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.03em;
+  background: var(--cream-dark);
+  border: 1px solid var(--border);
+  color: var(--text-mid);
+  padding: 4px 9px;
+  border-radius: 5px;
+}
+@media (max-width: 640px) {
+  .video-block { padding: 18px 16px 16px; }
+}
+
+/* ══════════ MOBILE READABILITY ══════════
+   Audited at 375px: dominant body sizes were 10.5-13.5px, well under the
+   16px minimum for mobile reading. These bumps apply only on small screens,
+   so the desktop/projection density is untouched. */
+@media (max-width: 767px) {
+  body { font-size: 16px; line-height: 1.62; }
+
+  .section-desc,
+  .concept-def,
+  .example-box,
+  .term-tile .tdef,
+  .exam-box p,
+  .video-sub,
+  .video-fallback { font-size: 15.5px; }
+
+  .concept-card p,
+  .concept-note,
+  .sort-item .stmt { font-size: 15.5px; }
+  .video-badge, .slabel, .export-panel-label { font-size: 12.5px; }
+
+  .term-tile .tname { font-size: 16.5px; }
+  .term-tile .twhere,
+  .concept-badge,
+  .example-box .exlabel { font-size: 12.5px; }
+
+  .sort-item .stmt .src { font-size: 12.5px; }
+  .opt-btn { font-size: 14.5px; padding: 11px 15px; min-height: 44px; }
+  .arena-opt { font-size: 15px; }
+  .signal-word, .video-tip { font-size: 12.5px; }
+
+  /* touch targets */
+  .tab-btn { font-size: 14.5px; padding: 14px 17px; min-height: 48px; }
+  .concept-chip { font-size: 14.5px; padding: 10px 15px; min-height: 44px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+</style>
+
+<style>
+/* ══════════ PACKAGE NAV (shared across all pages in this pack) ══════════
+   Self-contained: hardcoded palette so it renders identically regardless of
+   which page's token set it lands in. */
+.pkg-nav{background:#16233d;border-bottom:1px solid rgba(240,200,106,.28);
+  font-family:'DM Sans',system-ui,sans-serif;position:relative;z-index:120}
+.pkg-nav-inner{max-width:1240px;margin:0 auto;display:flex;align-items:center;
+  gap:4px;padding:0 14px;overflow-x:auto;scrollbar-width:none}
+.pkg-nav-inner::-webkit-scrollbar{display:none}
+.pkg-nav-label{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;color:#8b98b5;white-space:nowrap;
+  padding-right:14px;margin-right:6px;border-right:1px solid rgba(255,255,255,.14);flex-shrink:0}
+.pkg-nav a{display:inline-flex;align-items:center;gap:7px;white-space:nowrap;
+  font-size:14px;font-weight:600;color:#c9d3e6;text-decoration:none;
+  padding:13px 14px;min-height:48px;border-bottom:3px solid transparent;transition:color .18s,border-color .18s,background .18s}
+.pkg-nav a:hover{color:#fff;background:rgba(255,255,255,.06)}
+.pkg-nav a:focus-visible{outline:3px solid #f0c86a;outline-offset:-3px}
+.pkg-nav a[aria-current="page"]{color:#f0c86a;border-bottom-color:#C8922A}
+.pkg-nav a svg{flex-shrink:0}
+.pkg-nav .is-staff{color:#9fb0cc;margin-left:auto;border-left:1px solid rgba(255,255,255,.14)}
+@media (max-width:640px){
+  .pkg-nav-label{display:none}
+  .pkg-nav a{font-size:13.5px;padding:12px 11px}
+  .pkg-nav .is-staff{margin-left:0}
+}
+@media (prefers-reduced-motion:reduce){.pkg-nav a{transition:none}}
+</style>
+</head>
+<body>
+<nav class="pkg-nav" aria-label="Resources in this pack"><div class="pkg-nav-inner"><span class="pkg-nav-label">Statement Types</span><a href="index.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10l9-7 9 7v10a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1z"/></svg>Home</a><a href="WMSI_GP0457_Y10_T1_W2-3_Statement-Types-and-Generalisation_TOOL.html" aria-current="page"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h11l5 5v11a1 1 0 01-1 1H4a1 1 0 01-1-1V5a1 1 0 011-1z"/><path d="M14 4v6h6"/></svg>Notes &amp; Video</a><a href="mindmap.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="5" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="19" cy="19" r="2"/><path d="M9.9 9.9L6.4 6.4M14.1 9.9l3.5-3.5M14.1 14.1l3.5 3.5"/></svg>Mind Map</a><a href="WMSI_GP0457_Y10_T1_W2-3_Find-Your-Gap_Diagnostic-Targeted-Practice_TOOL.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/><circle cx="12" cy="12" r="5"/></svg>Find Your Gap</a><a href="WMSI_GP0457_Y10_T1_W2-3_Statement-Types-Intensive_TOOL.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>Intensive Practice</a><a href="WMSI_GP0457_The-Source_Claim-vs-Evidence_TOOL.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>The Source</a></div></nav>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="eyebrow">Cambridge IGCSE 0457 · Component 1 · Paper 1</div>
+    <h1 class="header-title">Reading Between the Lines
+      <span class="zh">识别陈述类型：概括性陈述与八种分析术语</span>
+    </h1>
+    <p class="header-sub">Eight statement types every candidate must recognise — with a close focus on generalisation, the skill tested directly in Question 1(b).</p>
+    <div class="pills">
+      <span class="pill gold">Question 1(b)(i) &amp; (ii)</span>
+      <span class="pill">Health &amp; Wellbeing strand</span>
+      <span class="pill">Year 10 · Term 1</span>
+    </div>
+    <div class="tab-nav-wrap" id="tabNavWrap">
+      <nav class="tab-nav" id="tabNav">
+        <button class="tab-btn active" onclick="switchTab('tab1')"><span class="tnum">1</span> Overview</button>
+        <button class="tab-btn" onclick="switchTab('tab2')"><span class="tnum">2</span> The Eight Terms</button>
+        <button class="tab-btn" onclick="switchTab('tab3')"><span class="tnum">3</span> Sort &amp; Classify</button>
+        <button class="tab-btn" onclick="switchTab('tab4')"><span class="tnum">4</span> Generalisation Drill</button>
+        <button class="tab-btn" onclick="switchTab('tab5')"><span class="tnum">5</span> Mixed Arena</button>
+        <button class="tab-btn" onclick="switchTab('tab6')"><span class="tnum">6</span> Exit Check</button>
+      </nav>
+      <span class="more-cue" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+      </span>
+    </div>
+  </div>
+</header>
+
+<script>
+/* Hide the edge fade once the tab strip is scrolled to its end, and keep the
+   active tab scrolled into view when switching. */
+(function(){
+  var nav = document.getElementById('tabNav'), wrap = document.getElementById('tabNavWrap');
+  if (!nav || !wrap) return;
+  function sync(){
+    var atEnd = nav.scrollLeft + nav.clientWidth >= nav.scrollWidth - 4;
+    var noOverflow = nav.scrollWidth <= nav.clientWidth + 1;
+    wrap.classList.toggle('at-end', atEnd || noOverflow);
+  }
+  nav.addEventListener('scroll', sync, {passive:true});
+  window.addEventListener('resize', sync);
+  nav.addEventListener('click', function(e){
+    var b = e.target.closest('.tab-btn');
+    if (b) setTimeout(function(){ b.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'}); }, 0);
+  });
+  sync();
+})();
+
+/* Collapse the sticky header to a slim bar once scrolled, so the eyebrow,
+   subtitle and pills stop blocking the tab content beneath it. */
+(function(){
+  var header = document.querySelector('.site-header');
+  if (!header) return;
+  function sync(){
+    header.classList.toggle('is-compact', window.scrollY > 40);
+  }
+  window.addEventListener('scroll', sync, {passive:true});
+  sync();
+})();
+</script>
+
+<main>
+
+<!-- ══════════════════ TAB 1: OVERVIEW ══════════════════ -->
+<section id="tab1" class="tab-panel active">
+  <div class="section-lead">Why this matters</div>
+  <p class="section-desc">The syllabus names eight terms candidates should understand when reading exam sources: <strong>bias, claim, fact, generalisation, opinion, prediction, value,</strong> and <strong>vested interest</strong>. One of these — generalisation — is tested directly. The rest sharpen your reading for Questions 2, 3 and 4.</p>
+
+  <div class="priority-banner">
+    <div class="icon">🎯</div>
+    <div>
+      <h3>Generalisation is the priority for this lesson</h3>
+      <p>Question 1(b)(i) asks you to identify which statement from a source <em>is</em> a generalisation. Question 1(b)(ii) asks you to explain <strong>why</strong> — a total of 3 marks, in the first five minutes of the paper. Look for <code>1(b)(i)</code> and <code>1(b)(ii)</code> tags as you work through this resource — those sections carry the most weight today.</p>
+    </div>
+  </div>
+
+  <div class="video-block">
+    <div class="video-head">
+      <h3>Watch first: the eight terms in one go</h3>
+      <span class="video-badge">▶ Explainer · 1(b)</span>
+    </div>
+    <p class="video-sub">Start here if you're new to this topic <span class="zh-annotation">先看视频</span> — the video walks through all eight terms, spends the longest on <strong>generalisation</strong>, and uses the same social-media examples you'll meet in Tab 2.</p>
+    <div class="video-frame" id="videoFrame">
+      <video id="explainerVideo" controls preload="metadata" playsinline width="100%">
+        <source src="assets/statement-types-overview.mp4" type="video/mp4">
+        Your browser doesn't support embedded video.
+      </video>
+    </div>
+    <div class="video-tips" id="videoTips">
+      <span class="video-tip">Use CC / subtitles if the audio is unclear</span>
+      <span class="video-tip">Pause and re-read each example</span>
+      <span class="video-tip">Then work through Tab 2</span>
+    </div>
+    <div class="video-fallback" id="videoFallback">
+      <strong>Video not loading?</strong> It needs an internet connection the first time. You can also <a href="assets/statement-types-overview.mp4" download>download the video</a> to watch offline. Everything in the video is also written out in Tab&nbsp;2 — the video is a shortcut, not a replacement.
+    </div>
+  </div>
+
+  <script>
+  /* If the video file is missing or unreachable, hide the player rather than
+     showing students an empty black box, and explain what to do instead. */
+  (function () {
+    var src = document.querySelector('#explainerVideo source');
+    if (!src) return;
+    src.addEventListener('error', function () {
+      var frame = document.getElementById('videoFrame');
+      var tips  = document.getElementById('videoTips');
+      var fb    = document.getElementById('videoFallback');
+      if (frame) frame.style.display = 'none';
+      if (tips)  tips.style.display  = 'none';
+      if (fb) {
+        fb.innerHTML = '<strong>The video isn\'t available right now.</strong> ' +
+          'It may still be uploading, or you may be offline. ' +
+          'Nothing is lost — every point the video makes is written out in full in ' +
+          '<strong>Tab 2: The Eight Terms</strong>. Carry on there and try the video again later.';
+      }
+    });
+  })();
+  </script>
+
+  <div class="section-lead" style="font-size:18px;">The eight terms at a glance</div>
+  <p class="section-desc">Tap through Tab 2 for full definitions and examples. This map shows where each term resurfaces across the paper.</p>
+
+  <div class="term-map">
+    <div class="term-tile priority">
+      <div class="tname">Generalisation</div>
+      <div class="twhere">★ Tested directly — Q1(b)</div>
+      <div class="tdef">A statement that applies something true of a small group to everyone, or claims something is <em>always</em> true when it's only sometimes true.</div>
+    </div>
+    <div class="term-tile">
+      <div class="tname">Fact</div>
+      <div class="twhere">Q2 · Q3 · Q4 — evidence</div>
+      <div class="tdef">A statement that can be checked and verified as true or false.</div>
+    </div>
+    <div class="term-tile">
+      <div class="tname">Opinion</div>
+      <div class="twhere">Q2 · Q3 — evaluating reasoning</div>
+      <div class="tdef">A personal view or judgement that cannot be proven true or false.</div>
+    </div>
+    <div class="term-tile">
+      <div class="tname">Claim</div>
+      <div class="twhere">Q3 — analysing arguments</div>
+      <div class="tdef">An assertion put forward as true, which may or may not be backed by evidence.</div>
+    </div>
+    <div class="term-tile">
+      <div class="tname">Value</div>
+      <div class="twhere">Q3 · Q4 — perspectives</div>
+      <div class="tdef">A statement reflecting what someone believes is important, right, or desirable.</div>
+    </div>
+    <div class="term-tile">
+      <div class="tname">Prediction</div>
+      <div class="twhere">Q2 · Q4 — future consequences</div>
+      <div class="tdef">A statement about what is expected to happen in the future.</div>
+    </div>
+    <div class="term-tile">
+      <div class="tname">Bias</div>
+      <div class="twhere">Q2 — evaluating research</div>
+      <div class="tdef">A one-sided slant in how information is presented, often favouring one perspective.</div>
+    </div>
+    <div class="term-tile">
+      <div class="tname">Vested interest</div>
+      <div class="twhere">Q2 · Q3 — source reliability</div>
+      <div class="tdef">A personal or financial stake that gives someone a reason to present information in a particular way.</div>
+    </div>
+  </div>
+
+  <div class="exam-context">
+    <div class="exam-box">
+      <div class="marks">1 MARK</div>
+      <h4>Question 1(b)(i)</h4>
+      <p>Identify which of three statements from the source is a generalisation. One correct answer only.</p>
+    </div>
+    <div class="exam-box">
+      <div class="marks">2 MARKS</div>
+      <h4>Question 1(b)(ii)</h4>
+      <p>Explain why your chosen statement is a generalisation — link clearly to a small sample being applied to everyone, or an "always/never" claim that isn't always true.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ TAB 2: THE EIGHT TERMS ══════════════════ -->
+<section id="tab2" class="tab-panel">
+  <div class="section-lead">The Eight Terms, in detail</div>
+  <p class="section-desc">All examples are built around one strand: <strong>youth mental health and social media use</strong>. Read each statement carefully — the wording is what signals the type, not the topic.</p>
+
+  <div class="concept-nav">
+    <button class="concept-chip is-priority active" onclick="switchConcept('generalisation', this)">★ Generalisation</button>
+    <button class="concept-chip" onclick="switchConcept('fact', this)">Fact</button>
+    <button class="concept-chip" onclick="switchConcept('opinion', this)">Opinion</button>
+    <button class="concept-chip" onclick="switchConcept('claim', this)">Claim</button>
+    <button class="concept-chip" onclick="switchConcept('value', this)">Value</button>
+    <button class="concept-chip" onclick="switchConcept('prediction', this)">Prediction</button>
+    <button class="concept-chip" onclick="switchConcept('bias', this)">Bias</button>
+    <button class="concept-chip" onclick="switchConcept('vested', this)">Vested Interest</button>
+  </div>
+
+  <!-- GENERALISATION -->
+  <div class="concept-card active" id="concept-generalisation">
+    <div class="card">
+      <div class="concept-head">
+        <h3>Generalisation <span class="zh-annotation">概括性陈述</span></h3>
+        <span class="concept-badge priority">1(b) — tested directly</span>
+      </div>
+      <div class="concept-def priority-def">A statement that takes something true of a <strong>small group or a specific case</strong> and presents it as true for <strong>everyone</strong> — or uses an absolute word like <em>always</em>, <em>never</em>, or <em>all</em> when the truth is only <em>sometimes</em>.</div>
+      <div class="example-grid">
+        <div class="example-box is-example">
+          <div class="exlabel">✓ This IS a generalisation</div>
+          <p class="quote">"A survey of 200 students in one city found 60% felt anxious after using social media — so teenagers everywhere are being harmed by their phones."</p>
+        </div>
+        <div class="example-box not-example">
+          <div class="exlabel">✗ This is NOT a generalisation</div>
+          <p class="quote">"A 2024 survey of 200 students in one city found that 60% reported feeling anxious after extended social media use."</p>
+        </div>
+      </div>
+      <p class="concept-note" style="margin-bottom:10px;">The second sentence is just a <strong>fact</strong> — it stays honest about its sample size (200 students, one city) and doesn't stretch the claim any further. The first sentence takes that same small sample and applies it to <em>"teenagers everywhere."</em> That stretch is the generalisation.</p>
+      <div class="signal-words">
+        <span class="signal-word">always</span><span class="signal-word">never</span><span class="signal-word">everyone</span>
+        <span class="signal-word">all [group]</span><span class="signal-word">no one</span><span class="signal-word">every time</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FACT -->
+  <div class="concept-card" id="concept-fact">
+    <div class="card">
+      <div class="concept-head"><h3>Fact <span class="zh-annotation">事实</span></h3><span class="concept-badge">Q2 · Q3 · Q4</span></div>
+      <div class="concept-def">A statement that can be checked and shown to be true or false using evidence.</div>
+      <div class="example-grid">
+        <div class="example-box is-example"><div class="exlabel">✓ Fact</div><p class="quote">"The World Health Organization reported a rise in reported cases of teen anxiety between 2015 and 2023."</p></div>
+        <div class="example-box not-example"><div class="exlabel">✗ Not a fact — it's an opinion</div><p class="quote">"Social media is the worst thing that has ever happened to young people."</p></div>
+      </div>
+      <p class="concept-note">A fact can still be selectively chosen or presented with bias — being factual doesn't automatically mean a source is balanced.</p>
+    </div>
+  </div>
+
+  <!-- OPINION -->
+  <div class="concept-card" id="concept-opinion">
+    <div class="card">
+      <div class="concept-head"><h3>Opinion <span class="zh-annotation">观点</span></h3><span class="concept-badge">Q2 · Q3</span></div>
+      <div class="concept-def">A personal view or judgement that cannot be proven true or false — it can be reasonable or unreasonable, but not "checked."</div>
+      <div class="example-grid">
+        <div class="example-box is-example"><div class="exlabel">✓ Opinion</div><p class="quote">"I think schools should ban phones completely — it's the only way students will focus."</p></div>
+        <div class="example-box not-example"><div class="exlabel">✗ Not an opinion — it's a value</div><p class="quote">"Every young person deserves the right to switch off without judgement."</p></div>
+      </div>
+      <p class="concept-note">Opinions and values overlap — the difference is that a value expresses a <em>principle</em> about what matters, while an opinion is usually a specific judgement or recommendation.</p>
+    </div>
+  </div>
+
+  <!-- CLAIM -->
+  <div class="concept-card" id="concept-claim">
+    <div class="card">
+      <div class="concept-head"><h3>Claim <span class="zh-annotation">主张</span></h3><span class="concept-badge">Q3</span></div>
+      <div class="concept-def">An assertion put forward as true — it might be backed by evidence, or it might not be. The word "claim" doesn't tell you whether it's reliable.</div>
+      <div class="example-grid">
+        <div class="example-box is-example"><div class="exlabel">✓ Claim (unsupported)</div><p class="quote">"App developers claim their new 'focus mode' reduces screen time by half."</p></div>
+        <div class="example-box not-example"><div class="exlabel">A claim WITH evidence becomes stronger</div><p class="quote">"App developers' internal data, reviewed by an independent auditor, showed a 48% reduction in screen time among test users."</p></div>
+      </div>
+      <p class="concept-note">Your job when evaluating a claim is to ask: <em>what evidence backs this up, and who is making it?</em></p>
+    </div>
+  </div>
+
+  <!-- VALUE -->
+  <div class="concept-card" id="concept-value">
+    <div class="card">
+      <div class="concept-head"><h3>Value <span class="zh-annotation">价值观</span></h3><span class="concept-badge">Q3 · Q4</span></div>
+      <div class="concept-def">A statement reflecting what someone believes is important, right, fair, or desirable — underlying principles rather than facts.</div>
+      <div class="example-grid">
+        <div class="example-box is-example"><div class="exlabel">✓ Value</div><p class="quote">"Protecting children's mental health should always come before a company's profit."</p></div>
+        <div class="example-box not-example"><div class="exlabel">✗ Not a value — it's a prediction</div><p class="quote">"If nothing changes, mental health referrals will keep rising over the next decade."</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PREDICTION -->
+  <div class="concept-card" id="concept-prediction">
+    <div class="card">
+      <div class="concept-head"><h3>Prediction <span class="zh-annotation">预测</span></h3><span class="concept-badge">Q2 · Q4</span></div>
+      <div class="concept-def">A statement about what is expected to happen in the future — it cannot yet be checked against evidence.</div>
+      <div class="example-grid">
+        <div class="example-box is-example"><div class="exlabel">✓ Prediction</div><p class="quote">"Experts warn that without regulation, screen-related anxiety cases will double by 2030."</p></div>
+        <div class="example-box not-example"><div class="exlabel">✗ Not a prediction — it's a fact (past tense, checkable now)</div><p class="quote">"Screen-related anxiety cases doubled between 2015 and 2023."</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BIAS -->
+  <div class="concept-card" id="concept-bias">
+    <div class="card">
+      <div class="concept-head"><h3>Bias <span class="zh-annotation">偏见</span></h3><span class="concept-badge">Q2</span></div>
+      <div class="concept-def">A one-sided slant in how information is selected or presented — usually favouring one perspective while downplaying or omitting others.</div>
+      <div class="example-grid">
+        <div class="example-box is-example"><div class="exlabel">✓ Shows bias</div><p class="quote">A wellness-app company's blog only cites studies where its product improved user mood, and never mentions studies with no effect.</p></div>
+        <div class="example-box not-example"><div class="exlabel">✗ Balanced — not biased</div><p class="quote">A university research summary presents both studies that found benefits and studies that found no significant effect.</p></div>
+      </div>
+      <p class="concept-note">Bias is about <em>selection</em> — what's left in, and what's left out — not necessarily about lying.</p>
+    </div>
+  </div>
+
+  <!-- VESTED INTEREST -->
+  <div class="concept-card" id="concept-vested">
+    <div class="card">
+      <div class="concept-head"><h3>Vested Interest <span class="zh-annotation">既得利益</span></h3><span class="concept-badge">Q2 · Q3</span></div>
+      <div class="concept-def">A personal, financial, or professional stake that gives someone a reason to present information in a way that benefits them.</div>
+      <div class="example-grid">
+        <div class="example-box is-example"><div class="exlabel">✓ Vested interest present</div><p class="quote">A company that sells "digital detox" retreats publishes an article on the dangers of phone use.</p></div>
+        <div class="example-box not-example"><div class="exlabel">✗ No obvious vested interest</div><p class="quote">An independent, government-funded health body publishes findings on phone use and anxiety.</p></div>
+      </div>
+      <p class="concept-note">A vested interest doesn't automatically make a source wrong — but it's a reason to check the evidence more carefully.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════ TAB 3: SORT & CLASSIFY ══════════════════ -->
+<section id="tab3" class="tab-panel">
+  <div class="section-lead">Sort &amp; Classify</div>
+  <p class="section-desc">Ten statements, all from the same strand (youth mental health and social media). Choose the correct statement type for each. Difficulty increases as you go — the last three are exam-realistic and deliberately ambiguous.</p>
+
+  <div class="sort-toolbar">
+    <div class="sort-progress" id="sortProgress">0 / 10 correct</div>
+    <button class="btn btn-ghost" onclick="resetSort()">Reset</button>
+  </div>
+
+  <div id="sortContainer"></div>
+</section>
+
+<!-- ══════════════════ TAB 4: GENERALISATION DRILL ══════════════════ -->
+<section id="tab4" class="tab-panel">
+  <div class="section-lead">Generalisation Drill — the 1(b)(i) + 1(b)(ii) two-step</div>
+  <p class="section-desc">This is the exact shape of the exam question. Step 1: spot the generalisation among three statements. Step 2: explain why, in your own words. Five rounds, each worth up to 3 XP — matching the 3 real marks on the paper.</p>
+
+  <div class="drill-shell">
+    <div class="drill-header">
+      <h3>⚡ Generalisation Hunter</h3>
+      <div class="xp-track">
+        <div class="xp-badge" id="drillXpBadge">0 XP</div>
+        <div class="xp-bar-track"><div class="xp-bar-fill" id="drillXpBar"></div></div>
+      </div>
+    </div>
+
+    <div class="stage-indicator" id="drillStageIndicator"></div>
+
+    <div id="drillRoundContainer"></div>
+  </div>
+</section>
+
+<!-- ══════════════════ TAB 5: MIXED ARENA ══════════════════ -->
+<section id="tab5" class="tab-panel">
+  <div class="section-lead">Mixed Retrieval Arena</div>
+  <p class="section-desc">All eight terms, mixed and timed. Fifteen seconds per question — this mirrors the pace you need on exam day. Beat your streak.</p>
+
+  <div class="arena-shell">
+    <div class="arena-top">
+      <div class="lvl" id="arenaLevel">🏅 Rookie</div>
+      <div class="timer-display" id="arenaTimer">15</div>
+    </div>
+
+    <div class="arena-question" id="arenaQuestionCard">
+      <div class="arena-q-text" id="arenaQText">Press Start to begin.</div>
+      <div class="arena-opts" id="arenaOpts"></div>
+    </div>
+
+    <div class="arena-stats">
+      <div class="stat-chip">Score: <b id="arenaScore">0</b></div>
+      <div class="stat-chip">Streak: <b id="arenaStreak">0</b></div>
+      <div class="stat-chip">Best streak: <b id="arenaBestStreak">0</b></div>
+      <div class="stat-chip">Question <b id="arenaQNum">0</b>/12</div>
+    </div>
+
+    <div style="margin-top:16px;">
+      <button class="btn btn-primary" id="arenaStartBtn" onclick="startArena()">Start Arena</button>
+    </div>
+
+    <div class="achievements-strip" id="achievementsStrip"></div>
+  </div>
+</section>
+
+<!-- ══════════════════ TAB 6: EXIT CHECK ══════════════════ -->
+<section id="tab6" class="tab-panel">
+  <div class="section-lead">Exit Check <span class="zh-annotation" style="margin-left:8px;">自我检查</span></div>
+  <p class="section-desc">Before you finish, check off what you can now do confidently. Be honest — this is for you, not for marks.</p>
+
+  <div class="card">
+    <div class="progress-label" id="progressLabel">0/8 complete</div>
+    <div class="progress-wrap"><div class="progress-fill" id="progressBar"></div></div>
+
+    <div class="checklist-item-row">
+      <input type="checkbox" class="checklist-item" onchange="updateExitProgress()">
+      <label>I can define generalisation in my own words. <span class="zh-annotation">我能用自己的话定义"概括性陈述"</span></label>
+    </div>
+    <div class="checklist-item-row">
+      <input type="checkbox" class="checklist-item" onchange="updateExitProgress()">
+      <label>I can spot the signal words that often appear in generalisations (always, never, everyone, all).</label>
+    </div>
+    <div class="checklist-item-row">
+      <input type="checkbox" class="checklist-item" onchange="updateExitProgress()">
+      <label>I can explain WHY a statement is a generalisation, not just identify it — this is where the 2 marks for 1(b)(ii) actually come from.</label>
+    </div>
+    <div class="checklist-item-row">
+      <input type="checkbox" class="checklist-item" onchange="updateExitProgress()">
+      <label>I can tell the difference between a fact and an opinion.</label>
+    </div>
+    <div class="checklist-item-row">
+      <input type="checkbox" class="checklist-item" onchange="updateExitProgress()">
+      <label>I can tell the difference between a claim and a fact — a claim isn't automatically true.</label>
+    </div>
+    <div class="checklist-item-row">
+      <input type="checkbox" class="checklist-item" onchange="updateExitProgress()">
+      <label>I can explain what a vested interest is and why it matters when reading a source.</label>
+    </div>
+    <div class="checklist-item-row">
+      <input type="checkbox" class="checklist-item" onchange="updateExitProgress()">
+      <label>I can tell the difference between bias and vested interest (bias = how it's presented; vested interest = why).</label>
+    </div>
+    <div class="checklist-item-row">
+      <input type="checkbox" class="checklist-item" onchange="updateExitProgress()">
+      <label>I completed the Generalisation Drill (Tab 4) and got at least 3/5 rounds correct.</label>
+    </div>
+
+    <div class="exit-reflect">
+      <label style="font-weight:700; font-size:14px; color:var(--navy);">One sentence: what's the difference between a fact and a generalisation?</label>
+      <textarea id="reflectionAnswer" placeholder="Write your answer here — this is a good sentence to keep in your journal..."></textarea>
+    </div>
+
+    <div class="export-panel">
+      <div class="export-panel-label">Send your results to your teacher</div>
+      <input type="text" class="name-input-inline" id="studentNameInputStatements" placeholder="Enter your name">
+      <button class="btn btn-primary" style="margin-top:10px;" onclick="generateStatementsExport()">Generate my result code</button>
+      <div id="statementsExportOutput" style="display:none; margin-top:14px;">
+        <div class="export-code-row">
+          <textarea class="export-code-box" id="statementsExportCodeBox" readonly rows="3"></textarea>
+          <button class="btn btn-primary" id="statementsCopyCodeBtn" onclick="copyStatementsExportCode()">Copy code</button>
+        </div>
+        <div class="export-alt-row">
+          <span>or</span>
+          <button class="btn btn-ghost" onclick="downloadStatementsExportFile()">Download result file (.json)</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<div class="toast" id="toastEl"></div>
+
+<script>
+/* ══════════════════ TAB NAVIGATION ══════════════════ */
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  const panel = document.getElementById(tabId);
+  panel.classList.add('active');
+  event.currentTarget.classList.add('active');
+  if (window.gsap) {
+    gsap.fromTo(panel.children, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.35, stagger: 0.05, ease: 'power2.out' });
+  }
+}
+
+/* ══════════════════ TAB 2: CONCEPT SWITCH ══════════════════ */
+function switchConcept(id, btn) {
+  document.querySelectorAll('.concept-card').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.concept-chip').forEach(c => c.classList.remove('active'));
+  document.getElementById('concept-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+/* ══════════════════ TAB 3: SORT & CLASSIFY ══════════════════ */
+const TYPES = ['Generalisation','Fact','Opinion','Claim','Value','Prediction','Bias','Vested interest'];
+
+const sortItems = [
+  { stmt: `"A survey of 150 teenagers in one school found that 70% checked their phones within five minutes of waking — so all young people are addicted to their phones."`, src: 'Adapted from a wellness blog', answer: 'Generalisation', explain: 'A small, single-school sample (150 students, one school) is stretched to cover "all young people."' },
+  { stmt: `"Reported cases of teen anxiety linked to social media rose by 34% between 2018 and 2023, according to national health records."`, src: 'Ministry of Health summary report', answer: 'Fact', explain: 'This is a specific, checkable statistic tied to a named source and time period — nothing is stretched beyond what the data shows.' },
+  { stmt: `"Personally, I think parents worry too much about screen time — kids today are just growing up differently."`, src: 'Parenting forum post', answer: 'Opinion', explain: 'This is a personal judgement ("I think") that cannot be proven true or false.' },
+  { stmt: `"The makers of FocusApp claim their software cuts unwanted screen time by 40% within two weeks."`, src: 'App store product description', answer: 'Claim', explain: 'It is presented as true by the people selling it, but no independent evidence is given here to confirm it.' },
+  { stmt: `"No child should have their wellbeing sacrificed for a company's advertising revenue."`, src: 'Op-ed by a child psychologist', answer: 'Value', explain: 'This expresses a principle about what is right and important, not a checkable fact.' },
+  { stmt: `"If current trends continue, mental health services for teenagers are likely to face even greater demand by 2030."`, src: 'Health policy briefing', answer: 'Prediction', explain: 'This is about what is expected to happen in the future — it cannot yet be checked against evidence.' },
+  { stmt: `"An article on a tech company's own website only quotes the two studies that found no link between its app and teen anxiety, ignoring the five other studies that found a link."`, src: 'Tech company blog', answer: 'Bias', explain: 'The one-sided selection of evidence — including only favourable studies — is the signal for bias.' },
+  { stmt: `"A company that sells screen-time monitoring software publishes a report warning parents that unsupervised phone use is dangerous."`, src: 'Industry press release', answer: 'Vested interest', explain: 'The company profits directly from parents believing phone use is dangerous — that financial stake is the vested interest.' },
+  { stmt: `"Teenagers who use social media never do well in school."`, src: 'Opinion column, local newspaper', answer: 'Generalisation', explain: 'The word "never" makes an absolute claim that almost certainly is not true for every teenager who uses social media.' },
+  { stmt: `"A youth counsellor states that in her experience, most of the students she sees for anxiety also report heavy social media use — though she notes this is not the same as proving one causes the other."`, src: 'Interview transcript', answer: 'Fact', explain: 'Tricky one: despite touching on a pattern, this is a careful, honest report of what one counsellor has observed — she explicitly avoids overclaiming or generalising beyond her own caseload.' },
+];
+
+let sortState = sortItems.map(() => ({ selected: null, correct: false }));
+
+function renderSort() {
+  const container = document.getElementById('sortContainer');
+  container.innerHTML = '';
+  sortItems.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'sort-item';
+    div.innerHTML = `
+      <div class="stmt">${idx + 1}. ${item.stmt}<span class="src">${item.src}</span></div>
+      <div class="option-row" id="sortOpts-${idx}">
+        ${TYPES.map(t => `<button class="opt-btn" onclick="selectSort(${idx}, '${t}')" id="sortBtn-${idx}-${t.replace(/\\s/g,'')}">${t}</button>`).join('')}
+      </div>
+      <div class="sort-feedback" id="sortFeedback-${idx}"></div>
+    `;
+    container.appendChild(div);
+  });
+  updateSortProgress();
+}
+
+function selectSort(idx, chosen) {
+  if (sortState[idx].correct) return; // locked once correct
+  sortState[idx].selected = chosen;
+  const item = sortItems[idx];
+  const feedback = document.getElementById(`sortFeedback-${idx}`);
+  document.querySelectorAll(`#sortOpts-${idx} .opt-btn`).forEach(b => b.classList.remove('selected','correct-flash','wrong-flash'));
+  const btnId = `sortBtn-${idx}-${chosen.replace(/\s/g,'')}`;
+  const btn = document.getElementById(btnId);
+
+  if (chosen === item.answer) {
+    btn.classList.add('correct-flash');
+    feedback.className = 'sort-feedback show correct';
+    feedback.textContent = `✓ Correct — ${item.explain}`;
+    sortState[idx].correct = true;
+  } else {
+    btn.classList.add('wrong-flash');
+    feedback.className = 'sort-feedback show incorrect';
+    feedback.textContent = `✗ Not quite. Think again — what does the wording actually do?`;
+  }
+  updateSortProgress();
+}
+
+function updateSortProgress() {
+  const correct = sortState.filter(s => s.correct).length;
+  document.getElementById('sortProgress').textContent = `${correct} / ${sortItems.length} correct`;
+}
+
+function resetSort() {
+  sortState = sortItems.map(() => ({ selected: null, correct: false }));
+  renderSort();
+}
+
+renderSort();
+
+/* ══════════════════ TAB 4: GENERALISATION DRILL ══════════════════ */
+const drillRounds = [
+  {
+    source: 'Source: School wellbeing newsletter',
+    statements: [
+      'A recent internal survey found that 45% of Year 10 students at one school reported feeling "always exhausted" — proving that homework is destroying an entire generation.',
+      'The school counsellor recorded 12 students seeking support for sleep issues this term.',
+      'Some students say they would prefer more flexible deadlines for coursework.'
+    ],
+    correctIndex: 0,
+    modelExplain: 'This is a generalisation because it takes a result from one school (45% of Year 10 there) and stretches it into a claim about "an entire generation" — a huge leap the evidence does not support.'
+  },
+  {
+    source: 'Source: Online magazine feature',
+    statements: [
+      'A wellness coach believes short daily walks can improve focus.',
+      'Teenagers who post more than five times a day always struggle to concentrate in class.',
+      'The article was written by a freelance journalist based in Kuala Lumpur.'
+    ],
+    correctIndex: 1,
+    modelExplain: 'The word "always" turns a possible pattern into an absolute claim that applies to every teenager who posts frequently — that is the generalisation.'
+  },
+  {
+    source: 'Source: Parent support group forum',
+    statements: [
+      'One parent shared that her daughter\'s screen time dropped after she started a new hobby.',
+      'A 2023 study followed 80 students across two schools and found a correlation between late-night phone use and lower test scores.',
+      'Kids these days can\'t function without their phones for even five minutes.'
+    ],
+    correctIndex: 2,
+    modelExplain: 'Statement 3 makes a sweeping claim about all young people ("kids these days") with no evidence at all — a classic generalisation with no sample behind it.'
+  },
+  {
+    source: 'Source: Health ministry press briefing',
+    statements: [
+      'Officials warned that if current trends continue, demand for youth mental health services could rise further.',
+      'A pilot programme in three schools reduced reported anxiety symptoms among participants by 20%.',
+      'Every teenager who uses social media for more than two hours a day will develop anxiety.'
+    ],
+    correctIndex: 2,
+    modelExplain: 'The word "every" and the certainty of "will develop" apply one outcome to all teenagers meeting a condition — that\'s a generalisation, not a fact, because it ignores individual variation.'
+  },
+  {
+    source: 'Source: Student-run school magazine',
+    statements: [
+      'A poll of the magazine\'s 30 regular readers found most enjoyed the new online edition.',
+      'Nobody in our generation reads printed newspapers anymore.',
+      'The magazine has been published continuously since 2011.'
+    ],
+    correctIndex: 1,
+    modelExplain: 'This statement uses "nobody" and "our generation" to make an absolute claim about an entire age group, based on no stated evidence at all.'
+  }
+];
+
+let drillState = { round: 0, xp: 0, roundsData: drillRounds.map(() => ({ step: 1, chosenIndex: null, explainSubmitted: false })) };
+
+function renderDrillStageIndicator() {
+  const el = document.getElementById('drillStageIndicator');
+  el.innerHTML = drillRounds.map((_, i) => {
+    let cls = 'stage-dot';
+    if (i < drillState.round) cls += ' done';
+    else if (i === drillState.round) cls += ' active';
+    return `<div class="${cls}"></div>`;
+  }).join('');
+}
+
+function renderDrillRound() {
+  renderDrillStageIndicator();
+  const container = document.getElementById('drillRoundContainer');
+  if (drillState.round >= drillRounds.length) {
+    container.innerHTML = `
+      <div class="gen-source-card" style="text-align:center;">
+        <h3 style="font-family:var(--font-game); color:var(--violet-dark); margin-bottom:8px;">Drill complete!</h3>
+        <p>You earned <strong>${drillState.xp} XP</strong> across 5 rounds (max 15 XP).</p>
+        <p style="margin-top:10px; font-size:13px; color:var(--text-mid);">This is exactly the two-step Q1(b) asks for every time: spot it, then explain why. Head to Tab 6 to check it off.</p>
+        <button class="btn btn-primary" style="margin-top:14px;" onclick="restartDrill()">Play again</button>
+      </div>
+    `;
+    return;
+  }
+
+  const r = drillRounds[drillState.round];
+  const rs = drillState.roundsData[drillState.round];
+
+  if (rs.step === 1) {
+    container.innerHTML = `
+      <div class="gen-source-card">
+        <div class="slabel">${r.source} &middot; Round ${drillState.round + 1} of ${drillRounds.length} &middot; STEP 1 — 1(b)(i)</div>
+        <p style="margin-bottom:14px; font-weight:600;">Which of these statements is a generalisation?</p>
+        ${r.statements.map((s, i) => `<button class="gen-stmt-option" id="genOpt-${i}" onclick="chooseGenStatement(${i})">${i+1}. ${s}</button>`).join('')}
+      </div>
+    `;
+  } else if (rs.step === 2) {
+    container.innerHTML = `
+      <div class="gen-source-card">
+        <div class="slabel">${r.source} &middot; Round ${drillState.round + 1} of ${drillRounds.length} &middot; STEP 2 — 1(b)(ii)</div>
+        <p style="margin-bottom:10px; font-weight:600;">You chose: <em>"${r.statements[rs.chosenIndex]}"</em></p>
+        <p style="margin-bottom:6px; font-size:13.5px; color:var(--text-mid);">Now explain WHY this is a generalisation. Think: what small group is being stretched to cover everyone? Or what absolute word is being used?</p>
+        <div class="explain-box">
+          <textarea id="genExplainInput" placeholder="Type your explanation here..."></textarea>
+          <div class="word-count" id="genWordCount">0 words</div>
+        </div>
+        <div class="controls-row">
+          <button class="btn btn-primary" onclick="submitGenExplain()">Check my thinking</button>
+        </div>
+      </div>
+    `;
+    const ta = document.getElementById('genExplainInput');
+    ta.addEventListener('input', () => {
+      const words = ta.value.trim() ? ta.value.trim().split(/\s+/).length : 0;
+      document.getElementById('genWordCount').textContent = `${words} words`;
+    });
+  } else if (rs.step === 3) {
+    container.innerHTML = `
+      <div class="gen-source-card">
+        <div class="slabel">${r.source} &middot; Round ${drillState.round + 1} of ${drillRounds.length} &middot; MODEL ANSWER</div>
+        <p style="margin-bottom:10px; font-weight:600;">Correct statement: <em>"${r.statements[r.correctIndex]}"</em></p>
+        <div class="two-step-check">
+          <strong>Model explanation:</strong> ${r.modelExplain}
+        </div>
+        <p style="margin-top:12px; font-size:13px; color:var(--text-mid);">Compare this to what you wrote. Did you name the specific small sample, or the specific absolute word? That's what earns both marks in the real exam.</p>
+        <div class="controls-row">
+          <button class="btn btn-primary" onclick="nextDrillRound()">Next round →</button>
+        </div>
+      </div>
+    `;
+  }
+  updateDrillXpDisplay();
+}
+
+function chooseGenStatement(i) {
+  const rs = drillState.roundsData[drillState.round];
+  const r = drillRounds[drillState.round];
+  document.querySelectorAll('.gen-stmt-option').forEach(el => el.classList.remove('chosen','correct-final','wrong-final'));
+  rs.chosenIndex = i;
+  const el = document.getElementById(`genOpt-${i}`);
+  if (i === r.correctIndex) {
+    el.classList.add('correct-final');
+    drillState.xp += 1;
+    showToast('+1 XP — correct statement spotted!');
+    setTimeout(() => { rs.step = 2; renderDrillRound(); }, 700);
+  } else {
+    el.classList.add('wrong-final');
+    setTimeout(() => {
+      el.classList.remove('wrong-final');
+    }, 600);
+  }
+}
+
+function submitGenExplain() {
+  const rs = drillState.roundsData[drillState.round];
+  const text = document.getElementById('genExplainInput').value.trim();
+  if (text.length < 8) {
+    showToast('Write a little more before checking — aim for a full sentence.');
+    return;
+  }
+  drillState.xp += 2;
+  rs.explainSubmitted = true;
+  rs.step = 3;
+  showToast('+2 XP — nice reasoning, compare it to the model!');
+  renderDrillRound();
+}
+
+function nextDrillRound() {
+  drillState.round += 1;
+  renderDrillRound();
+}
+
+function restartDrill() {
+  drillState = { round: 0, xp: 0, roundsData: drillRounds.map(() => ({ step: 1, chosenIndex: null, explainSubmitted: false })) };
+  renderDrillRound();
+}
+
+function updateDrillXpDisplay() {
+  document.getElementById('drillXpBadge').textContent = `${drillState.xp} XP`;
+  const pct = Math.min(100, Math.round((drillState.xp / 15) * 100));
+  document.getElementById('drillXpBar').style.width = pct + '%';
+}
+
+renderDrillRound();
+
+/* ══════════════════ TAB 5: MIXED ARENA ══════════════════ */
+const arenaBank = [
+  { q: `"Everyone who uses social media before bed struggles to sleep." What type of statement is this?`, opts: ['Generalisation','Fact','Prediction','Bias'], answer: 0 },
+  { q: `A tutoring company publishes a report claiming screens harm learning, while also selling "screen-free" tutoring packages. What is this an example of?`, opts: ['Fact','Vested interest','Opinion','Claim'], answer: 1 },
+  { q: `"National survey data (n=5,000) showed a 12% rise in reported sleep issues among 13–17 year-olds between 2020 and 2024." What type of statement is this?`, opts: ['Generalisation','Fact','Value','Prediction'], answer: 1 },
+  { q: `"I believe teenagers should be trusted to manage their own screen time." What type of statement is this?`, opts: ['Fact','Claim','Opinion','Bias'], answer: 2 },
+  { q: `"By 2030, most teenagers may rely on AI companions for emotional support." What type of statement is this?`, opts: ['Prediction','Fact','Generalisation','Value'], answer: 0 },
+  { q: `A blog only features testimonials from happy customers and never mentions any negative reviews. What is this an example of?`, opts: ['Vested interest','Fact','Bias','Claim'], answer: 2 },
+  { q: `"Every child deserves a childhood free from constant digital pressure." What type of statement is this?`, opts: ['Value','Fact','Prediction','Claim'], answer: 0 },
+  { q: `"The app's creators say it 'transforms' users' mental health within a week." What type of statement is this?`, opts: ['Fact','Claim','Generalisation','Bias'], answer: 1 },
+  { q: `"No teenager has ever benefited from using social media." What type of statement is this?`, opts: ['Fact','Opinion','Generalisation','Prediction'], answer: 2 },
+  { q: `A company selling parental-control software publishes a scary statistic about phone addiction on its homepage. What should you check first?`, opts: ['Whether they have a vested interest','Whether it uses good grammar','Whether it is a fact','Whether it is a prediction'], answer: 0 },
+  { q: `"Reports suggest counselling referrals for screen-related anxiety are likely to keep growing." What type of statement is this?`, opts: ['Fact','Prediction','Generalisation','Value'], answer: 1 },
+  { q: `"A survey of 40 students in one class found half felt more relaxed after a digital detox weekend — so digital detoxes fix everyone's anxiety." What type of statement is this?`, opts: ['Fact','Generalisation','Opinion','Bias'], answer: 1 },
+];
+
+let arenaState = { qIndex: 0, score: 0, streak: 0, bestStreak: 0, timer: 15, timerInterval: null, order: [], unlocked: new Set() };
+const LEVELS = [
+  { min: 0, title: '🏅 Rookie' }, { min: 4, title: '🥈 Apprentice' }, { min: 8, title: '🥉 Scholar' },
+  { min: 12, title: '🏆 Expert' }, { min: 18, title: '👑 Master' }, { min: 24, title: '⭐ Legend' }
+];
+const ACHIEVEMENTS = [
+  { id: 'first', name: 'First Blood', check: s => s.score >= 1 },
+  { id: 'roll3', name: 'On a Roll', check: s => s.streak >= 3 },
+  { id: 'sharp5', name: 'Sharp Mind', check: s => s.streak >= 5 },
+  { id: 'consistent', name: 'Consistent', check: s => s.qIndex >= arenaBank.length },
+  { id: 'half50', name: 'Half Century', check: s => s.score * 2 >= 12 },
+  { id: 'flawless', name: 'Flawless', check: s => s.qIndex >= arenaBank.length && s.score === arenaBank.length },
+  { id: 'distance', name: 'Distance Runner', check: s => s.qIndex >= arenaBank.length },
+  { id: 'scholarlvl', name: 'Scholar Level', check: s => s.score >= 8 },
+];
+
+function renderAchievements() {
+  const strip = document.getElementById('achievementsStrip');
+  strip.innerHTML = ACHIEVEMENTS.map(a => `<div class="ach-badge ${arenaState.unlocked.has(a.id) ? 'unlocked' : ''}" id="ach-${a.id}">${a.name}</div>`).join('');
+}
+renderAchievements();
+
+function checkAchievements() {
+  ACHIEVEMENTS.forEach(a => {
+    if (!arenaState.unlocked.has(a.id) && a.check(arenaState)) {
+      arenaState.unlocked.add(a.id);
+      const el = document.getElementById(`ach-${a.id}`);
+      if (el) el.classList.add('unlocked');
+      showToast(`🏆 Achievement unlocked: ${a.name}`);
+    }
+  });
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function startArena() {
+  arenaState = { qIndex: 0, score: 0, streak: 0, bestStreak: arenaState.bestStreak || 0, timer: 15, timerInterval: null, order: shuffle([...Array(arenaBank.length).keys()]), unlocked: arenaState.unlocked || new Set() };
+  document.getElementById('arenaStartBtn').textContent = 'Restart Arena';
+  renderAchievements();
+  loadArenaQuestion();
+}
+
+function loadArenaQuestion() {
+  clearInterval(arenaState.timerInterval);
+  if (arenaState.qIndex >= arenaBank.length) {
+    document.getElementById('arenaQText').textContent = `Session complete! Final score: ${arenaState.score}/${arenaBank.length}. Best streak: ${arenaState.bestStreak}.`;
+    document.getElementById('arenaOpts').innerHTML = '';
+    checkAchievements();
+    return;
+  }
+  const item = arenaBank[arenaState.order[arenaState.qIndex]];
+  document.getElementById('arenaQText').textContent = item.q;
+  document.getElementById('arenaQNum').textContent = arenaState.qIndex + 1;
+  const optsEl = document.getElementById('arenaOpts');
+  optsEl.innerHTML = item.opts.map((o, i) => `<button class="arena-opt" onclick="answerArena(${i})">${o}</button>`).join('');
+  arenaState.timer = 15;
+  updateArenaTimerDisplay();
+  arenaState.timerInterval = setInterval(() => {
+    arenaState.timer -= 1;
+    updateArenaTimerDisplay();
+    if (arenaState.timer <= 0) {
+      clearInterval(arenaState.timerInterval);
+      answerArena(-1); // timeout = wrong
+    }
+  }, 1000);
+}
+
+function updateArenaTimerDisplay() {
+  const el = document.getElementById('arenaTimer');
+  el.textContent = arenaState.timer;
+  el.classList.toggle('urgent', arenaState.timer <= 5);
+}
+
+function answerArena(chosenIdx) {
+  clearInterval(arenaState.timerInterval);
+  const item = arenaBank[arenaState.order[arenaState.qIndex]];
+  const buttons = document.querySelectorAll('.arena-opt');
+  buttons.forEach((b, i) => {
+    b.onclick = null;
+    if (i === item.answer) b.classList.add('correct');
+    else if (i === chosenIdx) b.classList.add('wrong');
+  });
+
+  if (chosenIdx === item.answer) {
+    arenaState.score += 1;
+    arenaState.streak += 1;
+    arenaState.bestStreak = Math.max(arenaState.bestStreak, arenaState.streak);
+    showToast(arenaState.streak >= 3 ? `🔥 Streak x${arenaState.streak}!` : '✓ Correct!');
+  } else {
+    arenaState.streak = 0;
+  }
+
+  document.getElementById('arenaScore').textContent = arenaState.score;
+  document.getElementById('arenaStreak').textContent = arenaState.streak;
+  document.getElementById('arenaBestStreak').textContent = arenaState.bestStreak;
+  document.getElementById('arenaLevel').textContent = LEVELS.slice().reverse().find(l => arenaState.score >= l.min).title;
+  checkAchievements();
+
+  setTimeout(() => {
+    arenaState.qIndex += 1;
+    loadArenaQuestion();
+  }, 1100);
+}
+
+/* ══════════════════ TOAST ══════════════════ */
+function showToast(msg) {
+  const el = document.getElementById('toastEl');
+  el.textContent = msg;
+  if (window.gsap) {
+    gsap.killTweensOf(el);
+    gsap.timeline()
+      .set(el, { opacity: 0, y: -8 })
+      .to(el, { opacity: 1, y: 0, duration: 0.25 })
+      .to(el, { opacity: 0, duration: 0.3, delay: 1.6 });
+  } else {
+    el.style.opacity = 1;
+    setTimeout(() => { el.style.opacity = 0; }, 1800);
+  }
+}
+
+/* ══════════════════ TAB 6: EXIT CHECK ══════════════════ */
+function updateExitProgress() {
+  const total = document.querySelectorAll('.checklist-item').length;
+  const checked = document.querySelectorAll('.checklist-item:checked').length;
+  const pct = Math.round((checked / total) * 100);
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = `${checked}/${total} complete`;
+}
+
+/* ══════════════════ EXPORT — shared envelope format ══════════════════
+   { toolId, studentName, timestamp, data: {...} }
+   Read by the separate Teacher Dashboard file. */
+let statementsExportPayload = null;
+
+function generateStatementsExport() {
+  const nameInput = document.getElementById('studentNameInputStatements');
+  const name = nameInput.value.trim();
+  if (!name) {
+    nameInput.style.borderColor = 'var(--error)';
+    nameInput.placeholder = 'Please enter your name first';
+    return;
+  }
+
+  const sortCorrect = (typeof sortState !== 'undefined') ? sortState.filter(s => s.correct).length : 0;
+  const sortTotal = (typeof sortItems !== 'undefined') ? sortItems.length : 0;
+
+  const drillXp = (typeof drillState !== 'undefined') ? drillState.xp : 0;
+  const drillMaxXp = (typeof drillRounds !== 'undefined') ? drillRounds.length * 3 : 15;
+  const drillRoundsCompleted = (typeof drillState !== 'undefined') ? drillState.round : 0;
+
+  const arenaScore = (typeof arenaState !== 'undefined') ? arenaState.score : 0;
+  const arenaTotal = (typeof arenaBank !== 'undefined') ? arenaBank.length : 0;
+  const arenaBestStreak = (typeof arenaState !== 'undefined') ? arenaState.bestStreak : 0;
+
+  const checklistTotal = document.querySelectorAll('.checklist-item').length;
+  const checklistChecked = document.querySelectorAll('.checklist-item:checked').length;
+
+  const reflection = document.getElementById('reflectionAnswer') ? document.getElementById('reflectionAnswer').value.trim() : '';
+
+  const record = {
+    toolId: 'statement-types',
+    studentName: name,
+    timestamp: new Date().toISOString(),
+    data: {
+      sortAndClassify: `${sortCorrect}/${sortTotal}`,
+      generalisationDrillXp: `${drillXp}/${drillMaxXp}`,
+      generalisationDrillRoundsCompleted: drillRoundsCompleted,
+      mixedArenaScore: `${arenaScore}/${arenaTotal}`,
+      mixedArenaBestStreak: arenaBestStreak,
+      exitChecklistComplete: `${checklistChecked}/${checklistTotal}`,
+      reflectionAnswer: reflection || '(not answered)'
+    }
+  };
+  statementsExportPayload = record;
+  const json = JSON.stringify(record);
+  const code = btoa(unescape(encodeURIComponent(json)));
+  document.getElementById('statementsExportCodeBox').value = code;
+  document.getElementById('statementsExportOutput').style.display = 'block';
+}
+
+function copyStatementsExportCode() {
+  const box = document.getElementById('statementsExportCodeBox');
+  box.select();
+  box.setSelectionRange(0, 999999);
+  navigator.clipboard.writeText(box.value).then(() => {
+    const btn = document.getElementById('statementsCopyCodeBtn');
+    const original = btn.textContent;
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copy-success');
+    setTimeout(() => { btn.textContent = original; btn.classList.remove('copy-success'); }, 1800);
+  }).catch(() => {
+    alert('Could not copy automatically — the code is selected, press Ctrl+C / Cmd+C to copy it.');
+  });
+}
+
+function downloadStatementsExportFile() {
+  if (!statementsExportPayload) return;
+  const json = JSON.stringify(statementsExportPayload, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const safeName = statementsExportPayload.studentName.replace(/[^a-z0-9]+/gi, '-').toLowerCase();
+  a.href = url;
+  a.download = `gp0457-statement-types-result-${safeName}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>

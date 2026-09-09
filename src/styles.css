@@ -1,0 +1,129 @@
+@import "tailwindcss";
+
+/* ────────────────────────────────────────────────────────────
+   WMSI GP0457 — Design tokens (editorial-academic language)
+   ──────────────────────────────────────────────────────────── */
+@theme {
+  /* Paper family — warm ivory, breaks from the old #F5F0E8 cream slightly */
+  --color-paper: #F7F3EA;
+  --color-paper-2: #EFE9DB;
+  --color-paper-3: #E5DEC9;
+  --color-line: #DDD5C1;
+  --color-line-soft: #EAE3D0;
+
+  /* Ink family — deep charcoal, never pure black */
+  --color-ink: #111417;
+  --color-ink-2: #3B4048;
+  --color-ink-3: #6F7580;
+
+  /* Accent — one strong accent per Section 4.2 */
+  --color-cobalt: #0B4CA6;
+  --color-cobalt-soft: #E4EBF7;
+  --color-cobalt-deep: #082E63;
+
+  /* Supporting hues (used sparingly, for topic/level colour coding only) */
+  --color-ember: #B33520;      /* warnings, exam callouts */
+  --color-ember-soft: #F7E4DE;
+  --color-forest: #215E48;     /* framework, teacher-facing */
+  --color-forest-soft: #DFEBE4;
+  --color-amber: #A56D14;      /* labels, eyebrows on paper */
+  --color-amber-soft: #F5E9CE;
+  --color-violet: #6C3AB8;     /* personal / cultural notes */
+  --color-violet-soft: #EDE3F7;
+
+  /* Fonts */
+  --font-display: "DM Serif Display", Georgia, "Noto Serif SC", serif;
+  --font-body: "Inter Tight", -apple-system, "Segoe UI", "Noto Sans SC", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "Consolas", monospace;
+  --font-zh: "Noto Sans SC", "Inter Tight", sans-serif;
+
+  /* Motion */
+  --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ─────────── Base ─────────── */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: light;
+}
+html:where(.dark) { color-scheme: dark; }
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  min-height: 100dvh;
+}
+
+/* Grain / texture on paper — subtle, fixed, no scroll cost */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.07  0 0 0 0 0.08  0 0 0 0 0.09  0 0 0 0.06 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+}
+
+/* ─────────── Language toggle behaviour ─────────── */
+body.lang-en .zh-only { display: none !important; }
+body.lang-zh .en-only { display: none !important; }
+body.lang-zh { font-family: var(--font-zh); }
+
+.zh, [lang="zh"] {
+  font-family: var(--font-zh);
+  font-feature-settings: "palt";
+}
+
+/* ─────────── Typography scale ─────────── */
+h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 400; }
+h1 { letter-spacing: -0.02em; line-height: 1.05; }
+h2 { letter-spacing: -0.015em; line-height: 1.1; }
+h3 { line-height: 1.2; }
+
+.font-display { font-family: var(--font-display); }
+.font-body    { font-family: var(--font-body); }
+.font-mono    { font-family: var(--font-mono); }
+
+/* ─────────── Focus ─────────── */
+:where(a, button, input, textarea, select, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-cobalt);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ─────────── Reduced motion ─────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ─────────── Utility helpers ─────────── */
+.paper-hairline { border-color: var(--color-line); }
+.paper-hairline-soft { border-color: var(--color-line-soft); }
+
+.rule-top { border-top: 1px solid var(--color-line); }
+.rule-bottom { border-bottom: 1px solid var(--color-line); }
+
+.balance { text-wrap: balance; }
+.pretty { text-wrap: pretty; }
+
+/* ─────────── Selection ─────────── */
+::selection { background: var(--color-cobalt); color: var(--color-paper); }
+
+/* ─────────── Print ─────────── */
+@media print {
+  body::before { display: none; }
+  .no-print { display: none !important; }
+}

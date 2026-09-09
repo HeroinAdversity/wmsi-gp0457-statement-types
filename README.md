@@ -1,43 +1,72 @@
-# Types of Statements — IGCSE Global Perspectives 0457
+# WMSI · IGCSE Global Perspectives 0457
 
-Self-study resources for **Year 10, Term 1, Weeks 2–3** at Wesley Methodist School International, Ipoh.
+Interactive teaching resources for **Year 10, Term 1** at Wesley Methodist School International, Ipoh. Bilingual (EN / 中文). Covers the two Paper 1 skill families that underpin the whole course:
 
-Covers the eight statement types named in the Cambridge IGCSE Global Perspectives (0457) syllabus — **bias, claim, fact, generalisation, opinion, prediction, value, vested interest** — with the heaviest weighting on **generalisation**, the term tested directly in exam **Question 1(b)** for 3 marks.
+- **Perspectives** — global · national · local · personal, and the Five Elements that turn a perspective into a mark-scheme answer.
+- **Statement types** — bias, claim, fact, generalisation, opinion, prediction, value, vested interest.
+
+## Stack
+
+- Vite + React + TypeScript
+- Tailwind v4
+- React Router (SPA)
+- Legacy static tools preserved and served under `/legacy/*`
+- Content aligned to the Cambridge IGCSE 0457 syllabus and the **Oxford Global Perspectives 3rd edition** textbook
 
 ## Contents
 
-| File | Audience | Purpose |
-|---|---|---|
-| `index.html` | Everyone | Landing page and entry point |
-| `WMSI_GP0457_Y10_T1_W2-3_Statement-Types-and-Generalisation_TOOL.html` | Students | Main self-study notes — video explainer, eight terms, sorting drill, generalisation hunter, mixed arena, exit check |
-| `WMSI_GP0457_Y10_T1_W2-3_Find-Your-Gap_Diagnostic-Targeted-Practice_TOOL.html` | Students | Diagnostic that identifies confused pairs and routes to targeted practice |
-| `WMSI_GP0457_Y10_T1_W2-3_Statement-Types-Intensive_TOOL.html` | Students | 120-minute deep-practice session: reference guide, 24-statement rapid sort, two source deep-dives, four confusable-pairs clinics, create-your-own task, 5 exam-style questions, self-assessment and export |
-| `mindmap.html` | Students | Interactive mind map revision of all eight terms |
-| `WMSI_GP0457_The-Source_Claim-vs-Evidence_TOOL.html` | Students | Separate Paper 1 Q1 skill: claim vs sourced evidence, developed (Level 3) evaluative comments |
-| `WMSI_GP0457_Y10_T1_W2-3_Teacher-Dashboard.html` | Staff | Lesson sequencing, timings, answer keys; imports results from the diagnostic and main statement-types tools |
-| `WMSI_GP0457_Y10_T1_W2-3_Statement-Types-Intensive_Teacher-Dashboard.html` | Staff | Imports export codes/JSON from Statement Types Intensive, aggregates class scores, flags students under 60%, exports CSV |
-| `assets/statement-types-overview.mp4` | Students | Video explainer, embedded in the main tool |
-| `video-source.md` | — | Source brief the video was generated from |
+| Route | What it is |
+|---|---|
+| `/` | Home — the two strands, three learning pathways, source note |
+| `/perspectives` | **Full React port** — 7-tab tool: Overview / Framework / Case study / Practice / Exam practice / Your turn / Checklist. Content extended with Oxford Ch. 1 material (values-experience-knowledge, regional level, owner-vs-product, nine evaluative elements). |
+| `/perspectives/weighing-room` | The Weighing Room — Q1(d) significance skills (served from `/legacy/`) |
+| `/statements` | **Full React port** — Statement Types hub, linking to every self-contained tool |
+| `/statements/main` → `/legacy/…and-Generalisation_TOOL.html` | Main self-study notes: video + eight terms + sorting drill + generalisation hunter + exit check |
+| `/statements/diagnostic` → `/legacy/…Find-Your-Gap…TOOL.html` | 15-min diagnostic that pinpoints confused pairs and routes to targeted practice |
+| `/statements/intensive` → `/legacy/…Statement-Types-Intensive_TOOL.html` | 120-min deep session: reference, 24-statement rapid sort, source deep-dives, four confusable-pair clinics, five exam-style Qs, self-assessment, export code |
+| `/statements/claim-vs-evidence` → `/legacy/…Claim-vs-Evidence_TOOL.html` | Separate Paper 1 Q1 skill: claim vs sourced evidence, Level-3 evaluative comments |
+| `/statements/mindmap` → `/legacy/mindmap.html` | Interactive mind map of all eight terms |
+| `/teachers/statements` → `/legacy/…Teacher-Dashboard.html` | Lesson sequencing, timings, answer keys; imports student export codes |
+| `/teachers/statements-intensive` → `/legacy/…Intensive_Teacher-Dashboard.html` | Aggregates class scores from the Intensive, flags students under 60%, exports CSV |
 
-## Running it
+The legacy static HTML tools (`legacy/*.html`) still open standalone from the filesystem — no build required.
 
-Every file is self-contained HTML. Open `index.html` in a browser — no build step, no server, no install.
-
-Fonts load from Google Fonts on first visit, then cache. The video needs a connection the first time it plays, or can be downloaded for offline use.
-
-## Regenerating the video
-
-The video was produced with [NotebookLM](https://notebooklm.google.com) from `video-source.md` via the [`notebooklm-py`](https://github.com/teng-lin/notebooklm-py) CLI. To rebuild it after editing the source brief:
+## Local development
 
 ```bash
-notebooklm create "GP0457 Types of Statements" --json
-notebooklm source add ./video-source.md --notebook <id> --json
-notebooklm generate video "<instructions>" --format explainer --style whiteboard --notebook <id>
-notebooklm download video ./assets/statement-types-overview.mp4 -n <id>
+cd "Types of statements/lesson notes"
+npm install
+npm run dev        # http://localhost:5173
+npm run build      # → dist/
+npm run preview    # preview built site
+npm run typecheck  # tsc --noEmit
 ```
 
-Editing `video-source.md` alone does **not** update the video — it must be regenerated and re-downloaded.
+## Design system
 
-## Licence
+- Palette: warm ivory paper (`#F7F3EA`) + deep ink (`#111417`) + electric cobalt accent (`#0B4CA6`), with supporting forest, amber, ember and violet for topic/level coding
+- Type: **DM Serif Display** (editorial headers), **Inter Tight** (body), **JetBrains Mono** (labels & tabular), **Noto Sans SC / Serif SC** (Chinese)
+- Motion: restrained — hover states, page transitions, no scroll hijack
+- Full `prefers-reduced-motion` and print styles
 
-Teaching material for WMSI Ipoh. Reuse for non-commercial educational purposes is welcome.
+## Deployment
+
+Netlify auto-builds from `main` using `netlify.toml`:
+
+```toml
+[build]
+  command = "npm run build"
+  publish = "dist"
+```
+
+`/legacy/*` is served as-is (see redirect rule), so nothing that worked before is lost.
+
+## Regenerating the Statement Types video
+
+Video source and regeneration instructions live in `legacy/video-source.md`. The video itself is served from `public/legacy/assets/statement-types-overview.mp4`.
+
+## Content sources
+
+- **Cambridge IGCSE Global Perspectives 0457 syllabus** and released past papers (labelled inline; June 2026 Q1(c), March 2026, etc.)
+- **Oxford Cambridge IGCSE & O Level Complete Global Perspectives, 3rd edition** — used for the "textbook enrichment" callouts on `/perspectives`
+- Original practice passages by the WMSI GP teacher (labelled "Original practice" inline)

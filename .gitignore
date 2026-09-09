@@ -6,7 +6,13 @@ desktop.ini
 .vscode/
 .idea/
 
-# Netlify
+# Node / build
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Netlify CLI
 .netlify/
 
 # Office lock files
