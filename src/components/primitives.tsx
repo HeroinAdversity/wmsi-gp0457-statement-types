@@ -62,7 +62,7 @@ export function Eyebrow({
 export function DisplayH1({ children, className = '' }: { children: ReactNode; className?: string }) {
   return (
     <h1
-      className={`font-display text-[clamp(38px,5.5vw,64px)] leading-[1.02] tracking-[-0.02em] text-[color:var(--color-ink)] balance ${className}`}
+      className={`font-display text-[clamp(38px,5.5vw,64px)] leading-[1.1] tracking-[-0.02em] text-[color:var(--color-ink)] balance ${className}`}
     >
       {children}
     </h1>
@@ -72,7 +72,7 @@ export function DisplayH1({ children, className = '' }: { children: ReactNode; c
 export function DisplayH2({ children, className = '' }: { children: ReactNode; className?: string }) {
   return (
     <h2
-      className={`font-display text-[clamp(28px,3.6vw,42px)] leading-[1.08] tracking-[-0.015em] text-[color:var(--color-ink)] balance ${className}`}
+      className={`font-display text-[clamp(28px,3.6vw,42px)] leading-[1.18] tracking-[-0.015em] text-[color:var(--color-ink)] balance ${className}`}
     >
       {children}
     </h2>
@@ -82,7 +82,7 @@ export function DisplayH2({ children, className = '' }: { children: ReactNode; c
 export function DisplayH3({ children, className = '' }: { children: ReactNode; className?: string }) {
   return (
     <h3
-      className={`font-display text-[clamp(20px,2.2vw,26px)] leading-[1.2] text-[color:var(--color-ink)] balance ${className}`}
+      className={`font-display text-[clamp(20px,2.2vw,26px)] leading-[1.25] text-[color:var(--color-ink)] balance ${className}`}
     >
       {children}
     </h3>
@@ -93,7 +93,7 @@ export function DisplayH3({ children, className = '' }: { children: ReactNode; c
 export function Lede({ children, className = '' }: { children: ReactNode; className?: string }) {
   return (
     <p
-      className={`text-[17px] md:text-[18px] leading-[1.55] text-[color:var(--color-ink-2)] max-w-[62ch] pretty ${className}`}
+      className={`text-[17px] md:text-[18px] leading-[1.7] text-[color:var(--color-ink-2)] max-w-[62ch] pretty ${className}`}
     >
       {children}
     </p>
@@ -102,7 +102,7 @@ export function Lede({ children, className = '' }: { children: ReactNode; classN
 
 export function Body({ children, className = '' }: { children: ReactNode; className?: string }) {
   return (
-    <p className={`text-[15.5px] leading-[1.65] text-[color:var(--color-ink)] max-w-[65ch] pretty ${className}`}>
+    <p className={`text-[15.5px] leading-[1.75] text-[color:var(--color-ink)] max-w-[65ch] pretty ${className}`}>
       {children}
     </p>
   );
@@ -150,29 +150,24 @@ export function Callout({
   eyebrow?: ReactNode;
   className?: string;
 }) {
-  const map: Record<string, { bg: string; bar: string; text: string }> = {
+  const map: Record<string, { bar: string; text: string }> = {
     cobalt: {
-      bg: 'bg-[color:var(--color-cobalt-soft)]',
       bar: 'border-l-[color:var(--color-cobalt)]',
       text: 'text-[color:var(--color-cobalt-deep)]',
     },
     ember: {
-      bg: 'bg-[color:var(--color-ember-soft)]',
       bar: 'border-l-[color:var(--color-ember)]',
       text: 'text-[color:var(--color-ember)]',
     },
     forest: {
-      bg: 'bg-[color:var(--color-forest-soft)]',
       bar: 'border-l-[color:var(--color-forest)]',
       text: 'text-[color:var(--color-forest)]',
     },
     amber: {
-      bg: 'bg-[color:var(--color-amber-soft)]',
       bar: 'border-l-[color:var(--color-amber)]',
       text: 'text-[color:var(--color-amber)]',
     },
     violet: {
-      bg: 'bg-[color:var(--color-violet-soft)]',
       bar: 'border-l-[color:var(--color-violet)]',
       text: 'text-[color:var(--color-violet)]',
     },
@@ -180,7 +175,7 @@ export function Callout({
   const t = map[tone];
   return (
     <aside
-      className={`${t.bg} border-l-[3px] ${t.bar} px-5 py-4 md:px-6 md:py-5 rounded-r-[4px] ${className}`}
+      className={`bg-[color:var(--color-paper-2)] border-l-[3px] ${t.bar} px-5 py-4 md:px-6 md:py-5 rounded-r-[4px] ${className}`}
     >
       {eyebrow && (
         <p className={`font-mono text-[11px] font-semibold uppercase tracking-[0.18em] mb-2 ${t.text}`}>

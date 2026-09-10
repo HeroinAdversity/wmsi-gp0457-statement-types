@@ -17,91 +17,74 @@ export function StatementTypesHubPage() {
   return (
     <>
       {/* HERO */}
-      <section className="pt-12 md:pt-16 pb-14 md:pb-20 border-b border-[color:var(--color-line)]">
+      <section className="pt-12 md:pt-16 pb-10 md:pb-12 border-b border-[color:var(--color-line)]">
         <Container size="wide">
-          <div className="grid gap-10 md:grid-cols-[1.15fr_1fr] items-start">
-            <div>
-              <DisplayH1>
-                <Bi
-                  en={
-                    <>
-                      Eight words <br className="hidden sm:block" />
-                      that unlock the paper.
-                    </>
-                  }
-                  zh={
-                    <>
-                      八个术语，
-                      <br className="hidden sm:block" />
-                      解锁整份试卷。
-                    </>
-                  }
-                />
-              </DisplayH1>
-              <Lede className="mt-6">
-                <Bi
-                  en={
-                    <>
-                      The Cambridge IGCSE Global Perspectives 0457 syllabus names eight kinds of statement. Learn to
-                      tell them apart and you unlock <strong>Question 1(b)</strong>, most of Paper 1, and the
-                      analytical spine of your team project.
-                    </>
-                  }
-                  zh={
-                    <>
-                      剑桥 IGCSE 全球视野 0457 大纲共列出八种陈述类型。学会分辨它们，就等于解锁了
-                      <strong>第 1(b) 题</strong>、卷一的大部分内容，以及团队项目的分析主线。
-                    </>
-                  }
-                />
-              </Lede>
-            </div>
+          <div className="max-w-[52ch]">
+            <DisplayH1>
+              <Bi
+                en={<>Eight words that unlock the paper.</>}
+                zh={<>八个术语，解锁整份试卷。</>}
+              />
+            </DisplayH1>
+            <Lede className="mt-6">
+              <Bi
+                en={
+                  <>
+                    The Cambridge IGCSE Global Perspectives 0457 syllabus names eight kinds of statement. Learn to
+                    tell them apart and you unlock <strong>Question 1(b)</strong>, most of Paper 1, and the
+                    analytical spine of your team project.
+                  </>
+                }
+                zh={
+                  <>
+                    剑桥 IGCSE 全球视野 0457 大纲共列出八种陈述类型。学会分辨它们，就等于解锁了
+                    <strong>第 1(b) 题</strong>、卷一的大部分内容，以及团队项目的分析主线。
+                  </>
+                }
+              />
+            </Lede>
+          </div>
 
-            {/* Eight-terms grid */}
-            <div className="grid grid-cols-2 gap-3">
-              {EIGHT_TERMS.map((t) => (
-                <div
-                  key={t.en}
-                  className={`px-4 py-3 rounded-md border ${
-                    t.accent
-                      ? 'border-[color:var(--color-ember)] bg-[color:var(--color-ember-soft)]'
-                      : 'border-[color:var(--color-line)] bg-[color:var(--color-paper)]'
+          {/* Eight-terms row */}
+          <ul className="mt-10 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-x-6 gap-y-4 border-t border-[color:var(--color-line)] pt-6">
+            {EIGHT_TERMS.map((t) => (
+              <li key={t.en} className="flex flex-col gap-1.5">
+                <span
+                  className={`font-display text-[17px] leading-tight ${
+                    t.accent ? 'text-[color:var(--color-cobalt)]' : 'text-[color:var(--color-ink)]'
                   }`}
                 >
-                  <p
-                    className={`font-display text-[18px] leading-tight ${
-                      t.accent ? 'text-[color:var(--color-ember)]' : 'text-[color:var(--color-ink)]'
-                    }`}
-                  >
-                    <Bi en={t.en} zh={t.zh} />
-                  </p>
-                  {t.accent && (
-                    <p className="font-mono text-[9.5px] uppercase tracking-[0.16em] text-[color:var(--color-ember)] mt-1">
-                      <Bi en="most-tested" zh="最常考" />
-                    </p>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
+                  <Bi en={t.en} zh={t.zh} />
+                </span>
+                {t.accent && (
+                  <span className="self-start inline-flex items-center font-mono text-[10px] font-semibold uppercase tracking-[0.14em] px-2 py-0.5 rounded-full bg-[color:var(--color-cobalt-soft)] text-[color:var(--color-cobalt-deep)]">
+                    <Bi en="most-tested" zh="最常考" />
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
         </Container>
       </section>
 
       {/* TOOLS GRID */}
-      <section className="py-16 md:py-24">
+      <section className="py-14 md:py-20">
         <Container size="wide">
-          <div className="grid gap-5 md:grid-cols-2">
-            <ToolCard
-              to="/statements/main"
-              minutes="45–60"
-              title={<Bi en="Statement Types & Generalisation" zh="陈述类型与一般化" />}
-              body={
-                <Bi
-                  en="The main self-study notes. Watch the four-minute video, meet all eight terms, work the sorting drill, hunt for generalisations, take the exit check."
-                  zh="主要的自学笔记。观看 4 分钟视频、认识八个术语、完成分类练习、寻找一般化语句、通过退出检测。"
-                />
-              }
-            />
+          {/* Primary pathway */}
+          <HeroToolCard
+            to="/statements/main"
+            minutes="45–60"
+            title={<Bi en="Statement Types & Generalisation" zh="陈述类型与一般化" />}
+            body={
+              <Bi
+                en="The main self-study notes. Watch the four-minute video, meet all eight terms, work the sorting drill, hunt for generalisations, take the exit check."
+                zh="主要的自学笔记。观看 4 分钟视频、认识八个术语、完成分类练习、寻找一般化语句、通过退出检测。"
+              />
+            }
+          />
+
+          {/* Secondary tools */}
+          <div className="mt-6 grid gap-5 md:grid-cols-2">
             <ToolCard
               to="/statements/diagnostic"
               minutes="15"
@@ -146,9 +129,12 @@ export function StatementTypesHubPage() {
                 />
               }
             />
-            <ToolCard
+          </div>
+
+          {/* Teacher pathway — separated */}
+          <div className="mt-14 pt-8 border-t border-[color:var(--color-line)]">
+            <StaffToolCard
               to="/teachers/statements"
-              minutes="staff"
               title={<Bi en="Teacher Dashboards" zh="教师面板" />}
               body={
                 <Bi
@@ -161,6 +147,45 @@ export function StatementTypesHubPage() {
         </Container>
       </section>
     </>
+  );
+}
+
+function HeroToolCard({
+  to,
+  minutes,
+  title,
+  body,
+}: {
+  to: string;
+  minutes: string;
+  title: React.ReactNode;
+  body: React.ReactNode;
+}) {
+  return (
+    <Link
+      to={to}
+      className="group grid gap-6 md:grid-cols-[1fr_auto] md:items-end bg-[color:var(--color-paper)] border border-[color:var(--color-line)] border-l-[3px] border-l-[color:var(--color-cobalt)] rounded-[8px] p-8 md:p-10 transition-all hover:border-[color:var(--color-ink)] hover:border-l-[color:var(--color-cobalt)]"
+    >
+      <div>
+        <p className="font-mono text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[color:var(--color-cobalt)] mb-3">
+          <Bi en="Start here · main pathway" zh="从这里开始 · 主学习路径" />
+        </p>
+        <h3 className="font-display text-[28px] md:text-[34px] leading-[1.1] text-[color:var(--color-ink)] balance">
+          {title}
+        </h3>
+        <p className="mt-4 text-[15.5px] leading-[1.55] text-[color:var(--color-ink-2)] max-w-[62ch] pretty">
+          {body}
+        </p>
+      </div>
+      <div className="flex md:flex-col md:items-end gap-4 md:gap-3">
+        <span className="font-mono text-[12px] text-[color:var(--color-ink-3)] whitespace-nowrap tabular-nums">
+          <Bi en={`${minutes} min`} zh={`${minutes} 分钟`} />
+        </span>
+        <span className="inline-flex items-center gap-2 text-[13.5px] font-semibold px-5 py-2.5 rounded-full bg-[color:var(--color-ink)] text-[color:var(--color-paper)] group-hover:bg-[color:var(--color-cobalt)] transition-colors">
+          <Bi en="Open →" zh="打开 →" />
+        </span>
+      </div>
+    </Link>
   );
 }
 
@@ -185,13 +210,45 @@ function ToolCard({
           {title}
         </h3>
         <span className="text-[12.5px] text-[color:var(--color-ink-3)] whitespace-nowrap tabular-nums shrink-0">
-          {minutes === 'staff' ? <Bi en="staff" zh="教师" /> : <Bi en={`${minutes} min`} zh={`${minutes} 分钟`} />}
+          <Bi en={`${minutes} min`} zh={`${minutes} 分钟`} />
         </span>
       </div>
       <p className="text-[14.5px] leading-[1.55] text-[color:var(--color-ink-2)] pretty">{body}</p>
       <div className="mt-auto pt-2 flex items-center gap-2 text-[13px] font-semibold text-[color:var(--color-ink)] group-hover:text-[color:var(--color-cobalt)] transition-colors">
         <Bi en="Open →" zh="打开 →" />
       </div>
+    </Link>
+  );
+}
+
+function StaffToolCard({
+  to,
+  title,
+  body,
+}: {
+  to: string;
+  title: React.ReactNode;
+  body: React.ReactNode;
+}) {
+  return (
+    <Link
+      to={to}
+      className="group grid gap-4 md:grid-cols-[auto_1fr_auto] md:items-baseline items-start"
+    >
+      <p className="font-mono text-[10.5px] font-semibold uppercase tracking-[0.18em] text-[color:var(--color-ink-3)] whitespace-nowrap">
+        <Bi en="For teachers" zh="教师专用" />
+      </p>
+      <div>
+        <h3 className="font-display text-[20px] md:text-[22px] leading-[1.2] text-[color:var(--color-ink)] balance">
+          {title}
+        </h3>
+        <p className="mt-2 text-[14px] leading-[1.55] text-[color:var(--color-ink-2)] pretty max-w-[68ch]">
+          {body}
+        </p>
+      </div>
+      <span className="inline-flex items-center gap-2 text-[13px] font-semibold text-[color:var(--color-ink-2)] group-hover:text-[color:var(--color-cobalt)] transition-colors whitespace-nowrap">
+        <Bi en="Open →" zh="打开 →" />
+      </span>
     </Link>
   );
 }

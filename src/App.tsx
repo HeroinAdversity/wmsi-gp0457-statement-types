@@ -11,6 +11,9 @@ import { ClaimVsEvidencePage } from './pages/types-of-statements/ClaimVsEvidence
 import { MindMapPage } from './pages/types-of-statements/MindMapPage';
 import { TeacherDashboardPage } from './pages/dashboards/TeacherDashboardPage';
 import { IntensiveDashboardPage } from './pages/dashboards/IntensiveDashboardPage';
+import { TeachersHubPage } from './pages/dashboards/TeachersHubPage';
+import { PerspectivesDashboardPage } from './pages/dashboards/PerspectivesDashboardPage';
+import { WeighingRoomDashboardPage } from './pages/dashboards/WeighingRoomDashboardPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 
 export function App() {
@@ -32,8 +35,11 @@ export function App() {
         <Route path="statements/mindmap" element={<MindMapPage />} />
 
         {/* Teacher dashboards */}
+        <Route path="teachers" element={<TeachersHubPage />} />
         <Route path="teachers/statements" element={<TeacherDashboardPage />} />
         <Route path="teachers/statements-intensive" element={<IntensiveDashboardPage />} />
+        <Route path="teachers/perspectives" element={<PerspectivesDashboardPage />} />
+        <Route path="teachers/weighing-room" element={<WeighingRoomDashboardPage />} />
 
         <Route path="*" element={<NotFoundPage />} />
       </Route>

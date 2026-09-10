@@ -8,20 +8,12 @@ const NAV_LINKS = [
   { to: '/perspectives', en: 'Perspectives', zh: '观点' },
   { to: '/statements', en: 'Statements', zh: '陈述类型' },
   { to: '/statements/mindmap', en: 'Mindmap', zh: '思维导图' },
-  { to: '/teachers/statements', en: 'Teachers', zh: '教师面板' },
+  { to: '/teachers', en: 'Teachers', zh: '教师面板' },
 ];
 
 export function SiteLayout() {
   const { lang, toggle } = useLanguage();
   const { pathname } = useLocation();
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' as ScrollBehavior });
@@ -29,7 +21,7 @@ export function SiteLayout() {
 
   return (
     <div className="min-h-[100dvh] flex flex-col">
-      <SiteHeader scrolled={scrolled} lang={lang} toggleLang={toggle} />
+      <SiteHeader lang={lang} toggleLang={toggle} />
       <main className="flex-1">
         <Outlet />
       </main>
@@ -39,28 +31,16 @@ export function SiteLayout() {
 }
 
 function SiteHeader({
-  scrolled,
   lang,
   toggleLang,
 }: {
-  scrolled: boolean;
   lang: 'en' | 'zh';
   toggleLang: () => void;
 }) {
   return (
-    <header
-      className={`sticky top-0 z-40 backdrop-blur-md transition-all duration-300 ${
-        scrolled
-          ? 'bg-[color:var(--color-paper)]/90 border-b border-[color:var(--color-line)]'
-          : 'bg-[color:var(--color-paper)]/60 border-b border-transparent'
-      }`}
-    >
+    <header className="sticky top-0 z-40 bg-[color:var(--color-paper)]/90 backdrop-blur-md border-b border-[color:var(--color-line)]">
       <Container size="wide">
-        <div
-          className={`flex items-center justify-between gap-6 transition-all duration-300 ${
-            scrolled ? 'py-3' : 'py-4 md:py-5'
-          }`}
-        >
+        <div className="flex items-center justify-between gap-6 py-3">
           <Link to="/" className="flex items-center gap-3 group">
             <WMSIMark />
             <p className="hidden sm:block font-display text-[16px] leading-tight text-[color:var(--color-ink)]">
@@ -68,17 +48,17 @@ function SiteHeader({
             </p>
           </Link>
 
-          <nav className="hidden lg:flex items-center gap-1">
+          <nav className="hidden lg:flex items-center gap-7">
             {NAV_LINKS.map((l) => (
               <NavLink
                 key={l.to}
                 to={l.to}
                 end={l.end}
                 className={({ isActive }) =>
-                  `text-[13.5px] font-semibold px-3.5 py-2 rounded-full transition-colors ${
+                  `text-[13.5px] font-semibold transition-colors relative py-1 ${
                     isActive
-                      ? 'bg-[color:var(--color-ink)] text-[color:var(--color-paper)]'
-                      : 'text-[color:var(--color-ink-2)] hover:text-[color:var(--color-ink)] hover:bg-[color:var(--color-paper-2)]'
+                      ? 'text-[color:var(--color-ink)] after:absolute after:left-0 after:right-0 after:-bottom-0.5 after:h-[2px] after:bg-[color:var(--color-ink)]'
+                      : 'text-[color:var(--color-ink-3)] hover:text-[color:var(--color-ink)]'
                   }`
                 }
               >

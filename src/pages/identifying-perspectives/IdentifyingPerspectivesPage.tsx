@@ -45,7 +45,7 @@ export function IdentifyingPerspectivesPage() {
   return (
     <>
       {/* HERO */}
-      <section className="pt-12 md:pt-16 pb-10 border-b border-[color:var(--color-line)]">
+      <section className="pt-12 md:pt-16 pb-8">
         <Container size="wide">
           <DisplayH1 className="max-w-[22ch]">
             <Bi en="Identifying & Explaining Perspectives" zh="识别与解释观点" />
@@ -59,10 +59,13 @@ export function IdentifyingPerspectivesPage() {
         </Container>
       </section>
 
-      {/* STICKY TAB NAV */}
+      {/* STICKY TAB NAV — editorial underline row, quieter than pills */}
       <div className="sticky top-[64px] z-30 bg-[color:var(--color-paper)]/95 backdrop-blur-md border-b border-[color:var(--color-line)]">
         <Container size="wide">
-          <nav className="flex gap-1 py-3 overflow-x-auto scrollbar-none" role="tablist">
+          <nav
+            className="flex gap-6 md:gap-8 overflow-x-auto scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+            role="tablist"
+          >
             {TABS.map((t) => (
               <button
                 key={t.id}
@@ -70,10 +73,10 @@ export function IdentifyingPerspectivesPage() {
                 role="tab"
                 aria-selected={tab === t.id}
                 onClick={() => setTabAndUrl(t.id)}
-                className={`shrink-0 text-[13.5px] font-semibold px-3.5 py-2 rounded-full transition-colors ${
+                className={`shrink-0 text-[13.5px] font-semibold py-3.5 border-b-2 -mb-px transition-colors ${
                   tab === t.id
-                    ? 'bg-[color:var(--color-ink)] text-[color:var(--color-paper)]'
-                    : 'text-[color:var(--color-ink-2)] hover:text-[color:var(--color-ink)] hover:bg-[color:var(--color-paper-2)]'
+                    ? 'text-[color:var(--color-ink)] border-[color:var(--color-ink)]'
+                    : 'text-[color:var(--color-ink-3)] border-transparent hover:text-[color:var(--color-ink)]'
                 }`}
               >
                 <Bi en={t.en} zh={t.zh} />
@@ -265,56 +268,62 @@ function ConcentricDiagram({ lang }: { lang: 'en' | 'zh' }) {
 /* ─────────── Framework tab ─────────── */
 function FrameworkTab() {
   return (
-    <div className="grid gap-10">
-      <div className="max-w-[68ch]">
-        <DisplayH2>
-          <Bi en="Three command words." zh="三个指令词。" />
-        </DisplayH2>
-        <Body className="mt-5">
-          <Bi
-            en={
-              <>
-                <strong>"Identify"</strong> means naming which level a perspective sits at, and whose it is: no
-                reasoning required. <strong>"Describe"</strong> means stating the points of a topic and giving its
-                characteristics and main features: clear and full, but without justification.{' '}
-                <strong>"Explain"</strong> goes further still: setting out reasons, making relationships clear, and
-                saying why and/or how, supported with evidence. These are Cambridge's own definitions, and they
-                matter: a "describe" question and an "explain" question are marked on different things.
-              </>
-            }
-            zh={
-              <>
-                <strong>「识别」(identify)</strong>是指说出一个观点属于哪个层次、是谁的观点：不需要说明理由。
-                <strong>「描述」(describe)</strong>是指说明某一主题的要点，列出其特征与主要方面：要清楚而全面，但不需要论证。
-                <strong>「解释」(explain)</strong>则要求更进一步：说明理由、理清关系，并说明为什么／如何，并有证据支持。这些是剑桥官方定义，非常关键：「描述」题与「解释」题的评分标准并不相同。
-              </>
-            }
-          />
-        </Body>
+    <div className="grid gap-12">
+      {/* Header: command words + Five Elements intro side-by-side */}
+      <div className="grid gap-10 md:grid-cols-2 md:gap-14">
+        <div>
+          <DisplayH2>
+            <Bi en="Three command words." zh="三个指令词。" />
+          </DisplayH2>
+          <Body className="mt-5">
+            <Bi
+              en={
+                <>
+                  <strong>"Identify"</strong> means naming which level a perspective sits at, and whose it is: no
+                  reasoning required. <strong>"Describe"</strong> means stating the points of a topic and giving its
+                  characteristics and main features: clear and full, but without justification.{' '}
+                  <strong>"Explain"</strong> goes further still: setting out reasons, making relationships clear, and
+                  saying why and/or how, supported with evidence. These are Cambridge's own definitions, and they
+                  matter: a "describe" question and an "explain" question are marked on different things.
+                </>
+              }
+              zh={
+                <>
+                  <strong>「识别」(identify)</strong>是指说出一个观点属于哪个层次、是谁的观点：不需要说明理由。
+                  <strong>「描述」(describe)</strong>是指说明某一主题的要点，列出其特征与主要方面：要清楚而全面，但不需要论证。
+                  <strong>「解释」(explain)</strong>则要求更进一步：说明理由、理清关系，并说明为什么／如何，并有证据支持。这些是剑桥官方定义，非常关键：「描述」题与「解释」题的评分标准并不相同。
+                </>
+              }
+            />
+          </Body>
+        </div>
+
+        <div>
+          <DisplayH2>
+            <Bi en="Five Elements." zh="五个要素。" />
+          </DisplayH2>
+          <Body className="mt-5">
+            <Bi
+              en={
+                <>
+                  When a question asks you to <strong>describe a perspective</strong> from a source, Cambridge's Table A
+                  mark scheme rewards covering a wide range of five elements, each backed by specific words from the
+                  source. This is the real structure the examiners use.
+                </>
+              }
+              zh={
+                <>
+                  当题目要求你从资料中<strong>描述一个观点</strong>时，剑桥表 A 评分标准所奖励的，是覆盖广泛的五个要素，
+                  并且每一个都有资料中的具体词语作支持。这是考官实际使用的结构。
+                </>
+              }
+            />
+          </Body>
+        </div>
       </div>
 
+      {/* Five Elements grid (full width) */}
       <div>
-        <DisplayH3 className="mb-6">
-          <Bi en="The Five Elements" zh="五个要素" />
-        </DisplayH3>
-        <Body className="mb-8 max-w-[65ch]">
-          <Bi
-            en={
-              <>
-                When a question asks you to <strong>describe a perspective</strong> from a source, Cambridge's Table A
-                mark scheme rewards covering a wide range of five elements, each backed by specific words from the
-                source. This is the real structure the examiners use.
-              </>
-            }
-            zh={
-              <>
-                当题目要求你从资料中<strong>描述一个观点</strong>时，剑桥表 A 评分标准所奖励的，是覆盖广泛的五个要素，
-                并且每一个都有资料中的具体词语作支持。这是考官实际使用的结构。
-              </>
-            }
-          />
-        </Body>
-
         <ol className="grid gap-3 md:grid-cols-5">
           {FIVE_ELEMENTS.map((el, i) => (
             <li
@@ -340,36 +349,38 @@ function FrameworkTab() {
         </ol>
       </div>
 
-      <Callout tone="amber">
-        <Bi
-          en="A source rarely spells out all five elements with equal clarity, and the same sentence can sometimes serve two elements at once: you'll see this in the worked example below. A strong answer covers as many elements as the source genuinely supports, backed by specific words from the text. Don't invent an element that isn't there just to complete the set."
-          zh="一份资料很少会把这五个要素都同样清楚地写出来，有时同一句话甚至能同时体现两个要素：你会在下面的范例中看到这一点。一个出色的答案，会尽可能覆盖资料真正能支持的要素，并有资料中的具体词语作为依据。不要为了凑齐五项，而生造一个资料中并不存在的要素。"
-        />
-      </Callout>
+      <div className="grid gap-4 md:grid-cols-2">
+        <Callout tone="amber" eyebrow={<Bi en="Practical note · coverage" zh="实用提示 · 覆盖面" />}>
+          <Bi
+            en="A source rarely spells out all five elements with equal clarity, and the same sentence can sometimes serve two elements at once: you'll see this in the worked example below. A strong answer covers as many elements as the source genuinely supports, backed by specific words from the text. Don't invent an element that isn't there just to complete the set."
+            zh="一份资料很少会把这五个要素都同样清楚地写出来，有时同一句话甚至能同时体现两个要素：你会在下面的范例中看到这一点。一个出色的答案，会尽可能覆盖资料真正能支持的要素，并有资料中的具体词语作为依据。不要为了凑齐五项，而生造一个资料中并不存在的要素。"
+          />
+        </Callout>
 
-      <Callout tone="forest" eyebrow={<Bi en="Textbook enrichment · owner and product" zh="教材补充 · 「作者」与「作品」" />}>
-        <Bi
-          en={
-            <>
-              The Oxford textbook (Ch. 1) frames source analysis as two moves: <strong>provenance</strong> (where the
-              source came from: its owner, credentials, format, whether it's primary or secondary) and{' '}
-              <strong>content</strong> (what the material actually says: its claims, arguments, and judgements). The
-              Five Elements above unpack the <em>content</em>. But before you describe a perspective, always ask:{' '}
-              <em>whose perspective is this, and why should I trust their framing?</em> That single question separates
-              a Level 2 answer from a Level 3 one on Q1(d).
-            </>
-          }
-          zh={
-            <>
-              牛津教材第一章将资料分析归纳为两步：<strong>出处 (provenance)</strong>：资料来自哪里？作者是谁、其资历如何、
-              是什么格式、是一手还是二手？：以及<strong>内容 (content)</strong>：资料实际说了什么？它的断言、论点与判断是什么？
-              上面的五要素分析的是<em>内容</em>。但在你描述某个观点之前，请务必先问：
-              <em>这是谁的观点？我为什么应该信任这种表述方式？</em>
-              就是这一个问题，把 Q1(d) 的等级 2 答案与等级 3 答案区分开来。
-            </>
-          }
-        />
-      </Callout>
+        <Callout tone="forest" eyebrow={<Bi en="Textbook enrichment · owner and product" zh="教材补充 · 「作者」与「作品」" />}>
+          <Bi
+            en={
+              <>
+                The Oxford textbook (Ch. 1) frames source analysis as two moves: <strong>provenance</strong> (where the
+                source came from: its owner, credentials, format, whether it's primary or secondary) and{' '}
+                <strong>content</strong> (what the material actually says: its claims, arguments, and judgements). The
+                Five Elements above unpack the <em>content</em>. But before you describe a perspective, always ask:{' '}
+                <em>whose perspective is this, and why should I trust their framing?</em> That single question separates
+                a Level 2 answer from a Level 3 one on Q1(d).
+              </>
+            }
+            zh={
+              <>
+                牛津教材第一章将资料分析归纳为两步：<strong>出处 (provenance)</strong>：资料来自哪里？作者是谁、其资历如何、
+                是什么格式、是一手还是二手？：以及<strong>内容 (content)</strong>：资料实际说了什么？它的断言、论点与判断是什么？
+                上面的五要素分析的是<em>内容</em>。但在你描述某个观点之前，请务必先问：
+                <em>这是谁的观点？我为什么应该信任这种表述方式？</em>
+                就是这一个问题，把 Q1(d) 的等级 2 答案与等级 3 答案区分开来。
+              </>
+            }
+          />
+        </Callout>
+      </div>
 
       <div>
         <DisplayH3 className="mb-4">
@@ -403,25 +414,28 @@ function FrameworkTab() {
             { en: 'Interpretation', zh: '诠释', tone: 'amber' as const },
             { en: 'Bias', zh: '偏见', tone: 'ember' as const },
             { en: 'Emotion', zh: '情感', tone: 'ember' as const },
-          ].map((it, i) => (
-            <li
-              key={i}
-              className={`flex items-center gap-2 px-3 py-2 rounded-md border ${
-                it.tone === 'cobalt'
-                  ? 'border-[color:var(--color-cobalt)]/30 bg-[color:var(--color-cobalt-soft)]'
-                  : it.tone === 'amber'
-                    ? 'border-[color:var(--color-amber)]/30 bg-[color:var(--color-amber-soft)]'
-                    : 'border-[color:var(--color-ember)]/30 bg-[color:var(--color-ember-soft)]'
-              }`}
-            >
-              <span className="font-mono text-[10px] font-semibold text-[color:var(--color-ink-3)] tabular-nums">
-                {String(i + 1).padStart(2, '0')}
-              </span>
-              <span className="text-[13.5px] font-semibold text-[color:var(--color-ink)]">
-                <Bi en={it.en} zh={it.zh} />
-              </span>
-            </li>
-          ))}
+          ].map((it, i) => {
+            const dot =
+              it.tone === 'cobalt'
+                ? 'bg-[color:var(--color-cobalt)]'
+                : it.tone === 'amber'
+                  ? 'bg-[color:var(--color-amber)]'
+                  : 'bg-[color:var(--color-ember)]';
+            return (
+              <li
+                key={i}
+                className="flex items-center gap-3 px-3 py-2 rounded-md border border-[color:var(--color-line)] bg-[color:var(--color-paper)]"
+              >
+                <span className={`inline-block w-1.5 h-1.5 rounded-full ${dot}`} aria-hidden />
+                <span className="font-mono text-[10px] font-semibold text-[color:var(--color-ink-3)] tabular-nums">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <span className="text-[13.5px] font-semibold text-[color:var(--color-ink)]">
+                  <Bi en={it.en} zh={it.zh} />
+                </span>
+              </li>
+            );
+          })}
         </ul>
         <p className="mt-4 text-[12.5px] text-[color:var(--color-ink-3)] font-mono uppercase tracking-[0.12em]">
           <Bi
@@ -451,7 +465,7 @@ function FrameworkTab() {
           </p>
         </div>
 
-        <div className="bg-[color:var(--color-amber-soft)] border border-dashed border-[color:var(--color-amber)] rounded-[6px] p-5 md:p-6 grid gap-3">
+        <div className="border border-[color:var(--color-line)] border-l-[3px] border-l-[color:var(--color-amber)] rounded-[6px] p-5 md:p-6 grid gap-3 bg-[color:var(--color-paper)]">
           {WORKED_EXAMPLE.map((row, i) => (
             <div key={i} className="grid gap-1 md:grid-cols-[100px_1fr]">
               <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-[color:var(--color-amber)]">
@@ -573,7 +587,7 @@ function VoiceCardComponent({ card }: { card: (typeof VOICE_CARDS)[number] }) {
             </div>
           ))}
           {card.cultural && (
-            <div className="mt-3 bg-[color:var(--color-violet-soft)] border-l-[3px] border-[color:var(--color-violet)] rounded-r-md px-4 py-3">
+            <div className="mt-3 bg-[color:var(--color-paper-2)] border-l-[3px] border-[color:var(--color-violet)] rounded-r-md px-4 py-3">
               <p className="font-mono text-[10.5px] font-semibold uppercase tracking-[0.16em] text-[color:var(--color-violet)] mb-1">
                 <Bi en="Cultural lens" zh="文化透镜" />
               </p>
@@ -604,7 +618,7 @@ function PracticeTab() {
         </Body>
       </div>
 
-      <div className="grid gap-5">
+      <div className="grid gap-5 md:grid-cols-2">
         {PRACTICE_STATEMENTS.map((s, i) => (
           <PracticeCard key={i} idx={i} item={s} />
         ))}
@@ -880,7 +894,7 @@ function ExamQuestion({ q }: { q: (typeof DESCRIBE_QUESTIONS)[number] }) {
         )}
 
         {showMarkScheme && (
-          <div className="mt-5 bg-[color:var(--color-amber-soft)] border-l-[3px] border-[color:var(--color-amber)] rounded-r-md p-4">
+          <div className="mt-5 bg-[color:var(--color-paper-2)] border-l-[3px] border-[color:var(--color-amber)] rounded-r-md p-4">
             <p className="font-semibold text-[13.5px] mb-2 text-[color:var(--color-ink)]">
               <Bi
                 en="Table A: Analysis of issues and perspectives (AO1), 6 marks"
@@ -955,7 +969,7 @@ function YourTurnTab() {
         />
       </p>
 
-      <div className="bg-[color:var(--color-amber-soft)] border border-dashed border-[color:var(--color-amber)] rounded-[6px] p-5 grid gap-1.5">
+      <div className="bg-[color:var(--color-paper-2)] border border-[color:var(--color-line)] border-l-[3px] border-l-[color:var(--color-amber)] rounded-[6px] p-5 grid gap-1.5">
         {(lang === 'zh' ? YOUR_TURN.frameLinesZh : YOUR_TURN.frameLinesEn).map((line, i) => (
           <p key={i} className="font-mono text-[13px] text-[color:var(--color-amber)]">
             {line}

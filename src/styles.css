@@ -4,31 +4,40 @@
    WMSI GP0457 — Design tokens (editorial-academic language)
    ──────────────────────────────────────────────────────────── */
 @theme {
-  /* Paper family — warm ivory, breaks from the old #F5F0E8 cream slightly */
-  --color-paper: #F7F3EA;
-  --color-paper-2: #EFE9DB;
-  --color-paper-3: #E5DEC9;
-  --color-line: #DDD5C1;
-  --color-line-soft: #EAE3D0;
+  /* Paper family — soft warm-white, classroom feel */
+  --color-paper: #FCFBF6;
+  --color-paper-2: #F4F2EA;
+  --color-paper-3: #E8E5D8;
+  --color-line: #E2DECD;
+  --color-line-soft: #EDEADB;
 
-  /* Ink family — deep charcoal, never pure black */
-  --color-ink: #111417;
-  --color-ink-2: #3B4048;
-  --color-ink-3: #6F7580;
+  /* Ink family — warm ink, softer than near-black */
+  --color-ink: #1B222D;
+  --color-ink-2: #4A5160;
+  --color-ink-3: #7A8290;
 
-  /* Accent — one strong accent per Section 4.2 */
-  --color-cobalt: #0B4CA6;
-  --color-cobalt-soft: #E4EBF7;
-  --color-cobalt-deep: #082E63;
+  /* Q1(b) territory — analytical blue */
+  --color-cobalt: #2258C4;
+  --color-cobalt-soft: #E8EFFB;
+  --color-cobalt-tint: #F4F7FD;
+  --color-cobalt-deep: #143C8A;
 
-  /* Supporting hues (used sparingly, for topic/level colour coding only) */
-  --color-ember: #B33520;      /* warnings, exam callouts */
+  /* Q1(c) territory — perspective, warm gold */
+  --color-amber: #8F5D0F;
+  --color-amber-soft: #F5E7C6;
+  --color-amber-tint: #FAF3DE;
+  --color-amber-deep: #593906;
+
+  /* Q1(d) territory — significance, weighing green */
+  --color-forest: #276A50;
+  --color-forest-soft: #DFECDF;
+  --color-forest-tint: #EEF5EE;
+  --color-forest-deep: #143F2E;
+
+  /* Reserved for real warnings only */
+  --color-ember: #B33520;
   --color-ember-soft: #F7E4DE;
-  --color-forest: #215E48;     /* framework, teacher-facing */
-  --color-forest-soft: #DFEBE4;
-  --color-amber: #A56D14;      /* labels, eyebrows on paper */
-  --color-amber-soft: #F5E9CE;
-  --color-violet: #6C3AB8;     /* personal / cultural notes */
+  --color-violet: #6C3AB8;
   --color-violet-soft: #EDE3F7;
 
   /* Fonts */
@@ -42,7 +51,7 @@
 }
 
 /* ─────────── Base ─────────── */
-* { box-sizing: border-box; margin: 0; padding: 0; }
+* { box-sizing: border-box; }
 
 html {
   scroll-behavior: smooth;
@@ -54,23 +63,17 @@ body {
   font-family: var(--font-body);
   background-color: var(--color-paper);
   color: var(--color-ink);
-  line-height: 1.55;
+  line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   min-height: 100dvh;
 }
 
-/* Grain / texture on paper — subtle, fixed, no scroll cost */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  pointer-events: none;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.07  0 0 0 0 0.08  0 0 0 0 0.09  0 0 0 0.06 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-  opacity: 0.5;
-  mix-blend-mode: multiply;
-}
+/* Grain / texture on paper — subtle, fixed, no scroll cost.
+   Kept intentionally faint so text and rules stay crisp; the fixed layer
+   sits behind interactive UI (z-index 0) so hover/click targets aren't
+   softened by the overlay. */
+/* Grain overlay removed — cleaner surface for study material. */
 
 /* ─────────── Language toggle behaviour ─────────── */
 body.lang-en .zh-only { display: none !important; }
@@ -84,9 +87,9 @@ body.lang-zh { font-family: var(--font-zh); }
 
 /* ─────────── Typography scale ─────────── */
 h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 400; }
-h1 { letter-spacing: -0.02em; line-height: 1.05; }
-h2 { letter-spacing: -0.015em; line-height: 1.1; }
-h3 { line-height: 1.2; }
+h1 { letter-spacing: -0.02em; line-height: 1.1; }
+h2 { letter-spacing: -0.015em; line-height: 1.18; }
+h3 { line-height: 1.25; }
 
 .font-display { font-family: var(--font-display); }
 .font-body    { font-family: var(--font-body); }
