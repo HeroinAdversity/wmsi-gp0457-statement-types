@@ -9,6 +9,10 @@ import { StatementTypesIntensivePage } from './pages/types-of-statements/Stateme
 import { FindYourGapPage } from './pages/types-of-statements/FindYourGapPage';
 import { ClaimVsEvidencePage } from './pages/types-of-statements/ClaimVsEvidencePage';
 import { MindMapPage } from './pages/types-of-statements/MindMapPage';
+import { RevisionSheetPage } from './pages/types-of-statements/RevisionSheetPage';
+import { PerspectivesRevisionSheetPage } from './pages/identifying-perspectives/PerspectivesRevisionSheetPage';
+import { SignificanceRevisionSheetPage } from './pages/identifying-perspectives/SignificanceRevisionSheetPage';
+import { RevisionSheetsIndexPage } from './pages/RevisionSheetsIndexPage';
 import { TeacherDashboardPage } from './pages/dashboards/TeacherDashboardPage';
 import { IntensiveDashboardPage } from './pages/dashboards/IntensiveDashboardPage';
 import { TeachersHubPage } from './pages/dashboards/TeachersHubPage';
@@ -33,13 +37,24 @@ export function App() {
           element={<Navigate to="/perspectives#weigh" replace />}
         />
 
-        {/* Q1(b) — Types of Statements */}
-        <Route path="statements" element={<StatementTypesHubPage />} />
-        <Route path="statements/main" element={<StatementTypesToolPage />} />
+        {/* Q1(b) — Types of Statements. /statements now shows the main notes
+            directly (no gateway). The tool hub still exists at /statements/tools
+            for teachers who want the full sub-tool list. Revision sheets live
+            under the /revision/* namespace. */}
+        <Route path="statements" element={<StatementTypesToolPage />} />
+        <Route path="statements/main" element={<Navigate to="/statements" replace />} />
+        <Route path="statements/tools" element={<StatementTypesHubPage />} />
         <Route path="statements/intensive" element={<StatementTypesIntensivePage />} />
         <Route path="statements/diagnostic" element={<FindYourGapPage />} />
         <Route path="statements/claim-vs-evidence" element={<ClaimVsEvidencePage />} />
         <Route path="statements/mindmap" element={<MindMapPage />} />
+        <Route path="statements/revision" element={<Navigate to="/revision/statements" replace />} />
+
+        {/* Revision Sheets — index + one canonical URL per sheet */}
+        <Route path="revision" element={<RevisionSheetsIndexPage />} />
+        <Route path="revision/statements" element={<RevisionSheetPage />} />
+        <Route path="revision/perspectives" element={<PerspectivesRevisionSheetPage />} />
+        <Route path="revision/significance" element={<SignificanceRevisionSheetPage />} />
 
         {/* Teacher dashboards */}
         <Route path="teachers" element={<TeachersHubPage />} />

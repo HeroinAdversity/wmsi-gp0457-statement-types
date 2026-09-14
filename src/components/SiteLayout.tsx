@@ -23,7 +23,7 @@ const NAV_LINKS: NavLinkDef[] = [
   { to: '/statements', en: 'Statements', zh: '陈述类型' },
   { to: '/perspectives', en: 'Perspectives', zh: '观点', activeHashPrefix: 'not-weigh' },
   { to: '/perspectives#weigh', en: 'Significance', zh: '重要性', activeHashPrefix: 'weigh' },
-  { to: '/statements/mindmap', en: 'Mindmap', zh: '思维导图' },
+  { to: '/revision', en: 'Revision Sheets', zh: '复习页' },
   { to: '/teachers', en: 'Teachers', zh: '教师面板' },
 ];
 
