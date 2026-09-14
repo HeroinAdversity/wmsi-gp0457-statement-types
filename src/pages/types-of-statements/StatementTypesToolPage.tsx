@@ -136,6 +136,87 @@ export function StatementTypesToolPage() {
   );
 }
 
+/* ─────────── Tab 1: explainer video block ─────────── */
+const VIDEO_SRC = '/legacy/assets/statement-types-overview.mp4';
+function ExplainerVideo() {
+  const [failed, setFailed] = useState(false);
+  return (
+    <div className="bg-[color:var(--color-paper)] border border-[color:var(--color-line)] rounded-md p-5 md:p-7">
+      <div className="flex flex-wrap items-baseline justify-between gap-3">
+        <DisplayH3>
+          <Bi en="Watch first: the eight terms in one go" zh="先看视频：一次讲完八种术语" />
+        </DisplayH3>
+        <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-[color:var(--color-amber)]">
+          <Bi en="▶ Explainer · 1(b)" zh="▶ 讲解 · 1(b)" />
+        </span>
+      </div>
+      <Body className="mt-3 max-w-[68ch]">
+        <Bi
+          en={
+            <>
+              Start here if you're new to this topic — the video walks through all eight terms, spends the longest on{' '}
+              <strong>generalisation</strong>, and uses the same social-media examples you'll meet in the Eight Terms tab.
+            </>
+          }
+          zh={
+            <>
+              如果你是第一次接触这个话题，从这里开始。视频依次讲解八种术语，重点讲<strong>「概括」</strong>，
+              例子与「八种术语」标签中一致。
+            </>
+          }
+        />
+      </Body>
+
+      {!failed ? (
+        <div className="mt-5 overflow-hidden rounded-md border border-[color:var(--color-line)] bg-black">
+          <video
+            className="w-full h-auto block"
+            controls
+            preload="metadata"
+            playsInline
+            onError={() => setFailed(true)}
+          >
+            <source src={VIDEO_SRC} type="video/mp4" onError={() => setFailed(true)} />
+            Your browser doesn't support embedded video.
+          </video>
+        </div>
+      ) : (
+        <div className="mt-5 bg-[color:var(--color-paper-2)] border border-[color:var(--color-line)] rounded-md p-5 text-[14px] leading-[1.6] text-[color:var(--color-ink-2)]">
+          <Bi
+            en={
+              <>
+                <strong>The video isn't loading right now.</strong> It may still be uploading, or you may be offline.
+                Nothing is lost — every point the video makes is written out in full in the <strong>Eight Terms</strong>{' '}
+                tab. Carry on there and try the video again later.
+              </>
+            }
+            zh={
+              <>
+                <strong>视频暂时无法加载。</strong>可能仍在上传，或你目前处于离线状态。
+                不影响学习——视频讲解的所有要点都在<strong>「八种术语」</strong>标签中完整呈现。
+              </>
+            }
+          />
+        </div>
+      )}
+
+      {!failed && (
+        <div className="mt-3 flex flex-wrap gap-2 text-[12px]">
+          <span className="font-mono uppercase tracking-[0.12em] text-[color:var(--color-ink-3)] px-2.5 py-1 bg-[color:var(--color-paper-2)] rounded">
+            <Bi en="Use CC if the audio is unclear" zh="音频不清可开字幕" />
+          </span>
+          <span className="font-mono uppercase tracking-[0.12em] text-[color:var(--color-ink-3)] px-2.5 py-1 bg-[color:var(--color-paper-2)] rounded">
+            <Bi en="Pause on each example" zh="每个例子处暂停" />
+          </span>
+          <span className="font-mono uppercase tracking-[0.12em] text-[color:var(--color-ink-3)] px-2.5 py-1 bg-[color:var(--color-paper-2)] rounded">
+            <Bi en="Then continue to Eight Terms" zh="然后进入「八种术语」" />
+          </span>
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ══════════════════ Tab 1: Overview ══════════════════ */
 function OverviewTab({ onGoto }: { onGoto: (t: TabId) => void }) {
   return (
@@ -180,6 +261,8 @@ function OverviewTab({ onGoto }: { onGoto: (t: TabId) => void }) {
           }
         />
       </Callout>
+
+      <ExplainerVideo />
 
       <div>
         <DisplayH3>
