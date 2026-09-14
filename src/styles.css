@@ -34,11 +34,15 @@
   --color-forest-tint: #EEF5EE;
   --color-forest-deep: #143F2E;
 
+  /* Q1(a) territory — first read, quiet violet */
+  --color-violet: #6C3AB8;
+  --color-violet-soft: #EDE3F7;
+  --color-violet-tint: #F6F0FB;
+  --color-violet-deep: #3F1C7A;
+
   /* Reserved for real warnings only */
   --color-ember: #B33520;
   --color-ember-soft: #F7E4DE;
-  --color-violet: #6C3AB8;
-  --color-violet-soft: #EDE3F7;
 
   /* Fonts */
   --font-display: "DM Serif Display", Georgia, "Noto Serif SC", serif;

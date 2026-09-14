@@ -1,8 +1,8 @@
-import { Routes, Route } from 'react-router-dom';
+import { Navigate, Routes, Route } from 'react-router-dom';
 import { SiteLayout } from './components/SiteLayout';
 import { HomePage } from './pages/HomePage';
+import { Q1aPage } from './pages/q1a/Q1aPage';
 import { IdentifyingPerspectivesPage } from './pages/identifying-perspectives/IdentifyingPerspectivesPage';
-import { WeighingRoomPage } from './pages/identifying-perspectives/WeighingRoomPage';
 import { StatementTypesHubPage } from './pages/types-of-statements/StatementTypesHubPage';
 import { StatementTypesToolPage } from './pages/types-of-statements/StatementTypesToolPage';
 import { StatementTypesIntensivePage } from './pages/types-of-statements/StatementTypesIntensivePage';
@@ -22,11 +22,18 @@ export function App() {
       <Route element={<SiteLayout />}>
         <Route index element={<HomePage />} />
 
-        {/* Identifying Perspectives */}
-        <Route path="perspectives" element={<IdentifyingPerspectivesPage />} />
-        <Route path="perspectives/weighing-room" element={<WeighingRoomPage />} />
+        {/* Q1(a) — Source recall */}
+        <Route path="source-recall" element={<Q1aPage />} />
 
-        {/* Types of Statements */}
+        {/* Q1(c) + Q1(d) — Perspectives (identify) and Weighing Room (weigh),
+            folded into one page with a top-level chapter switcher */}
+        <Route path="perspectives" element={<IdentifyingPerspectivesPage />} />
+        <Route
+          path="perspectives/weighing-room"
+          element={<Navigate to="/perspectives#weigh" replace />}
+        />
+
+        {/* Q1(b) — Types of Statements */}
         <Route path="statements" element={<StatementTypesHubPage />} />
         <Route path="statements/main" element={<StatementTypesToolPage />} />
         <Route path="statements/intensive" element={<StatementTypesIntensivePage />} />

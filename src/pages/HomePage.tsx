@@ -5,7 +5,7 @@ import { Bi } from '../lib/LanguageContext';
 
 type Strand = {
   part: string;
-  hue: 'cobalt' | 'amber' | 'forest';
+  hue: 'violet' | 'cobalt' | 'amber' | 'forest';
   to: string;
   eyebrowEn: string;
   eyebrowZh: string;
@@ -20,6 +20,33 @@ type Strand = {
 };
 
 const STRANDS: Strand[] = [
+  {
+    part: '1(a)',
+    hue: 'violet',
+    to: '/source-recall',
+    eyebrowEn: 'What does the source say, exactly?',
+    eyebrowZh: '资料到底说了什么？',
+    titleEn: 'First Read — Source recall',
+    titleZh: '初读 —— 资料识别',
+    bodyEn:
+      "Paper 1's opening question: one mark for finding one precise fact in a named source. The easiest mark on the paper — and the one most often lost to a dropped unit, a nearby number, or an over-written answer.",
+    bodyZh:
+      '卷一的开场题：从指定资料中找出一个精确事实即得 1 分。全卷最容易的一分——也是最常因为漏写单位、看错数字或写太多而丢失的一分。',
+    itemsEn: [
+      'Anatomy of the question stem',
+      'Five common ways to lose the mark',
+      'Four worked examples from 2026 papers',
+      'Six exam-style practice items',
+    ],
+    itemsZh: [
+      '题干四部分拆解',
+      '五种常见的丢分方式',
+      '2026 年真题四道范例',
+      '六道仿真题练习',
+    ],
+    ctaEn: 'Open First Read',
+    ctaZh: '进入「初读」',
+  },
   {
     part: '1(b)',
     hue: 'cobalt',
@@ -77,17 +104,17 @@ const STRANDS: Strand[] = [
   {
     part: '1(d)',
     hue: 'forest',
-    to: '/perspectives/weighing-room',
+    to: '/perspectives#weigh',
     eyebrowEn: 'How much does it matter?',
     eyebrowZh: '这件事究竟有多重要？',
     titleEn: 'Significance — The Weighing Room',
     titleZh: '重要性 —— 秤量之室',
     bodyEn:
-      'Not what the source says, but how much it matters, and to whom. Weigh a perspective’s significance across scales, evidence it from the paper, and write the Level-3 evaluative answers examiners look for.',
+      "Not what the source says, but how much it matters, and to whom. Weigh a perspective's significance across scales, evidence it from the paper, and write the Level-3 evaluative answers examiners look for.",
     bodyZh:
       '不只看资料说了什么，更判断它有多重要、对谁重要。跨层次衡量一个观点的分量，从资料中找出证据，写出考官期待的三级评价式回答。',
     itemsEn: [
-      'What examiners actually mean by ‘significance’',
+      "What examiners actually mean by 'significance'",
       'Weighing across the four levels',
       'Evidence, not assertion',
       'Level-3 evaluative writing',
@@ -135,8 +162,8 @@ function Hero() {
           </DisplayH1>
           <Lede className="mt-8">
             <Bi
-              en="Study notes, drills, and past-paper practice for IGCSE Global Perspectives 0457. Everything you need for the three connected skills in Question 1 — from your first pass through the syllabus to the week before the exam."
-              zh="为剑桥 IGCSE 全球视野 0457 打造的学习笔记、练习和真题训练。三项彼此相连的第 1 题技能，从第一次学到考前一周所需的一切。"
+              en="Study notes, drills, and past-paper practice for IGCSE Global Perspectives 0457. Everything you need for the four connected skills in Question 1 — from your first pass through the syllabus to the week before the exam."
+              zh="为剑桥 IGCSE 全球视野 0457 打造的学习笔记、练习和真题训练。四项彼此相连的第 1 题技能，从第一次学到考前一周所需的一切。"
             />
           </Lede>
           <div className="mt-10 flex flex-wrap gap-3">
@@ -144,7 +171,7 @@ function Hero() {
               <Bi en="Start with Statements" zh="从「陈述类型」开始" />
             </PrimaryLink>
             <GhostLink to="#q1-map">
-              <Bi en="See the three strands" zh="查看三大主线" />
+              <Bi en="See the four strands" zh="查看四大主线" />
             </GhostLink>
           </div>
         </div>
@@ -168,8 +195,8 @@ function Q1Map() {
           </DisplayH2>
           <Body className="mt-6 text-[color:var(--color-ink-2)]">
             <Bi
-              en="Paper 1 opens with a source and four connected tasks. Three of them are on this site, each with its own colour and its own set of notes."
-              zh="卷一以一份资料开场，接着有四道相连的小题。其中三道我们都做了配套：每一道有自己的颜色，也有自己的一整套笔记。"
+              en="Paper 1 opens with a source and four connected tasks. All four are on this site, each with its own colour and its own set of notes."
+              zh="卷一以一份资料开场，接着有四道相连的小题。四道我们都做了配套：每一道有自己的颜色，也有自己的一整套笔记。"
             />
           </Body>
         </div>
@@ -187,6 +214,16 @@ function Q1Map() {
 /* Colour tokens per strand hue, resolved at the call site so the JIT
    compiler keeps every class present in the built stylesheet. */
 const HUE_STYLES = {
+  violet: {
+    stripBg: 'bg-[color:var(--color-violet-tint)]',
+    numberInk: 'text-[color:var(--color-violet-deep)]',
+    numberEdge: 'border-[color:var(--color-violet)]',
+    numberDot: 'bg-[color:var(--color-violet)]',
+    eyebrow: 'text-[color:var(--color-violet-deep)]',
+    ctaBg: 'bg-[color:var(--color-violet)] hover:bg-[color:var(--color-violet-deep)]',
+    bulletDot: 'bg-[color:var(--color-violet)]',
+    divider: 'divide-[color:var(--color-violet-soft)]',
+  },
   cobalt: {
     stripBg: 'bg-[color:var(--color-cobalt-tint)]',
     numberInk: 'text-[color:var(--color-cobalt-deep)]',
@@ -345,9 +382,27 @@ const DECISIONS: {
         直接进入<strong>「秤量之室」(第 1(d) 题)</strong>。这里给出重要性的定义、范例解析，以及三级评价式回答的模板。
       </>
     ),
-    to: '/perspectives/weighing-room',
+    to: '/perspectives#weigh',
     ctaEn: 'Open The Weighing Room',
     ctaZh: '进入「秤量之室」',
+  },
+  {
+    qEn: 'You keep losing the easy Q1(a) mark.',
+    qZh: '你在最简单的第 1(a) 题上反复丢分。',
+    aEn: (
+      <>
+        Go to <strong>First Read</strong>. Five ways to lose the mark, four worked examples from 2026 papers, and
+        six practice items you can drill in twenty minutes.
+      </>
+    ),
+    aZh: (
+      <>
+        请进入<strong>「初读」</strong>。五种常见的丢分方式、2026 年真题四道范例，以及六道可在二十分钟内完成的练习。
+      </>
+    ),
+    to: '/source-recall',
+    ctaEn: 'Open First Read',
+    ctaZh: '进入「初读」',
   },
 ];
 
@@ -361,8 +416,8 @@ function WhereToStart() {
           </DisplayH2>
           <Body className="mt-6 text-[color:var(--color-ink-2)]">
             <Bi
-              en="Three common situations. Pick the one that sounds like you — the link takes you straight where you should go."
-              zh="三种常见情况。选择最像你的一种 —— 链接会直接把你带到该去的地方。"
+              en="Four common situations. Pick the one that sounds like you — the link takes you straight where you should go."
+              zh="四种常见情况。选择最像你的一种 —— 链接会直接把你带到该去的地方。"
             />
           </Body>
         </div>

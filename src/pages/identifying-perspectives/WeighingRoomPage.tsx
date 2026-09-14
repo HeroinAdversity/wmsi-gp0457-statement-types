@@ -1,14 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
   Container,
-  DisplayH1,
   DisplayH2,
   DisplayH3,
   Eyebrow,
-  Lede,
   Body,
 } from '../../components/primitives';
 import { Bi, useLanguage } from '../../lib/LanguageContext';
+import { usePersistentState } from '../../lib/useNotesExport';
 import {
   BANDS,
   BONUS_MOVE,
@@ -79,11 +78,41 @@ function initialState(): WeighingRoomState {
   };
 }
 
-export function WeighingRoomPage() {
-  const [s, setS] = useState<WeighingRoomState>(initialState);
+/**
+ * The Weighing Room, embedded as a section within /perspectives.
+ * Renders its own sub-tab strip + panels, but no page hero — the parent
+ * IdentifyingPerspectivesPage owns the shared hero and the chapter switcher.
+ *
+ * `initialTab` seeds the first render (from URL hash); `onTabChange` lets the
+ * parent write the current tab back into the URL.
+ */
+export function WeighingRoomSection({
+  initialTab,
+  onTabChange,
+}: {
+  initialTab?: TabKey;
+  onTabChange?: (t: TabKey) => void;
+} = {}) {
+  const [s, setS] = usePersistentState<WeighingRoomState>(
+    TOOL_ID,
+    'state',
+    { ...initialState(), tab: initialTab && TABS.some((t) => t.key === initialTab) ? initialTab : 'overview' },
+  );
+
+  useEffect(() => {
+    if (initialTab && TABS.some((t) => t.key === initialTab) && initialTab !== s.tab) {
+      setS((cur) => ({ ...cur, tab: initialTab }));
+    }
+  }, [initialTab]); // eslint-disable-line react-hooks/exhaustive-deps
 
   function set<K extends keyof WeighingRoomState>(k: K, v: WeighingRoomState[K]) {
     setS((cur) => ({ ...cur, [k]: v }));
+  }
+
+  function selectTab(t: TabKey) {
+    set('tab', t);
+    onTabChange?.(t);
+    window.scrollTo({ top: 260, behavior: 'smooth' });
   }
 
   function updateSet(i: number, patch: Partial<SetState>) {
@@ -95,53 +124,22 @@ export function WeighingRoomPage() {
 
   return (
     <>
-      {/* HERO */}
-      <section className="pt-12 md:pt-16 pb-8">
+      {/* STICKY SUB-TAB STRIP */}
+      <div className="sticky top-[64px] z-30 bg-[color:var(--color-paper)]/95 backdrop-blur-md border-b border-[color:var(--color-line)]">
         <Container size="wide">
-          <Eyebrow color="cobalt">
-            <Bi en="Q1(d) · Significance skills" zh="第 1(d) 题 · 重要性判断" />
-          </Eyebrow>
-          <DisplayH1 className="mt-3">
-            <Bi en="The Weighing Room." zh="权衡室。" />
-          </DisplayH1>
-          <Lede className="mt-6">
-            <Bi
-              en={
-                <>
-                  Cambridge IGCSE Global Perspectives 0457, Paper 1, Question 1(d): eight marks for choosing one point
-                  from the sources and explaining why it outweighs the others. Six tabs walk you through what's really
-                  being marked, five weights to justify your choice, a worked Level-4 answer, and five full practice
-                  items.
-                </>
-              }
-              zh={
-                <>
-                  剑桥 IGCSE 全球视野 0457，卷一第 1(d) 题：从资料中选出一点并说明其为何比其他选项更重要，满分 8 分。
-                  以下六个标签页依次带你了解：真正评分的是什么、五种「权衡」思路、一份 4 级范例，以及五套完整的应试练习。
-                </>
-              }
-            />
-          </Lede>
-        </Container>
-      </section>
-
-      {/* STICKY TAB STRIP */}
-      <div className="sticky top-[64px] z-30 bg-[color:var(--color-paper)]/95 backdrop-blur-sm border-b border-[color:var(--color-line)]">
-        <Container size="wide">
-          <nav className="flex gap-6 md:gap-8 overflow-x-auto no-scrollbar -mb-px">
+          <nav className="flex gap-6 md:gap-8 overflow-x-auto no-scrollbar -mb-px" role="tablist" aria-label="Weighing Room tabs">
             {TABS.map((t) => {
               const active = t.key === s.tab;
               return (
                 <button
                   key={t.key}
                   type="button"
-                  onClick={() => {
-                    set('tab', t.key);
-                    window.scrollTo({ top: 260, behavior: 'smooth' });
-                  }}
+                  role="tab"
+                  aria-selected={active}
+                  onClick={() => selectTab(t.key)}
                   className={`text-[13.5px] font-semibold py-3.5 whitespace-nowrap border-b-2 transition-colors ${
                     active
-                      ? 'border-[color:var(--color-ink)] text-[color:var(--color-ink)]'
+                      ? 'border-[color:var(--color-forest)] text-[color:var(--color-ink)]'
                       : 'border-transparent text-[color:var(--color-ink-3)] hover:text-[color:var(--color-ink)]'
                   }`}
                 >
@@ -168,20 +166,14 @@ export function WeighingRoomPage() {
                   matchLocked: key === MATCH_ITEMS[i].answer ? { ...cur.matchLocked, [i]: true } : cur.matchLocked,
                 }));
               }}
-              onGotoModel={() => {
-                set('tab', 'model');
-                window.scrollTo({ top: 260, behavior: 'smooth' });
-              }}
+              onGotoModel={() => selectTab('model')}
             />
           )}
           {s.tab === 'model' && (
             <WorkedModelTab
               annoOpen={s.annoOpen}
               onAnno={(i) => set('annoOpen', s.annoOpen === i ? null : i)}
-              onGotoLevelUp={() => {
-                set('tab', 'levelup');
-                window.scrollTo({ top: 260, behavior: 'smooth' });
-              }}
+              onGotoLevelUp={() => selectTab('levelup')}
             />
           )}
           {s.tab === 'levelup' && (
@@ -189,10 +181,7 @@ export function WeighingRoomPage() {
               step={s.levelupStep}
               onStep={(n) => set('levelupStep', Math.max(s.levelupStep, n))}
               onReset={() => set('levelupStep', 0)}
-              onGotoPractice={() => {
-                set('tab', 'practice');
-                window.scrollTo({ top: 260, behavior: 'smooth' });
-              }}
+              onGotoPractice={() => selectTab('practice')}
             />
           )}
           {s.tab === 'practice' && (

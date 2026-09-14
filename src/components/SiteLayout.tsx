@@ -1,15 +1,45 @@
 import { useEffect, useState } from 'react';
-import { NavLink, Outlet, Link, useLocation } from 'react-router-dom';
+import { Outlet, Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '../lib/LanguageContext';
 import { Container } from './primitives';
 
-const NAV_LINKS = [
+type NavLinkDef = {
+  to: string;
+  en: string;
+  zh: string;
+  end?: boolean;
+  /**
+   * If set, this link only counts as active when the current URL hash
+   * starts with `activeHashPrefix`. Used to split /perspectives into
+   * two nav entries — Perspectives (Q1c) and Significance (Q1d) — that
+   * share a pathname but live under different hash namespaces.
+   */
+  activeHashPrefix?: 'weigh' | 'not-weigh';
+};
+
+const NAV_LINKS: NavLinkDef[] = [
   { to: '/', en: 'Home', zh: '首页', end: true },
-  { to: '/perspectives', en: 'Perspectives', zh: '观点' },
+  { to: '/source-recall', en: 'First Read', zh: '初读' },
   { to: '/statements', en: 'Statements', zh: '陈述类型' },
+  { to: '/perspectives', en: 'Perspectives', zh: '观点', activeHashPrefix: 'not-weigh' },
+  { to: '/perspectives#weigh', en: 'Significance', zh: '重要性', activeHashPrefix: 'weigh' },
   { to: '/statements/mindmap', en: 'Mindmap', zh: '思维导图' },
   { to: '/teachers', en: 'Teachers', zh: '教师面板' },
 ];
+
+/**
+ * Custom active-check: two nav entries can share the same pathname
+ * (Perspectives and Significance both live at /perspectives) but the
+ * URL hash picks between them.
+ */
+function isNavActive(link: NavLinkDef, pathname: string, hash: string): boolean {
+  const linkPath = link.to.split('#')[0];
+  const pathMatches = link.end ? pathname === linkPath : pathname.startsWith(linkPath);
+  if (!pathMatches) return false;
+  if (!link.activeHashPrefix) return true;
+  const inWeigh = hash === '#weigh' || hash.startsWith('#weigh-');
+  return link.activeHashPrefix === 'weigh' ? inWeigh : !inWeigh;
+}
 
 export function SiteLayout() {
   const { lang, toggle } = useLanguage();
@@ -37,6 +67,7 @@ function SiteHeader({
   lang: 'en' | 'zh';
   toggleLang: () => void;
 }) {
+  const { pathname, hash } = useLocation();
   return (
     <header className="sticky top-0 z-40 bg-[color:var(--color-paper)]/90 backdrop-blur-md border-b border-[color:var(--color-line)]">
       <Container size="wide">
@@ -48,23 +79,23 @@ function SiteHeader({
             </p>
           </Link>
 
-          <nav className="hidden lg:flex items-center gap-7">
-            {NAV_LINKS.map((l) => (
-              <NavLink
-                key={l.to}
-                to={l.to}
-                end={l.end}
-                className={({ isActive }) =>
-                  `text-[13.5px] font-semibold transition-colors relative py-1 ${
-                    isActive
+          <nav className="hidden lg:flex items-center gap-6">
+            {NAV_LINKS.map((l) => {
+              const active = isNavActive(l, pathname, hash);
+              return (
+                <Link
+                  key={`${l.to}#${l.activeHashPrefix ?? ''}`}
+                  to={l.to}
+                  className={`text-[13.5px] font-semibold transition-colors relative py-1 ${
+                    active
                       ? 'text-[color:var(--color-ink)] after:absolute after:left-0 after:right-0 after:-bottom-0.5 after:h-[2px] after:bg-[color:var(--color-ink)]'
                       : 'text-[color:var(--color-ink-3)] hover:text-[color:var(--color-ink)]'
-                  }`
-                }
-              >
-                {lang === 'zh' ? l.zh : l.en}
-              </NavLink>
-            ))}
+                  }`}
+                >
+                  {lang === 'zh' ? l.zh : l.en}
+                </Link>
+              );
+            })}
           </nav>
 
           <div className="flex items-center gap-2">
@@ -87,11 +118,11 @@ function SiteHeader({
 
 function MobileMenu({ lang }: { lang: 'en' | 'zh' }) {
   const [open, setOpen] = useState(false);
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
 
   useEffect(() => {
     setOpen(false);
-  }, [pathname]);
+  }, [pathname, hash]);
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
@@ -140,22 +171,22 @@ function MobileMenu({ lang }: { lang: 'en' | 'zh' }) {
               </button>
             </div>
             <nav className="flex flex-col p-2">
-              {NAV_LINKS.map((l) => (
-                <NavLink
-                  key={l.to}
-                  to={l.to}
-                  end={l.end}
-                  className={({ isActive }) =>
-                    `font-display text-[19px] px-4 py-3 rounded-md ${
-                      isActive
+              {NAV_LINKS.map((l) => {
+                const active = isNavActive(l, pathname, hash);
+                return (
+                  <Link
+                    key={`${l.to}#${l.activeHashPrefix ?? ''}`}
+                    to={l.to}
+                    className={`font-display text-[19px] px-4 py-3 rounded-md ${
+                      active
                         ? 'bg-[color:var(--color-paper-2)] text-[color:var(--color-ink)]'
                         : 'text-[color:var(--color-ink-2)]'
-                    }`
-                  }
-                >
-                  {lang === 'zh' ? l.zh : l.en}
-                </NavLink>
-              ))}
+                    }`}
+                  >
+                    {lang === 'zh' ? l.zh : l.en}
+                  </Link>
+                );
+              })}
             </nav>
           </div>
         </div>

@@ -15,26 +15,6 @@ interface Entry {
 
 const ENTRIES: Entry[] = [
   {
-    to: '/teachers/perspectives',
-    eyebrowEn: 'Q1(c) · Perspectives',
-    eyebrowZh: '第 1(c) 题 · 观点',
-    titleEn: 'Identifying & Explaining Perspectives',
-    titleZh: '识别与解释观点',
-    bodyEn: 'Ingest export codes from the Perspectives tool. Read describe responses and the your-turn task, enter a mark per question, download the class CSV.',
-    bodyZh: '导入学生从「识别与解释观点」工具生成的代码。查看描述题回答与「你来试试」作答，为每道题打分，下载全班 CSV。',
-    markable: true,
-  },
-  {
-    to: '/teachers/weighing-room',
-    eyebrowEn: 'Q1(d) · Weighing Room',
-    eyebrowZh: '第 1(d) 题 · 权衡室',
-    titleEn: 'The Weighing Room — significance skills',
-    titleZh: '「权衡室」—— 重要性判断技能',
-    bodyEn: 'Ingest export codes from The Weighing Room. Five practice sets, self-selected bands and criteria; enter a mark per set (out of 8), download the class CSV.',
-    bodyZh: '导入学生从「权衡室」工具生成的代码。五个练习组、自选评分带与所勾标准；为每组打分（满分 8），下载全班 CSV。',
-    markable: true,
-  },
-  {
     to: '/teachers/statements',
     eyebrowEn: 'Q1(b) · Statement Types',
     eyebrowZh: '第 1(b) 题 · 陈述类型',
@@ -53,6 +33,26 @@ const ENTRIES: Entry[] = [
     bodyEn: '120-minute intensive dashboard: aggregate class scores, flag students under 60%, export CSV.',
     bodyZh: '120 分钟强化课程面板：汇总班级成绩，标记低于 60% 的学生，导出 CSV。',
     markable: false,
+  },
+  {
+    to: '/teachers/perspectives',
+    eyebrowEn: 'Q1(c) · Perspectives',
+    eyebrowZh: '第 1(c) 题 · 观点',
+    titleEn: 'Identifying & Explaining Perspectives',
+    titleZh: '识别与解释观点',
+    bodyEn: 'Ingest export codes from the Perspectives tool. Read describe responses and the your-turn task, enter a mark per question, download the class CSV.',
+    bodyZh: '导入学生从「识别与解释观点」工具生成的代码。查看描述题回答与「你来试试」作答，为每道题打分，下载全班 CSV。',
+    markable: true,
+  },
+  {
+    to: '/teachers/weighing-room',
+    eyebrowEn: 'Q1(d) · Weighing Room',
+    eyebrowZh: '第 1(d) 题 · 权衡室',
+    titleEn: 'The Weighing Room — significance skills',
+    titleZh: '「权衡室」—— 重要性判断技能',
+    bodyEn: 'Ingest export codes from The Weighing Room. Five practice sets, self-selected bands and criteria; enter a mark per set (out of 8), download the class CSV.',
+    bodyZh: '导入学生从「权衡室」工具生成的代码。五个练习组、自选评分带与所勾标准；为每组打分（满分 8），下载全班 CSV。',
+    markable: true,
   },
 ];
 

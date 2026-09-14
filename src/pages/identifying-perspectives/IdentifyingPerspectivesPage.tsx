@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Container, DisplayH1, DisplayH2, DisplayH3, Body, Eyebrow, Chip, Callout, Button } from '../../components/primitives';
+import { Container, DisplayH1, DisplayH2, DisplayH3, Body, Eyebrow, Chip, Callout, Button, Lede } from '../../components/primitives';
 import { Bi, useLanguage } from '../../lib/LanguageContext';
+import { ExportFooter } from '../../components/ExportFooter';
+import { useNotesExport, nx } from '../../lib/useNotesExport';
 import {
   LEVEL_DEFS,
   FIVE_ELEMENTS,
@@ -12,8 +14,12 @@ import {
   CHECKLIST_ITEMS,
   type LevelKey,
 } from './data';
+import { WeighingRoomSection } from './WeighingRoomPage';
+import { CRITERIA, BANDS, SELF_CHECK_ITEMS, TOOL_ID as WEIGH_TOOL_ID } from './weighingRoomData';
 
-const TABS = [
+const IP_TOOL_ID = 'identifying-perspectives';
+
+const IDENTIFY_TABS = [
   { id: 'overview', en: 'Overview', zh: '概述' },
   { id: 'framework', en: 'Framework', zh: '框架' },
   { id: 'case', en: 'Case study', zh: '案例' },
@@ -23,83 +29,264 @@ const TABS = [
   { id: 'checklist', en: 'Checklist', zh: '自查' },
 ] as const;
 
-type TabId = (typeof TABS)[number]['id'];
+type IdentifyTabId = (typeof IDENTIFY_TABS)[number]['id'];
+type WeighTabKey = 'overview' | 'toolkit' | 'model' | 'levelup' | 'practice' | 'journal';
+type Section = 'identify' | 'weigh';
+
+const WEIGH_TAB_KEYS: WeighTabKey[] = ['overview', 'toolkit', 'model', 'levelup', 'practice', 'journal'];
+
+/**
+ * URL hash convention:
+ *   #framework           → identify section, framework tab
+ *   #weigh               → weigh section, its overview tab
+ *   #weigh-toolkit       → weigh section, toolkit tab
+ *
+ * Bare identify-tab hashes stay backward-compatible with links written before
+ * the Weighing Room was folded in.
+ */
+function parseHash(hash: string): { section: Section; identifyTab: IdentifyTabId; weighTab: WeighTabKey } {
+  const raw = hash.replace(/^#/, '');
+  if (raw === 'weigh') {
+    return { section: 'weigh', identifyTab: 'overview', weighTab: 'overview' };
+  }
+  if (raw.startsWith('weigh-')) {
+    const key = raw.slice('weigh-'.length) as WeighTabKey;
+    return {
+      section: 'weigh',
+      identifyTab: 'overview',
+      weighTab: WEIGH_TAB_KEYS.includes(key) ? key : 'overview',
+    };
+  }
+  if (IDENTIFY_TABS.some((t) => t.id === raw)) {
+    return { section: 'identify', identifyTab: raw as IdentifyTabId, weighTab: 'overview' };
+  }
+  return { section: 'identify', identifyTab: 'overview', weighTab: 'overview' };
+}
 
 export function IdentifyingPerspectivesPage() {
   const location = useLocation();
   const navigate = useNavigate();
-  const initialTab: TabId = (location.hash.replace('#', '') as TabId) || 'overview';
-  const [tab, setTab] = useState<TabId>(TABS.some((t) => t.id === initialTab) ? initialTab : 'overview');
 
-  const setTabAndUrl = (t: TabId) => {
-    setTab(t);
-    navigate({ pathname: location.pathname, hash: `#${t}` }, { replace: true });
-    window.scrollTo({ top: 300, behavior: 'smooth' });
-  };
+  const parsed = useMemo(() => parseHash(location.hash), [location.hash]);
+  const [section, setSection] = useState<Section>(parsed.section);
+  const [identifyTab, setIdentifyTab] = useState<IdentifyTabId>(parsed.identifyTab);
+  const [weighTab, setWeighTab] = useState<WeighTabKey>(parsed.weighTab);
 
   useEffect(() => {
-    const h = location.hash.replace('#', '') as TabId;
-    if (TABS.some((t) => t.id === h) && h !== tab) setTab(h);
-  }, [location.hash]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (parsed.section !== section) setSection(parsed.section);
+    if (parsed.identifyTab !== identifyTab) setIdentifyTab(parsed.identifyTab);
+    if (parsed.weighTab !== weighTab) setWeighTab(parsed.weighTab);
+  }, [parsed.section, parsed.identifyTab, parsed.weighTab]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const writeHash = (h: string) =>
+    navigate({ pathname: location.pathname, hash: h ? `#${h}` : '' }, { replace: true });
+
+  const switchIdentifyTab = (t: IdentifyTabId) => {
+    setIdentifyTab(t);
+    writeHash(t);
+    window.scrollTo({ top: 260, behavior: 'smooth' });
+  };
+
+  const switchWeighTab = (t: WeighTabKey) => {
+    setWeighTab(t);
+    writeHash(`weigh-${t}`);
+  };
+
+  useNotesExport({
+    toolId: IP_TOOL_ID,
+    pageTitleEn: 'Q1(c) + Q1(d) — Identifying Perspectives & The Weighing Room',
+    subtitleEn: 'IGCSE Global Perspectives 0457 · Student worksheet',
+    filenameStem: 'GP_Perspectives',
+    studentNameSelector: '#wne-student-name',
+    exportDocxSelector: '#wne-export-docx',
+    exportPdfSelector:  '#wne-export-pdf',
+    openNotesSelector:  '#wne-open-notes',
+    collect: () => collectPerspectives(),
+  });
 
   return (
     <>
-      {/* HERO */}
+      {/* HERO — shared across both Q1(c) and Q1(d) */}
       <section className="pt-12 md:pt-16 pb-8">
         <Container size="wide">
-          <DisplayH1 className="max-w-[22ch]">
-            <Bi en="Identifying & Explaining Perspectives" zh="识别与解释观点" />
-          </DisplayH1>
-          <Body className="mt-6 max-w-[62ch] text-[color:var(--color-ink-2)]">
+          <Eyebrow color={section === 'weigh' ? 'forest' : 'amber'}>
             <Bi
-              en="Global, national, local, personal, and how culture shapes each one. Built around Cambridge's Table A mark scheme and the Oxford Global Perspectives 3rd edition textbook."
-              zh="全球、国家、地方、个人，以及文化如何影响每一个层次。围绕剑桥表 A 评分标准与牛津《全球视野》第三版教材构建。"
+              en={section === 'weigh' ? 'Q1(d) · Significance skills' : 'Q1(c) · Analytical skills'}
+              zh={section === 'weigh' ? '第 1(d) 题 · 重要性判断' : '第 1(c) 题 · 观点分析'}
             />
-          </Body>
+          </Eyebrow>
+          <DisplayH1 className="mt-3 max-w-[24ch]">
+            <Bi
+              en="Perspectives — read them, then weigh them."
+              zh="观点 —— 先读懂，再权衡。"
+            />
+          </DisplayH1>
+          <Lede className="mt-6">
+            <Bi
+              en={
+                <>
+                  Two connected skills on the same Paper 1 source: <strong>identify and describe</strong> the
+                  perspective (Q1(c), 6 marks), then <strong>weigh which point matters most</strong> (Q1(d), 8 marks).
+                  Together they carry 14 of the paper's 70 marks — a fifth of the exam.
+                </>
+              }
+              zh={
+                <>
+                  这两项技能建立在卷一同一份资料之上：<strong>识别并描述观点</strong>（第 1(c) 题，6 分），再<strong>判断哪一点最为重要</strong>（第 1(d) 题，8 分）。
+                  合计 14 分，约占全卷 70 分的五分之一。
+                </>
+              }
+            />
+          </Lede>
         </Container>
       </section>
 
-      {/* STICKY TAB NAV — editorial underline row, quieter than pills */}
-      <div className="sticky top-[64px] z-30 bg-[color:var(--color-paper)]/95 backdrop-blur-md border-b border-[color:var(--color-line)]">
-        <Container size="wide">
-          <nav
-            className="flex gap-6 md:gap-8 overflow-x-auto scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
-            role="tablist"
-          >
-            {TABS.map((t) => (
-              <button
-                key={t.id}
-                type="button"
-                role="tab"
-                aria-selected={tab === t.id}
-                onClick={() => setTabAndUrl(t.id)}
-                className={`shrink-0 text-[13.5px] font-semibold py-3.5 border-b-2 -mb-px transition-colors ${
-                  tab === t.id
-                    ? 'text-[color:var(--color-ink)] border-[color:var(--color-ink)]'
-                    : 'text-[color:var(--color-ink-3)] border-transparent hover:text-[color:var(--color-ink)]'
-                }`}
+      {section === 'identify' ? (
+        <>
+          {/* SUB-TAB STRIP (Q1c) */}
+          <div className="sticky top-[64px] z-30 bg-[color:var(--color-paper)]/95 backdrop-blur-md border-b border-[color:var(--color-line)]">
+            <Container size="wide">
+              <nav
+                className="flex gap-6 md:gap-8 overflow-x-auto scrollbar-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+                role="tablist"
+                aria-label="Identify perspectives tabs"
               >
-                <Bi en={t.en} zh={t.zh} />
-              </button>
-            ))}
-          </nav>
-        </Container>
-      </div>
+                {IDENTIFY_TABS.map((t) => (
+                  <button
+                    key={t.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={identifyTab === t.id}
+                    onClick={() => switchIdentifyTab(t.id)}
+                    className={`shrink-0 text-[13.5px] font-semibold py-3.5 border-b-2 -mb-px transition-colors ${
+                      identifyTab === t.id
+                        ? 'text-[color:var(--color-ink)] border-[color:var(--color-amber)]'
+                        : 'text-[color:var(--color-ink-3)] border-transparent hover:text-[color:var(--color-ink)]'
+                    }`}
+                  >
+                    <Bi en={t.en} zh={t.zh} />
+                  </button>
+                ))}
+              </nav>
+            </Container>
+          </div>
 
-      {/* PANELS */}
-      <Container size="wide">
-        <section className="py-10 md:py-14" role="tabpanel">
-          {tab === 'overview' && <OverviewTab />}
-          {tab === 'framework' && <FrameworkTab />}
-          {tab === 'case' && <CaseStudyTab />}
-          {tab === 'practice' && <PracticeTab />}
-          {tab === 'examprep' && <ExamPracticeTab />}
-          {tab === 'yourturn' && <YourTurnTab />}
-          {tab === 'checklist' && <ChecklistTab />}
-        </section>
-      </Container>
+          <Container size="wide">
+            <section className="py-10 md:py-14" role="tabpanel">
+              {identifyTab === 'overview' && <OverviewTab />}
+              {identifyTab === 'framework' && <FrameworkTab />}
+              {identifyTab === 'case' && <CaseStudyTab />}
+              {identifyTab === 'practice' && <PracticeTab />}
+              {identifyTab === 'examprep' && <ExamPracticeTab />}
+              {identifyTab === 'yourturn' && <YourTurnTab />}
+              {identifyTab === 'checklist' && <ChecklistTab />}
+            </section>
+          </Container>
+        </>
+      ) : (
+        <WeighingRoomSection initialTab={weighTab} onTabChange={switchWeighTab} />
+      )}
+
+      <ExportFooter toolId={IP_TOOL_ID} />
     </>
   );
+}
+
+/* ============================================================
+   Collect for the Perspectives + Weighing Room worksheet.
+   Q1(c) student input lives in sub-components — read from DOM by
+   data attributes at collect() time. Q1(d) state is persisted via
+   usePersistentState on WeighingRoomSection, so read from localStorage.
+   ============================================================ */
+function collectPerspectives() {
+  const sections: Array<{ heading: string; blocks: any[] }> = [];
+
+  // --- Q1(c) responses: read textareas by data-wne-* attributes ---
+  const q1cBlocks: any[] = [];
+  document.querySelectorAll<HTMLTextAreaElement>('textarea[data-wne-qid]').forEach((ta) => {
+    const val = ta.value.trim();
+    if (!val) return;
+    const qid = ta.getAttribute('data-wne-qid') || '';
+    const label = ta.getAttribute('data-wne-label') || `Question ${qid}`;
+    q1cBlocks.push(nx.h(3, label));
+    q1cBlocks.push(nx.p(val));
+  });
+  if (q1cBlocks.length) {
+    sections.push({ heading: 'Q1(c) — Describe the perspective', blocks: q1cBlocks });
+  }
+
+  // --- Your Turn textarea ---
+  const yt = document.querySelector<HTMLTextAreaElement>('textarea[data-wne-yourturn]');
+  if (yt && yt.value.trim()) {
+    sections.push({
+      heading: 'Your turn — Five Elements description',
+      blocks: [nx.p(yt.value.trim())],
+    });
+  }
+
+  // --- Q1(d) Weighing Room: persisted state ---
+  let wrState: any = null;
+  try {
+    const raw = localStorage.getItem(`wne_${WEIGH_TOOL_ID}_state`);
+    if (raw) wrState = JSON.parse(raw);
+  } catch { /* ignore */ }
+
+  if (wrState && Array.isArray(wrState.sets)) {
+    const wrBlocks: any[] = [];
+    wrState.sets.forEach((setState: any, i: number) => {
+      const response = (setState.response || '').trim();
+      const criteria = setState.criteria || [];
+      const band = setState.band;
+      if (!response && !criteria.length && !band) return;
+      wrBlocks.push(nx.h(3, `Practice item ${i + 1}`));
+      wrBlocks.push(nx.p([nx.text('Your answer:', { bold: true })]));
+      wrBlocks.push(nx.p(response || '(blank)'));
+      if (criteria.length) {
+        const labels = criteria.map((k: string) => {
+          const c = CRITERIA.find((x: any) => x.key === k);
+          return c ? c.labelEn : k;
+        });
+        wrBlocks.push(nx.p([nx.text('Weights you used: ', { bold: true }), nx.text(labels.join(', '))]));
+      }
+      if (band) {
+        const b = BANDS.find((x: any) => x.key === band);
+        wrBlocks.push(nx.p([nx.text('Self-assessed level: ', { bold: true }), nx.text(b ? `${b.label} — ${b.descEn}` : String(band))]));
+      }
+    });
+    if (wrBlocks.length) sections.push({ heading: 'Q1(d) — Exam-style practice (Weighing Room)', blocks: wrBlocks });
+
+    // Self-check
+    const scChecks = wrState.selfCheck || [];
+    const doneCount = scChecks.filter(Boolean).length;
+    const scBlocks: any[] = [nx.p([nx.text(`${doneCount} of ${SELF_CHECK_ITEMS.length} ticked`, { bold: true })])];
+    SELF_CHECK_ITEMS.forEach((item: string, i: number) => {
+      const mark = scChecks[i] ? '☑ ' : '☐ ';
+      scBlocks.push(nx.p(mark + item));
+    });
+    sections.push({ heading: 'Q1(d) — Self-check', blocks: scBlocks });
+
+    if ((wrState.levelupStep || 0) >= 4) {
+      sections.push({
+        heading: 'Q1(d) — Level-up challenge',
+        blocks: [nx.p([nx.text('Completed all four building steps — reached Level 4 in the answer-builder.', { bold: true })])],
+      });
+    }
+  }
+
+  // --- Identify checklist (Q1c) — DOM-scanned checkbox items ---
+  const identifyChecks = Array.from(document.querySelectorAll<HTMLInputElement>('input[type="checkbox"][data-wne-checklist]'));
+  if (identifyChecks.length) {
+    const done = identifyChecks.filter((c) => c.checked).length;
+    const clBlocks: any[] = [nx.p([nx.text(`${done} of ${identifyChecks.length} ticked`, { bold: true })])];
+    identifyChecks.forEach((cb) => {
+      const label = cb.getAttribute('data-wne-checklist') || '';
+      const mark = cb.checked ? '☑ ' : '☐ ';
+      clBlocks.push(nx.p(mark + label));
+    });
+    sections.push({ heading: 'Q1(c) — Self-check', blocks: clBlocks });
+  }
+
+  return { sections };
 }
 
 /* ─────────── Overview ─────────── */
@@ -791,6 +978,8 @@ function ExamQuestion({ q }: { q: (typeof DESCRIBE_QUESTIONS)[number] }) {
         <textarea
           value={response}
           onChange={(e) => setResponse(e.target.value)}
+          data-wne-qid={q.qid}
+          data-wne-label={`Question ${q.qid} — ${q.titleEn.replace(/&amp;/g, '&')}`}
           className="w-full min-h-[140px] p-3 text-[14.5px] bg-[color:var(--color-paper)] border border-[color:var(--color-line)] rounded-md focus:outline-none focus:border-[color:var(--color-cobalt)] focus:ring-1 focus:ring-[color:var(--color-cobalt)]"
           placeholder={lang === 'zh' ? '在此写下你的答案……' : 'Write your answer here…'}
         />
@@ -981,6 +1170,7 @@ function YourTurnTab() {
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
+          data-wne-yourturn="1"
           className="w-full min-h-[180px] p-4 text-[15px] bg-[color:var(--color-paper)] border border-[color:var(--color-line)] rounded-md focus:outline-none focus:border-[color:var(--color-cobalt)] focus:ring-1 focus:ring-[color:var(--color-cobalt)]"
           placeholder={lang === 'zh' ? '在此写下你的五要素描述……' : 'Write your Five Elements description here…'}
         />
@@ -1050,6 +1240,7 @@ function ChecklistTab() {
                 next[i] = e.target.checked;
                 setChecked(next);
               }}
+              data-wne-checklist={it.en}
               className="mt-1 w-4 h-4 accent-[color:var(--color-cobalt)]"
             />
             <span className="text-[14.5px] text-[color:var(--color-ink)]">
