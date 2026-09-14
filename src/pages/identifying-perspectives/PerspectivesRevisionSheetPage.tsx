@@ -242,14 +242,12 @@ function FiveElements() {
 function ElementCard({ el, n }: { el: Element; n: number }) {
   return (
     <article className="rs-card p-4">
-      <div className="flex items-baseline gap-2">
-        <span className="font-mono text-[10px] font-semibold tabular-nums text-[color:var(--color-ink-3)]">
-          {String(n).padStart(2, '0')}
-        </span>
-        <h3 className="font-display text-[18px] leading-tight tracking-[-0.01em] text-[color:var(--color-ink)]">
-          {el.labelEn}
-        </h3>
-      </div>
+      <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.16em] tabular-nums text-[color:var(--sheet-accent)]">
+        Element {String(n).padStart(2, '0')}
+      </p>
+      <h3 className="font-display text-[17px] leading-[1.1] tracking-[-0.01em] text-[color:var(--color-ink)] mt-1">
+        {el.labelEn}
+      </h3>
       <p className="mt-2 text-[12.5px] leading-[1.5] text-[color:var(--color-ink)]">{el.descEn}</p>
       <p className="mt-2 text-[11.5px] leading-[1.45] italic text-[color:var(--color-ink-2)]">
         Signal: {el.signalsEn}
