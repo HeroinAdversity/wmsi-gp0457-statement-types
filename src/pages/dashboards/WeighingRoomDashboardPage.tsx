@@ -2,6 +2,8 @@ import { useMemo, useState } from 'react';
 import { Container, DisplayH1, Eyebrow, Lede } from '../../components/primitives';
 import { Bi } from '../../lib/LanguageContext';
 import { decodePayload, downloadFile, formatTimestamp, toCsv } from '../../lib/dashboards';
+import { ExportFooter } from '../../components/ExportFooter';
+import { useNotesExport, nx } from '../../lib/useNotesExport';
 
 /* ─────────── Static reference data (mirrors legacy tool) ─────────── */
 
@@ -65,6 +67,24 @@ export function WeighingRoomDashboardPage() {
   const [codeInput, setCodeInput] = useState('');
   const [status, setStatus] = useState<{ msg: string; tone: 'ok' | 'err' | 'warn' } | null>(null);
   const [openIdx, setOpenIdx] = useState<number | null>(null);
+
+  useNotesExport({
+    toolId: 'dashboard-weighing-room',
+    pageTitleEn: 'Teacher Dashboard — Weighing Room',
+    subtitleEn: 'IGCSE Global Perspectives 0457 · Class observations',
+    filenameStem: 'GP_WeighingRoom_Dashboard',
+    studentNameSelector: '#wne-student-name',
+    exportDocxSelector: '#wne-export-docx',
+    exportPdfSelector:  '#wne-export-pdf',
+    collect: () => ({
+      sections: [{
+        heading: 'Class summary',
+        blocks: [
+          nx.p([nx.text('Submissions imported: ', { bold: true }), nx.text(String(records.length))]),
+        ],
+      }],
+    }),
+  });
 
   function reportStatus(msg: string, tone: 'ok' | 'err' | 'warn' = 'ok') {
     setStatus({ msg, tone });
@@ -367,6 +387,8 @@ export function WeighingRoomDashboardPage() {
           )}
         </Container>
       </section>
+
+      <ExportFooter toolId="dashboard-weighing-room" />
     </>
   );
 }

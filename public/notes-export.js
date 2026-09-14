@@ -584,12 +584,79 @@
   // Legacy convenience: install + setPage together (standalone HTML pages call this)
   function init(config){ setPage(config); }
 
+  /* ---------- Generic auto-collect for legacy HTML tools ----------
+     Scans the current DOM for filled textareas and toggled checkboxes,
+     bundling them into a single "Your work" section. Pages that want
+     something more curated should pass their own collect() instead. */
+  function autoCollect(){
+    var sections = [];
+    var workBlocks = [];
+
+    // Textareas — group by nearest <label> or ancestor with a heading
+    Array.prototype.forEach.call(document.querySelectorAll('textarea'), function(ta, i){
+      var v = (ta.value || '').trim();
+      if(!v) return;
+      // Skip our own export-code textareas etc.
+      if(ta.id === 'exportCode' || ta.id === 'export-output' || ta.readOnly) return;
+      var label = findNearbyLabel(ta) || ta.placeholder || ('Textarea ' + (i+1));
+      workBlocks.push(p([text(label + ':', {bold:true})]));
+      workBlocks.push(p(v));
+    });
+
+    // Checkboxes — one line per checked box, grouped by nearest heading
+    var checkedItems = [];
+    Array.prototype.forEach.call(document.querySelectorAll('input[type="checkbox"]'), function(cb){
+      var label = findNearbyLabel(cb);
+      if(!label) return;
+      checkedItems.push({ label: label, checked: cb.checked });
+    });
+    if(checkedItems.length){
+      if(workBlocks.length) workBlocks.push(h(3, 'Self-check'));
+      var done = checkedItems.filter(function(i){ return i.checked; }).length;
+      workBlocks.push(p([text(done + ' of ' + checkedItems.length + ' ticked', {bold:true})]));
+      checkedItems.forEach(function(item){
+        workBlocks.push(p((item.checked ? '☑ ' : '☐ ') + item.label));
+      });
+    }
+
+    if(workBlocks.length) sections.push({ heading: 'Your work', blocks: workBlocks });
+    return { sections: sections };
+  }
+
+  function findNearbyLabel(el){
+    // Look for enclosing <label>
+    var parent = el.parentElement;
+    while(parent && parent.tagName !== 'LABEL' && parent.tagName !== 'BODY'){
+      parent = parent.parentElement;
+    }
+    if(parent && parent.tagName === 'LABEL'){
+      var text = (parent.textContent || '').trim();
+      if(text) return text.slice(0, 200);
+    }
+    // Look for <label for=id>
+    if(el.id){
+      var lbl = document.querySelector('label[for="' + el.id + '"]');
+      if(lbl){ var t = (lbl.textContent || '').trim(); if(t) return t.slice(0, 200); }
+    }
+    // Sibling <p> or heading immediately before
+    var sib = el.previousElementSibling;
+    while(sib){
+      if(/^(P|H1|H2|H3|H4|H5|H6|SPAN|DIV)$/.test(sib.tagName)){
+        var text2 = (sib.textContent || '').trim();
+        if(text2 && text2.length < 240) return text2;
+      }
+      sib = sib.previousElementSibling;
+    }
+    return null;
+  }
+
   window.WMSI_Notes = {
     install: install,
     setPage: setPage,
     init: init,
     text: text, p: p, h: h, ul: ul, ol: ol,
     notesBlocks: notesBlocks,
+    autoCollect: autoCollect,
     loadField: loadField, saveField: saveField,
     openPanel: openPanel, closePanel: closePanel,
     exportDocx: exportDocx, exportPdf: exportPdf

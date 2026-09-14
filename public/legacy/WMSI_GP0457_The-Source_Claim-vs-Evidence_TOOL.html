@@ -165,6 +165,38 @@ textarea.reflection { width: 100%; min-height: 90px; border: 1.5px solid var(--b
 }
 @media (prefers-reduced-motion:reduce){.pkg-nav a{transition:none}}
 </style>
+<!-- WMSI-NOTES-EXPORT (injected) -->
+<script src="https://cdn.jsdelivr.net/npm/docx@9.5.1/dist/index.iife.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js" defer></script>
+<link rel="stylesheet" href="/notes-export.css" />
+<script src="/notes-export.js"></script>
+<style>
+  .wne-legacy-bar {
+    position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%);
+    z-index: 50; background: #1B2A4A; color: #F5F0E8;
+    padding: 10px 14px; border-radius: 999px;
+    display: flex; gap: 8px; align-items: center;
+    box-shadow: 0 8px 24px rgba(27,42,74,0.28);
+    font-family: 'DM Sans', sans-serif; font-size: 13px;
+  }
+  .wne-legacy-bar input {
+    background: transparent; border: none;
+    border-bottom: 1px solid rgba(245,240,232,0.4);
+    color: #F5F0E8; padding: 4px 6px; width: 140px;
+    font-family: inherit; font-size: 13px; outline: none;
+  }
+  .wne-legacy-bar input::placeholder { color: rgba(245,240,232,0.55); }
+  .wne-legacy-bar button {
+    background: #C8922A; color: #3a2a08; border: none;
+    padding: 6px 12px; border-radius: 999px;
+    font-family: inherit; font-size: 12.5px; font-weight: 700; cursor: pointer;
+  }
+  .wne-legacy-bar button:hover { background: #dbaa42; }
+  .wne-legacy-bar button:disabled { opacity: 0.55; cursor: wait; }
+  @media print { .wne-legacy-bar { display: none !important; } }
+</style>
+<!-- /WMSI-NOTES-EXPORT -->
 </head>
 <body>
 <nav class="pkg-nav" aria-label="Resources in this pack"><div class="pkg-nav-inner"><span class="pkg-nav-label">Statement Types</span><a href="index.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10l9-7 9 7v10a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1z"/></svg>Home</a><a href="WMSI_GP0457_Y10_T1_W2-3_Statement-Types-and-Generalisation_TOOL.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h11l5 5v11a1 1 0 01-1 1H4a1 1 0 01-1-1V5a1 1 0 011-1z"/><path d="M14 4v6h6"/></svg>Notes &amp; Video</a><a href="mindmap.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="5" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="19" cy="19" r="2"/><path d="M9.9 9.9L6.4 6.4M14.1 9.9l3.5-3.5M14.1 14.1l3.5 3.5"/></svg>Mind Map</a><a href="WMSI_GP0457_Y10_T1_W2-3_Find-Your-Gap_Diagnostic-Targeted-Practice_TOOL.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/><circle cx="12" cy="12" r="5"/></svg>Find Your Gap</a><a href="WMSI_GP0457_Y10_T1_W2-3_Statement-Types-Intensive_TOOL.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"/></svg>Intensive Practice</a><a href="WMSI_GP0457_The-Source_Claim-vs-Evidence_TOOL.html" aria-current="page"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>The Source</a></div></nav>
@@ -713,5 +745,40 @@ initUpgrades();
 initPractice();
 initChecklist();
 </script>
+<!-- WMSI-NOTES-EXPORT-BAR (injected) -->
+<div class="wne-legacy-bar" id="wne-legacy-bar">
+  <input type="text" id="wne-student-name" placeholder="Your name" />
+  <button type="button" id="wne-export-docx">Word</button>
+  <button type="button" id="wne-export-pdf">PDF</button>
+</div>
+<!-- /WMSI-NOTES-EXPORT-BAR -->
+<!-- WMSI-NOTES-EXPORT-INIT (injected) -->
+<script>
+(function(){
+  function boot(){
+    if(!window.WMSI_Notes){ setTimeout(boot, 60); return; }
+    window.WMSI_Notes.setPage({
+      toolId: 'legacy-' + (document.title || 'tool').replace(/[^a-zA-Z0-9]+/g,'-').toLowerCase().slice(0,60),
+      pageTitleEn: document.title || 'WMSI worksheet',
+      subtitleEn: 'IGCSE Global Perspectives 0457 · Student worksheet',
+      filenameStem: 'GP_' + (document.title || 'worksheet').replace(/[^a-zA-Z0-9]+/g,'_').slice(0,30),
+      studentNameSelector: '#wne-student-name',
+      exportDocxSelector: '#wne-export-docx',
+      exportPdfSelector:  '#wne-export-pdf',
+      collect: window.WMSI_Notes.autoCollect
+    });
+    // Restore student name across visits
+    try {
+      var el = document.getElementById('wne-student-name');
+      var k = 'wne_legacy-shared_studentName';
+      var saved = localStorage.getItem(k);
+      if(saved) el.value = saved;
+      el.addEventListener('input', function(){ try { localStorage.setItem(k, el.value); } catch(e){} });
+    } catch(e){}
+  }
+  boot();
+})();
+</script>
+<!-- /WMSI-NOTES-EXPORT-INIT -->
 </body>
 </html>
